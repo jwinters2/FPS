@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/FPS.dir/src/Entity.cpp.o CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o CMakeFiles/FPS.dir/src/Math3d.cpp.o CMakeFiles/FPS.dir/src/World.cpp.o CMakeFiles/FPS.dir/src/main.cpp.o  -o FPS -lGL -lGLU -lGLEW /usr/local/lib/libglfw3.a -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor 
