@@ -5,17 +5,19 @@
 
 Entity::Entity()
 {
-  x = rand()%100;   
+  pos.x = rand()%100;   
+  pos.y = rand()%100;   
+  pos.z = rand()%100;   
 };
 
 Entity::~Entity(){};
 
 void Entity::update()
 {
-  x++;
+  pos = pos + Vec3(0.0, 1.0, 0.0);
 };
 
 void Entity::draw() const
 {
-  std::cout << "x = " << x;
+  std::cout << "pos = " << pos;
 };

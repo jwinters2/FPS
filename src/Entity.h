@@ -1,3 +1,7 @@
+#pragma once
+
+#include "Math3d.h"
+
 class Entity
 {
   public:
@@ -8,5 +12,5 @@ class Entity
     void draw() const;
 
   private:
-    int x;
+    Vec3 pos;
 };

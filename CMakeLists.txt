@@ -1,0 +1,16 @@
+cmake_minimum_required (VERSION 2.6)
+project (FPS)
+
+#version number
+set(FPS_VERSION_MAJOR 0)
+set(FPS.VERSION_MINOR 1)
+
+file(GLOB SOURCES "src/*.cpp")
+
+add_executable(FPS ${SOURCES})
+
+find_package(OpenGL REQUIRED)
+find_package(glfw3 REQUIRED)
+include_directories( ${OPENGL_INCLUDE_DIRS} )
+
+target_link_libraries(FPS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} glfw)
