@@ -21,9 +21,25 @@ class GraphicsManager
     void unloadModel(std::string);
     void renderModel(std::string) const;
 
+    void beginRender() const;
+    void endRender() const;
+
+    static GraphicsManager* gm;
+    static GraphicsManager& getReference();
+
   private:
     GLFWwindow* window;
+
+    GLuint programID;
     GLuint vertexArrayID;
+    GLuint vertex_buffer_test;
+
+    glm::mat4 CameraMatrix;
+    glm::mat4 ProjectionMatrix;
+    glm::mat4 MVPMatrix;
+    GLuint matrixID;
+
     std::map<std::string, Model> modelMap;
-    std::map<std::string, GLuint> vertexBufferMap;
+
+    GLuint loadShaders(std::string, std::string) const;
 };

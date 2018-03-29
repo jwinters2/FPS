@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "GraphicsManager.h"
 #include "World.h"
 #include "Entity.h"
 
@@ -38,6 +39,8 @@ void World::update()
 
 void World::draw() const
 {
+  const GraphicsManager& gm = GraphicsManager::getReference(); 
+  gm.beginRender();
   for(int i=0; i<2; i++)
   {
     if(entityList[i] != nullptr)
@@ -47,5 +50,6 @@ void World::draw() const
       std::cout << std::endl;
     }
   }
+  gm.endRender();
   std::cout << std::endl;
 }

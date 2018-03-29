@@ -10,13 +10,21 @@ CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/GraphicsManager.cpp
 CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/GraphicsManager.h
 CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/Math3d.h
 CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/Model.h
-CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: /usr/local/include/GLFW/glfw3.h
 
 CMakeFiles/FPS.dir/src/Math3d.cpp.o: src/Math3d.cpp
 CMakeFiles/FPS.dir/src/Math3d.cpp.o: src/Math3d.h
 
+CMakeFiles/FPS.dir/src/Statue.cpp.o: src/Entity.h
+CMakeFiles/FPS.dir/src/Statue.cpp.o: src/GraphicsManager.h
+CMakeFiles/FPS.dir/src/Statue.cpp.o: src/Math3d.h
+CMakeFiles/FPS.dir/src/Statue.cpp.o: src/Model.h
+CMakeFiles/FPS.dir/src/Statue.cpp.o: src/Statue.cpp
+CMakeFiles/FPS.dir/src/Statue.cpp.o: src/Statue.h
+
 CMakeFiles/FPS.dir/src/World.cpp.o: src/Entity.h
+CMakeFiles/FPS.dir/src/World.cpp.o: src/GraphicsManager.h
 CMakeFiles/FPS.dir/src/World.cpp.o: src/Math3d.h
+CMakeFiles/FPS.dir/src/World.cpp.o: src/Model.h
 CMakeFiles/FPS.dir/src/World.cpp.o: src/World.cpp
 CMakeFiles/FPS.dir/src/World.cpp.o: src/World.h
 

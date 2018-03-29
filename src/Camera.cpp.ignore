@@ -1,0 +1,12 @@
+class Camera public Entity
+{
+  public:
+    Camera();
+    ~Camera();
+
+    update();
+
+  private:
+    double xangle;
+    double yangle;
+};

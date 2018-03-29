@@ -236,7 +236,7 @@ gl_DIR:PATH=gl_DIR-NOTFOUND
 glew_DIR:PATH=glew_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for glfw3.
-glfw3_DIR:PATH=/usr/local/lib/cmake/glfw3
+glfw3_DIR:PATH=/usr/lib64/cmake/glfw3
 
 //The directory containing a CMake configuration file for glm.
 glm_DIR:PATH=/usr/lib64/cmake/glm

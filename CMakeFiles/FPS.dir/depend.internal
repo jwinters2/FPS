@@ -11,13 +11,21 @@ CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o
  /home/jamie/Programming/FPS/src/GraphicsManager.h
  /home/jamie/Programming/FPS/src/Math3d.h
  /home/jamie/Programming/FPS/src/Model.h
- /usr/local/include/GLFW/glfw3.h
 CMakeFiles/FPS.dir/src/Math3d.cpp.o
  /home/jamie/Programming/FPS/src/Math3d.cpp
  /home/jamie/Programming/FPS/src/Math3d.h
+CMakeFiles/FPS.dir/src/Statue.cpp.o
+ /home/jamie/Programming/FPS/src/Entity.h
+ /home/jamie/Programming/FPS/src/GraphicsManager.h
+ /home/jamie/Programming/FPS/src/Math3d.h
+ /home/jamie/Programming/FPS/src/Model.h
+ /home/jamie/Programming/FPS/src/Statue.cpp
+ /home/jamie/Programming/FPS/src/Statue.h
 CMakeFiles/FPS.dir/src/World.cpp.o
  /home/jamie/Programming/FPS/src/Entity.h
+ /home/jamie/Programming/FPS/src/GraphicsManager.h
  /home/jamie/Programming/FPS/src/Math3d.h
+ /home/jamie/Programming/FPS/src/Model.h
  /home/jamie/Programming/FPS/src/World.cpp
  /home/jamie/Programming/FPS/src/World.h
 CMakeFiles/FPS.dir/src/main.cpp.o
