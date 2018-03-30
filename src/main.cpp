@@ -55,7 +55,6 @@ int main(int argc, char** argv)
 
     //std::cout << "elapsed time: " << elapsedTime.count() << " " << std::endl;
     //std::cout << "FPS:          " << 1/elapsedTime.count() << " " << std::endl;
-    break;
   }
 
 };
