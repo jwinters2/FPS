@@ -32,7 +32,12 @@ class GraphicsManager
     static GraphicsManager* gm;
     static GraphicsManager& getReference();
 
+    void setWindowSize(int,int);
+
   private:
+    int width;
+    int height;
+
     GLFWwindow* window;
 
     GLuint programID;

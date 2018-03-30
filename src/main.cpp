@@ -30,7 +30,9 @@ int main(int argc, char** argv)
   std::chrono::duration<double> elapsedTime;
 
   World world(10.0);
-  while(true)
+  while( !(im.getCloseButtonPressed() || 
+          ( (im.getKeyPressed(KeyCodes::LSHIFT) || im.getKeyPressed(KeyCodes::RSHIFT) ) && 
+             im.getKeyPressed(KeyCodes::Q) ) ) )
   {
     // this loop has all the timing and whatnot happening in it
 

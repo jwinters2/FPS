@@ -61,6 +61,26 @@ void glfw_key_callback(GLFWwindow* window, int key, int scancode,
   }
 }
 
+void glfw_mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+  InputManager& im = InputManager::getReference();
+
+  im.mouseX = (int)xpos;
+  im.mouseY = (int)ypos;
+}
+
+void glfw_resize_callback(GLFWwindow* window, int width, int height)
+{
+  GraphicsManager& gm = GraphicsManager::getReference();
+  gm.setWindowSize(width,height);
+}
+
+void glfw_close_callback(GLFWwindow* window)
+{
+  InputManager& im = InputManager::getReference();
+  im.closeButtonPressed = true;
+}
+
 InputManager::InputManager()
 {
   if(im == nullptr)
@@ -71,6 +91,8 @@ InputManager::InputManager()
   keyPressed = new bool[KeyCodes::KeyCount];
   keyPressedPrev = new bool[KeyCodes::KeyCount];
 
+  closeButtonPressed = false;
+
   for(int i=0; i<KeyCodes::KeyCount; i++)
   {
     keyPressed[i] = false;
@@ -78,8 +100,15 @@ InputManager::InputManager()
   }
 
   GraphicsManager& gm = GraphicsManager::getReference();
-  glfwSetKeyCallback(gm.getWindow(), glfw_key_callback);
-  glfwSetInputMode(gm.getWindow(), GLFW_STICKY_KEYS, 1);
+  GLFWwindow* window = gm.getWindow();
+
+  glfwSetKeyCallback(window, glfw_key_callback);
+  glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+
+  glfwSetCursorPosCallback(window, glfw_mouse_callback);
+
+  glfwSetWindowSizeCallback(window, glfw_resize_callback);
+  glfwSetWindowCloseCallback(window, glfw_close_callback);
 }
 
 InputManager::~InputManager()
@@ -115,4 +144,9 @@ bool InputManager::getKeyClicked(KeyCodes k) const
 bool InputManager::getKeyReleased(KeyCodes k) const
 {
   return !keyPressed[k] && keyPressedPrev[k];
+}
+
+bool InputManager::getCloseButtonPressed() const
+{
+  return closeButtonPressed;
 }

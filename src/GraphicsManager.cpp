@@ -138,13 +138,33 @@ GraphicsManager& GraphicsManager::getReference()
   return *gm;
 }
 
-// ------------
-// ETC. GETTERS
-// ------------
+// ------------------------
+// ETC. GETTERS AND SETTERS
+// ------------------------
 
 GLFWwindow* GraphicsManager::getWindow() const
 {
   return window;
+}
+
+void GraphicsManager::setWindowSize(int w, int h)
+{
+  if(w != width || height != h)
+  {
+    width = w;
+    height = h;
+
+    ProjectionMatrix = glm::perspective(
+      glm::radians(45.0f),
+      (float)width/(float)height,
+      0.1f,
+      100.0f
+    );
+  
+    MVPMatrix = ProjectionMatrix * CameraMatrix;
+
+    glViewport(0,0,width,height);
+  }
 }
 
 // --------------------------

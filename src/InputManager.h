@@ -62,6 +62,7 @@ class InputManager
     bool getKeyPressed(KeyCodes) const;
     bool getKeyClicked(KeyCodes) const;
     bool getKeyReleased(KeyCodes) const;
+    bool getCloseButtonPressed() const;
 
     int getMouseX() const;
     int getMouseY() const;
@@ -75,8 +76,13 @@ class InputManager
     bool* keyPressed;
     bool* keyPressedPrev;
 
-    int mouseX;
-    int mouxeY;
+    bool closeButtonPressed;
 
-  friend void glfw_key_callback(GLFWwindow*, int, int, int, int);
+    int mouseX;
+    int mouseY;
+
+  friend void glfw_key_callback   (GLFWwindow*, int, int, int, int);
+  friend void glfw_mouse_callback (GLFWwindow*, double, double);
+  friend void glfw_resize_callback(GLFWwindow*, int, int);
+  friend void glfw_close_callback (GLFWwindow*);
 };
