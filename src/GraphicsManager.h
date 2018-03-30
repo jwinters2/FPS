@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Model.h"
+#include "Math3d.h"
 
 #include <GL/gl.h>
 
@@ -12,14 +13,16 @@ class GLFWwindow;
 class GraphicsManager
 {
   public:
-    GraphicsManager(int,int,bool=false);
+    GraphicsManager(int,int,bool);
     ~GraphicsManager();
 
-    void render(const Entity&);
+    void drawLine(const Vec3&,const Vec3&,const Vec3&);
+
+    void render(const Entity&) const;
 
     bool loadModel(std::string);
     void unloadModel(std::string);
-    void renderModel(std::string) const;
+    void renderModel(std::string);
 
     void beginRender() const;
     void endRender() const;
@@ -32,7 +35,7 @@ class GraphicsManager
 
     GLuint programID;
     GLuint vertexArrayID;
-    GLuint vertex_buffer_test;
+    GLuint lineVertexBuffer;
 
     glm::mat4 CameraMatrix;
     glm::mat4 ProjectionMatrix;

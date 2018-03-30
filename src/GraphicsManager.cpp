@@ -11,11 +11,10 @@
 
 GraphicsManager* GraphicsManager::gm = nullptr;
 
-static const GLfloat g_vertex_buffer_data[] =
+static const GLfloat lineData[] =
 {
-  -1.0f, -1.0f, 0.0f,
-   1.0f, -1.0f, 0.0f,
-   0.0f,  1.0f, 0.0f
+  0.0f, 0.0f, 0.0f,
+  1.0f, 1.0f, 1.0f
 };
 
 // -------------------
@@ -84,24 +83,32 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
     exit(EXIT_FAILURE);
   }
 
+  // set the background color
   glClearColor(0.3f, 0.3f, 1.0f, 0.0f);
 
+  // generate the vertex array
   glGenVertexArrays(1, &vertexArrayID);
   glBindVertexArray(vertexArrayID);
 
+  // load, compile and link the shaders
   programID = loadShaders("shaders/VertexShader.glsl",
                           "shaders/FragmentShader.glsl");
 
+  // setup a vertexbuffer for a single line
+  glGenBuffers(1, &lineVertexBuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW);
+
   // setup MVP matrix (this will be done on the fly later)
   CameraMatrix = glm::lookAt(
-    glm::vec3(0,0,20),
+    glm::vec3(20,10,18),
     glm::vec3(0,0,0),
     glm::vec3(0,1,0)
   );
 
   ProjectionMatrix = glm::perspective(
     glm::radians(45.0f),
-    (float)height/(float)width,
+    (float)width/(float)height,
     0.1f,
     100.0f
   );
@@ -114,7 +121,7 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
 GraphicsManager::~GraphicsManager()
 {
   std::cout << "shutting down graphics manager" << std::endl;
-  glDeleteBuffers(1, &vertex_buffer_test);
+  glDeleteBuffers(1, &lineVertexBuffer);
   glDeleteVertexArrays(1, &vertexArrayID);
   glDeleteProgram(programID);
 
@@ -412,12 +419,14 @@ void GraphicsManager::endRender() const
   glfwSwapBuffers(window);
 }
 
-void GraphicsManager::renderModel(std::string path) const
+void GraphicsManager::renderModel(std::string path)
 {
   if(modelMap.find(path) != modelMap.end())
   {
     Model model = modelMap.at(path);
     
+    // reset the MVP matrix
+    MVPMatrix = ProjectionMatrix * CameraMatrix;
     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
 
     glEnableVertexAttribArray(0);
@@ -440,7 +449,30 @@ void GraphicsManager::renderModel(std::string path) const
               << ": does not exist" << std::endl;
   }
 }
+    
+void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
+{
+  glm::mat4 translate = glm::translate(glm::mat4(), glm::vec3(a.x, a.y, a.z));
+  glm::mat4 scale = glm::scale(glm::mat4(), 
+                               glm::vec3(b.x - a.x, b.y - a.y, b.z - a.z));
 
-void GraphicsManager::render(const Entity& e)
+  MVPMatrix = ProjectionMatrix * CameraMatrix * translate * scale;
+  glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
+
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
+  glVertexAttribPointer(
+    0,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    0,
+    (void*)0
+  );
+  glDrawArrays(GL_LINES, 0, 2);
+  glDisableVertexAttribArray(0);
+}
+
+void GraphicsManager::render(const Entity& e) const
 {
 }

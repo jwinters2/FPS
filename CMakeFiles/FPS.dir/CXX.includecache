@@ -41,6 +41,8 @@ Entity.h
 /home/jamie/Programming/FPS/src/Entity.h
 Model.h
 /home/jamie/Programming/FPS/src/Model.h
+Math3d.h
+/home/jamie/Programming/FPS/src/Math3d.h
 GL/gl.h
 -
 map
@@ -77,6 +79,8 @@ Entity.h
 /home/jamie/Programming/FPS/src/World.cpp
 iostream
 -
+math.h
+-
 GraphicsManager.h
 /home/jamie/Programming/FPS/src/GraphicsManager.h
 World.h
@@ -85,13 +89,15 @@ Entity.h
 /home/jamie/Programming/FPS/src/Entity.h
 
 /home/jamie/Programming/FPS/src/World.h
+Math3d.h
+/home/jamie/Programming/FPS/src/Math3d.h
 
 /home/jamie/Programming/FPS/src/main.cpp
 cstdlib
 -
 ctime
 -
-unistd.h
+chrono
 -
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h

@@ -13,6 +13,6 @@ Statue::~Statue()
 
 void Statue::draw() const
 {
-  const GraphicsManager& gm = GraphicsManager::getReference(); 
+  GraphicsManager& gm = GraphicsManager::getReference(); 
   gm.renderModel(modelPath);
 }
