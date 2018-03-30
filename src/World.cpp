@@ -3,7 +3,7 @@
 
 #include "GraphicsManager.h"
 #include "World.h"
-#include "Entity.h"
+#include "entity/Entity.h"
 
 World::World()
 {
@@ -109,11 +109,11 @@ void World::draw() const
   {
     if(entityList[i] != nullptr)
     {
-      std::cout << "entity " << i << " : ";
-      entityList[i]->draw();
-      std::cout << std::endl;
+      //std::cout << "entity " << i << " : ";
+      //entityList[i]->draw();
+      //std::cout << std::endl;
     }
   }
   gm.endRender();
-  std::cout << std::endl;
+  //std::cout << std::endl;
 }

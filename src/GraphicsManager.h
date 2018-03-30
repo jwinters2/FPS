@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "entity/Entity.h"
 #include "Model.h"
 #include "Math3d.h"
 
@@ -26,6 +26,8 @@ class GraphicsManager
 
     void beginRender() const;
     void endRender() const;
+
+    GLFWwindow* getWindow() const;
 
     static GraphicsManager* gm;
     static GraphicsManager& getReference();

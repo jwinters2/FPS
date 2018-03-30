@@ -11,7 +11,9 @@ set(CMAKE_CXX_STANDARD 11)
 #compiler flags
 set(GCC_COVERAGE_COMPILE_FLAGS "-Wall")
 
-file(GLOB SOURCES "src/*.cpp")
+include_directories(${FPS_SOURCE_DIR}/src)
+
+file(GLOB SOURCES "src/*.cpp" "src/**/*.cpp")
 
 add_executable(FPS ${SOURCES})
 

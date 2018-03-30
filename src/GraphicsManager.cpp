@@ -125,6 +125,7 @@ GraphicsManager::~GraphicsManager()
   glDeleteVertexArrays(1, &vertexArrayID);
   glDeleteProgram(programID);
 
+  glfwDestroyWindow(window);
   glfwTerminate();
 }
 
@@ -135,6 +136,15 @@ GraphicsManager::~GraphicsManager()
 GraphicsManager& GraphicsManager::getReference()
 {
   return *gm;
+}
+
+// ------------
+// ETC. GETTERS
+// ------------
+
+GLFWwindow* GraphicsManager::getWindow() const
+{
+  return window;
 }
 
 // --------------------------

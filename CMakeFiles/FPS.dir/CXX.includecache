@@ -6,18 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/jamie/Programming/FPS/src/Entity.cpp
-iostream
--
-cstdlib
--
-Entity.h
-/home/jamie/Programming/FPS/src/Entity.h
-
-/home/jamie/Programming/FPS/src/Entity.h
-Math3d.h
-/home/jamie/Programming/FPS/src/Math3d.h
-
 /home/jamie/Programming/FPS/src/GraphicsManager.cpp
 cstdlib
 -
@@ -37,8 +25,8 @@ GraphicsManager.h
 /home/jamie/Programming/FPS/src/GraphicsManager.h
 
 /home/jamie/Programming/FPS/src/GraphicsManager.h
-Entity.h
-/home/jamie/Programming/FPS/src/Entity.h
+entity/Entity.h
+/home/jamie/Programming/FPS/src/entity/Entity.h
 Model.h
 /home/jamie/Programming/FPS/src/Model.h
 Math3d.h
@@ -47,6 +35,18 @@ GL/gl.h
 -
 map
 -
+
+/home/jamie/Programming/FPS/src/InputManager.cpp
+InputManager.h
+/home/jamie/Programming/FPS/src/InputManager.h
+GraphicsManager.h
+/home/jamie/Programming/FPS/src/GraphicsManager.h
+GLFW/glfw3.h
+-
+iostream
+-
+
+/home/jamie/Programming/FPS/src/InputManager.h
 
 /home/jamie/Programming/FPS/src/Math3d.cpp
 iostream
@@ -66,16 +66,6 @@ GL/gl.h
 glm/glm.hpp
 -
 
-/home/jamie/Programming/FPS/src/Statue.cpp
-GraphicsManager.h
-/home/jamie/Programming/FPS/src/GraphicsManager.h
-Statue.h
-/home/jamie/Programming/FPS/src/Statue.h
-
-/home/jamie/Programming/FPS/src/Statue.h
-Entity.h
-/home/jamie/Programming/FPS/src/Entity.h
-
 /home/jamie/Programming/FPS/src/World.cpp
 iostream
 -
@@ -85,12 +75,34 @@ GraphicsManager.h
 /home/jamie/Programming/FPS/src/GraphicsManager.h
 World.h
 /home/jamie/Programming/FPS/src/World.h
-Entity.h
-/home/jamie/Programming/FPS/src/Entity.h
+entity/Entity.h
+/home/jamie/Programming/FPS/src/entity/Entity.h
 
 /home/jamie/Programming/FPS/src/World.h
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h
+
+/home/jamie/Programming/FPS/src/entity/Entity.cpp
+iostream
+-
+cstdlib
+-
+Entity.h
+/home/jamie/Programming/FPS/src/entity/Entity.h
+
+/home/jamie/Programming/FPS/src/entity/Entity.h
+Math3d.h
+/home/jamie/Programming/FPS/src/entity/Math3d.h
+
+/home/jamie/Programming/FPS/src/entity/Statue.cpp
+GraphicsManager.h
+/home/jamie/Programming/FPS/src/entity/GraphicsManager.h
+Statue.h
+/home/jamie/Programming/FPS/src/entity/Statue.h
+
+/home/jamie/Programming/FPS/src/entity/Statue.h
+Entity.h
+/home/jamie/Programming/FPS/src/entity/Entity.h
 
 /home/jamie/Programming/FPS/src/main.cpp
 cstdlib
@@ -101,8 +113,38 @@ chrono
 -
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h
+InputManager.h
+/home/jamie/Programming/FPS/src/InputManager.h
 GraphicsManager.h
 /home/jamie/Programming/FPS/src/GraphicsManager.h
 World.h
 /home/jamie/Programming/FPS/src/World.h
+
+src/GraphicsManager.h
+entity/Entity.h
+src/entity/Entity.h
+Model.h
+src/Model.h
+Math3d.h
+src/Math3d.h
+GL/gl.h
+-
+map
+-
+
+src/Math3d.h
+iostream
+-
+
+src/Model.h
+vector
+-
+GL/gl.h
+-
+glm/glm.hpp
+-
+
+src/entity/Entity.h
+Math3d.h
+src/entity/Math3d.h
 
