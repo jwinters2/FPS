@@ -4,6 +4,9 @@
 #include "GraphicsManager.h"
 #include "World.h"
 #include "entity/Entity.h"
+#include "entity/Statue.h"
+
+const int ENTITY_COUNT = 3;
 
 World::World()
 {
@@ -31,16 +34,17 @@ World::World(const Vec3& dim)
 
 void World::init()
 {
-  entityList = new Entity*[2];
-  for(int i=0; i<2; i++)
+  entityList = new Entity*[ENTITY_COUNT];
+
+  for(int i=0; i<ENTITY_COUNT; i++)
   {
-    entityList[i] = new Entity();
+    entityList[i] = new Statue();
   }
 };
 
 World::~World()
 {
-  for(int i=0; i<2; i++)
+  for(int i=0; i<ENTITY_COUNT; i++)
   {
     if(entityList[i] != nullptr)
     {
@@ -53,7 +57,7 @@ World::~World()
 void World::update()
 {
   // this should use an octree
-  for(int i=0; i<2; i++)
+  for(int i=0; i<ENTITY_COUNT; i++)
   {
     if(entityList[i] != nullptr)
     {
@@ -105,12 +109,12 @@ void World::draw() const
   //gm.renderModel("assets/statue.obj");
 
   // draw each entity
-  for(int i=0; i<2; i++)
+  for(int i=0; i<ENTITY_COUNT; i++)
   {
     if(entityList[i] != nullptr)
     {
       //std::cout << "entity " << i << " : ";
-      //entityList[i]->draw();
+      entityList[i]->draw();
       //std::cout << std::endl;
     }
   }

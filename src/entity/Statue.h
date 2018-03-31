@@ -11,5 +11,4 @@ class Statue: public Entity
     void draw() const;
 
   private:
-    const std::string modelPath;
 };

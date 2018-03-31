@@ -15,5 +15,5 @@ Model::~Model() {}
 void Model::draw() const
 {
   GraphicsManager& gm = GraphicsManager::getReference();
-  gm.renderModel(modelName);
+  gm.renderModel(modelName, transform);
 }

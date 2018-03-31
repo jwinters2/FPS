@@ -29,6 +29,8 @@ class GraphicsManager
     bool loadModel(std::string);
     void unloadModel(std::string);
     void renderModel(std::string);
+    void renderModel(std::string, const Vec3&, const Vec3&, const Quat&);
+    void renderModel(std::string, const Mat4&);
     bool isModelLoaded(std::string) const;
 
     void beginRender() const;
@@ -59,4 +61,6 @@ class GraphicsManager
     std::map<std::string, ModelMapEntry> modelMap;
 
     GLuint loadShaders(std::string, std::string) const;
+
+    glm::mat4 toGlmMat4(const Mat4&) const;
 };

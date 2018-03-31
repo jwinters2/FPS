@@ -12,19 +12,7 @@ int main(int argc, char** argv)
   srand(time(NULL));
   GraphicsManager gm(640,480,false);
   InputManager im;
-  gm.loadModel("assets/statue.obj");
-
-
-  /*
-  for(int i=0; i<50; i++)
-  {
-    gm.beginRender();
-    gm.renderModel("assets/statue.obj");
-    gm.endRender();
-    usleep(100 * 1000);
-  }
-  */
-
+  
   std::chrono::time_point<std::chrono::high_resolution_clock> currentTime;
   std::chrono::time_point<std::chrono::high_resolution_clock> newTime;
   std::chrono::duration<double> elapsedTime;

@@ -1,6 +1,12 @@
 #include <iostream>
 #pragma once
 
+/*
+ * Vec3
+ *
+ * a vector with 3 elements
+ * used for positions, directions, and scaling
+ */
 struct Vec3
 {
   double x;
@@ -24,3 +30,50 @@ Vec3 operator/(const Vec3&, double);
 Vec3 operator/=(Vec3&, double);
 Vec3 operator*(double, Vec3&);
 double operator*(Vec3&, Vec3&);
+
+/*
+
+ * Quat
+ *
+ * a vector with 4 elements
+ * used for rotations (which are quaternions)
+ */
+
+struct Quat
+{
+ double x;
+ double y;
+ double z;
+ double w;
+
+ Quat();
+};
+
+/*
+ * Mat4
+ *
+ * a 4x4 matrix
+ * used for transformations
+ */
+
+struct Mat4
+{
+  double x[4];
+  double y[4];
+  double z[4];
+  double w[4];
+
+  Mat4();
+  Mat4(double);
+  Mat4(const Mat4&);
+
+  static Mat4 Identity();
+  static Mat4 Translate(const Vec3&);
+  static Mat4 Scale(const Vec3&);
+  //static Mat4 Rotate(const Quat&);
+};
+
+std::ostream& operator<<(std::ostream&, const Mat4&);
+Mat4 operator*(const Mat4&, const Mat4&);
+Mat4 operator*=(Mat4&, const Mat4&);
+Vec3 operator*(const Mat4&, const Vec3&);

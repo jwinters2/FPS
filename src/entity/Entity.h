@@ -12,7 +12,9 @@ class Entity
     virtual void update();
     virtual void draw() const;
 
-  private:
+    void setPosition(const Vec3&);
+
+  protected:
     Vec3 pos;
     Renderable* model;
 };

@@ -69,6 +69,8 @@ World.h
 /home/jamie/Programming/FPS/src/World.h
 entity/Entity.h
 /home/jamie/Programming/FPS/src/entity/Entity.h
+entity/Statue.h
+/home/jamie/Programming/FPS/src/entity/Statue.h
 
 /home/jamie/Programming/FPS/src/World.h
 Math3d.h
@@ -91,6 +93,8 @@ Renderable.h
 /home/jamie/Programming/FPS/src/component/renderable/Renderable.h
 
 /home/jamie/Programming/FPS/src/component/renderable/Renderable.h
+Math3d.h
+/home/jamie/Programming/FPS/src/component/renderable/Math3d.h
 
 /home/jamie/Programming/FPS/src/entity/Entity.cpp
 iostream
@@ -113,6 +117,10 @@ GraphicsManager.h
 /home/jamie/Programming/FPS/src/entity/GraphicsManager.h
 Statue.h
 /home/jamie/Programming/FPS/src/entity/Statue.h
+Math3d.h
+/home/jamie/Programming/FPS/src/entity/Math3d.h
+component/renderable/Model.h
+/home/jamie/Programming/FPS/src/entity/component/renderable/Model.h
 
 /home/jamie/Programming/FPS/src/entity/Statue.h
 Entity.h
@@ -157,6 +165,8 @@ string
 -
 
 src/component/renderable/Renderable.h
+Math3d.h
+src/component/renderable/Math3d.h
 
 src/entity/Entity.h
 Math3d.h

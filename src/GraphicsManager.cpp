@@ -292,7 +292,7 @@ bool GraphicsManager::loadModel(std::string path)
   {
     // if the model already exists, don't load it, we're done
     std::cout << "WARNING: model " << path 
-              << "already exists, not loading again" << std::endl;
+              << " already exists, not loading again" << std::endl;
     return true;
   }
 
@@ -457,12 +457,23 @@ void GraphicsManager::endRender() const
 
 void GraphicsManager::renderModel(std::string path)
 {
+  renderModel(path, Mat4::Identity());
+}
+
+void GraphicsManager::renderModel(std::string path, const Vec3& position, 
+                                  const Vec3& scale, const Quat& rotation)
+{
+  renderModel(path, Mat4::Translate(position) * Mat4::Scale(scale));
+}
+
+void GraphicsManager::renderModel(std::string path, const Mat4& transform)
+{
   if(modelMap.find(path) != modelMap.end())
   {
     ModelMapEntry model = modelMap.at(path);
-    
+
     // reset the MVP matrix
-    MVPMatrix = ProjectionMatrix * CameraMatrix;
+    MVPMatrix = ProjectionMatrix * CameraMatrix * toGlmMat4(transform);
     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
 
     glEnableVertexAttribArray(0);
@@ -509,6 +520,29 @@ void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
   glDisableVertexAttribArray(0);
 }
 
-void GraphicsManager::render(const Entity& e) const
+glm::mat4 GraphicsManager::toGlmMat4(const Mat4& m) const
 {
+  glm::mat4 retval;
+
+  retval[0][0] = m.x[0];
+  retval[1][0] = m.x[1];
+  retval[2][0] = m.x[2];
+  retval[3][0] = m.x[3];
+
+  retval[0][1] = m.y[0];
+  retval[1][1] = m.y[1];
+  retval[2][1] = m.y[2];
+  retval[3][1] = m.y[3];
+
+  retval[0][2] = m.z[0];
+  retval[1][2] = m.z[1];
+  retval[2][2] = m.z[2];
+  retval[3][2] = m.z[3];
+
+  retval[0][3] = m.w[0];
+  retval[1][3] = m.w[1];
+  retval[2][3] = m.w[2];
+  retval[3][3] = m.w[3];
+
+  return retval;
 }
