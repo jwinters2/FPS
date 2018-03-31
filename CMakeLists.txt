@@ -13,7 +13,7 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-Wall")
 
 include_directories(${FPS_SOURCE_DIR}/src)
 
-file(GLOB SOURCES "src/*.cpp" "src/**/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(FPS ${SOURCES})
 

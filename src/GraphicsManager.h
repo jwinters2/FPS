@@ -1,14 +1,20 @@
 #pragma once
 
 #include "entity/Entity.h"
-#include "Model.h"
 #include "Math3d.h"
 
 #include <GL/gl.h>
+#include <glm/glm.hpp>
 
 #include <map>
 
 class GLFWwindow;
+
+struct ModelMapEntry
+{
+  GLuint vertexBuffer;
+  unsigned int triangleCount;
+};
 
 class GraphicsManager
 {
@@ -23,6 +29,7 @@ class GraphicsManager
     bool loadModel(std::string);
     void unloadModel(std::string);
     void renderModel(std::string);
+    bool isModelLoaded(std::string) const;
 
     void beginRender() const;
     void endRender() const;
@@ -49,7 +56,7 @@ class GraphicsManager
     glm::mat4 MVPMatrix;
     GLuint matrixID;
 
-    std::map<std::string, Model> modelMap;
+    std::map<std::string, ModelMapEntry> modelMap;
 
     GLuint loadShaders(std::string, std::string) const;
 };

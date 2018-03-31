@@ -296,6 +296,7 @@ bool GraphicsManager::loadModel(std::string path)
     return true;
   }
 
+  std::cout << "loading model " << path << std::endl;
   // initialize some vectors for temporary storage
 
   // indices for vertices, uv values and normals
@@ -422,17 +423,22 @@ bool GraphicsManager::loadModel(std::string path)
                &final_vertices[0], GL_STATIC_DRAW);
 
   // make a new model to load the data into
-  Model newModel;
+  ModelMapEntry newModel;
   newModel.vertexBuffer = vertexBuffer;
   newModel.triangleCount = final_vertices.size()/3;
 
   modelMap[path] = newModel;
-  std::cout << "vertexBuffer  = " << newModel.vertexBuffer  << std::endl;
-  std::cout << "triangleCount = " << newModel.triangleCount << std::endl;
+  //std::cout << "vertexBuffer  = " << newModel.vertexBuffer  << std::endl;
+  //std::cout << "triangleCount = " << newModel.triangleCount << std::endl;
 }
   
 
 void GraphicsManager::unloadModel(std::string path) {}
+
+bool GraphicsManager::isModelLoaded(std::string path) const
+{
+  return modelMap.find(path) != modelMap.end();
+}
 
 // ---------------
 // MODEL RENDERING
@@ -453,7 +459,7 @@ void GraphicsManager::renderModel(std::string path)
 {
   if(modelMap.find(path) != modelMap.end())
   {
-    Model model = modelMap.at(path);
+    ModelMapEntry model = modelMap.at(path);
     
     // reset the MVP matrix
     MVPMatrix = ProjectionMatrix * CameraMatrix;

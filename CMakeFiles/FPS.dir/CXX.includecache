@@ -27,11 +27,11 @@ GraphicsManager.h
 /home/jamie/Programming/FPS/src/GraphicsManager.h
 entity/Entity.h
 /home/jamie/Programming/FPS/src/entity/Entity.h
-Model.h
-/home/jamie/Programming/FPS/src/Model.h
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h
 GL/gl.h
+-
+glm/glm.hpp
 -
 map
 -
@@ -58,14 +58,6 @@ Math3d.h
 iostream
 -
 
-/home/jamie/Programming/FPS/src/Model.h
-vector
--
-GL/gl.h
--
-glm/glm.hpp
--
-
 /home/jamie/Programming/FPS/src/World.cpp
 iostream
 -
@@ -82,6 +74,24 @@ entity/Entity.h
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h
 
+/home/jamie/Programming/FPS/src/component/renderable/Model.cpp
+Model.h
+/home/jamie/Programming/FPS/src/component/renderable/Model.h
+GraphicsManager.h
+/home/jamie/Programming/FPS/src/component/renderable/GraphicsManager.h
+
+/home/jamie/Programming/FPS/src/component/renderable/Model.h
+Renderable.h
+/home/jamie/Programming/FPS/src/component/renderable/Renderable.h
+string
+-
+
+/home/jamie/Programming/FPS/src/component/renderable/Renderable.cpp
+Renderable.h
+/home/jamie/Programming/FPS/src/component/renderable/Renderable.h
+
+/home/jamie/Programming/FPS/src/component/renderable/Renderable.h
+
 /home/jamie/Programming/FPS/src/entity/Entity.cpp
 iostream
 -
@@ -89,10 +99,14 @@ cstdlib
 -
 Entity.h
 /home/jamie/Programming/FPS/src/entity/Entity.h
+component/renderable/Model.h
+/home/jamie/Programming/FPS/src/entity/component/renderable/Model.h
 
 /home/jamie/Programming/FPS/src/entity/Entity.h
 Math3d.h
 /home/jamie/Programming/FPS/src/entity/Math3d.h
+component/renderable/Renderable.h
+/home/jamie/Programming/FPS/src/entity/component/renderable/Renderable.h
 
 /home/jamie/Programming/FPS/src/entity/Statue.cpp
 GraphicsManager.h
@@ -123,11 +137,11 @@ World.h
 src/GraphicsManager.h
 entity/Entity.h
 src/entity/Entity.h
-Model.h
-src/Model.h
 Math3d.h
 src/Math3d.h
 GL/gl.h
+-
+glm/glm.hpp
 -
 map
 -
@@ -136,15 +150,17 @@ src/Math3d.h
 iostream
 -
 
-src/Model.h
-vector
+src/component/renderable/Model.h
+Renderable.h
+src/component/renderable/Renderable.h
+string
 -
-GL/gl.h
--
-glm/glm.hpp
--
+
+src/component/renderable/Renderable.h
 
 src/entity/Entity.h
 Math3d.h
 src/entity/Math3d.h
+component/renderable/Renderable.h
+src/entity/component/renderable/Renderable.h
 

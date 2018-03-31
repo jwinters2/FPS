@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math3d.h"
+#include "component/renderable/Renderable.h"
 
 class Entity
 {
@@ -8,9 +9,10 @@ class Entity
     Entity();
     ~Entity();
 
-    void update();
-    void draw() const;
+    virtual void update();
+    virtual void draw() const;
 
   private:
     Vec3 pos;
+    Renderable* model;
 };
