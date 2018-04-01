@@ -121,7 +121,13 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
   // get a reference to the matrix and texure sampler in the shaders
   textureSamplerID = glGetUniformLocation(programID, "texSampler");
   matrixID         = glGetUniformLocation(programID, "MVP");
+  MVID             = glGetUniformLocation(programID, "MV");
   colorID          = glGetUniformLocation(programID, "shading");
+  lightPositionID  = glGetUniformLocation(programID, "lightPosition");
+  ambientID        = glGetUniformLocation(programID, "ambient");
+
+  // load error texture
+  loadErrorModel();
 
   // "load" white and error textures
   loadWhiteTexture();
@@ -206,6 +212,22 @@ void GraphicsManager::endRender() const
   glfwSwapBuffers(window);
 }
 
+void GraphicsManager::renderModel(std::string modelPath)
+{
+  renderModel(modelPath, "TEX_WHITE");
+}
+
+void GraphicsManager::renderModel(std::string modelPath, const Vec3& position,
+                                  const Vec3& scale, const Quat& rotation)
+{
+  renderModel(modelPath, "TEX_WHITE", position, scale, rotation);
+}
+
+void GraphicsManager::renderModel(std::string modelPath, const Mat4& transform)
+{
+  renderModel(modelPath, "TEX_WHITE", transform);
+}
+
 void GraphicsManager::renderModel(std::string modelPath, std::string texPath)
 {
   renderModel(modelPath, texPath, Mat4::Identity());
@@ -225,73 +247,96 @@ void GraphicsManager::renderModel(std::string modelPath, std::string texPath,
 void GraphicsManager::renderModel(std::string modelPath, std::string texPath,
                                   const Mat4& transform)
 {
-  if(modelMap.find(modelPath) != modelMap.end()
-  && textureMap.find(texPath) != textureMap.end())
+  ModelMapEntry model;
+  TextureMapEntry texture;
+
+  if(modelMap.find(modelPath) == modelMap.end())
   {
-    ModelMapEntry   model   = modelMap.at(modelPath);
-    TextureMapEntry texture = textureMap.at(texPath);
-
-    //std::cout << "vertexBuffer  = " << model.vertexBuffer << std::endl;
-    //std::cout << "textureBuffer = " << texture.textureBuffer << std::endl;
-    //std::cout << "uvBuffer      = " << model.uvBuffer << std::endl;
-
-    // set the color to white
-    glUniform3f(colorID, 1.0f, 1.0f, 1.0f);
-
-    // reset the MVP matrix
-    MVPMatrix = ProjectionMatrix * CameraMatrix * toGlmMat4(transform);
-    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
-
-    // bind the texture
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.textureBuffer);
-    glUniform1i(textureSamplerID, 0);
-
-    glEnableVertexAttribArray(0);
-
-    // bind the model
-    glBindBuffer(GL_ARRAY_BUFFER, model.vertexBuffer);
-    glVertexAttribPointer(
-      0,
-      3,
-      GL_FLOAT,
-      GL_FALSE,
-      0,
-      (void*)0
-    );
-
-    glEnableVertexAttribArray(1);
-
-    // bind the uvs
-    glBindBuffer(GL_ARRAY_BUFFER, model.uvBuffer);
-    glVertexAttribPointer(
-      1,
-      2,
-      GL_FLOAT,
-      GL_FALSE,
-      0,
-      (void*)0
-    );
-
-    glDrawArrays(GL_TRIANGLES, 0, 3 * model.triangleCount);
-
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
+    //std::cout << "WARNING: cannot render model: model " << modelPath 
+    //          << ": does not exist" << std::endl;
+    model = modelMap.at("MODEL_ERROR");
   }
   else
   {
-    if(modelMap.find(modelPath) == modelMap.end())
-    {
-      std::cerr << "cannot render model: model " << modelPath 
-                << ": does not exist" << std::endl;
-    }
-    if(textureMap.find(texPath) == textureMap.end())
-    {
-      std::cerr << "cannot render model: texture " << texPath 
-                << ": does not exist" << std::endl;
-    }
-
+    model = modelMap.at(modelPath);
   }
+
+  if(textureMap.find(texPath) == textureMap.end())
+  {
+    //std::cout << "WARNING: cannot render model: texture " << texPath 
+    //          << ": does not exist" << std::endl;
+    texture = textureMap.at("TEX_ERROR");
+  }
+  else
+  {
+    texture = textureMap.at(texPath);
+  }
+
+  //std::cout << "vertexBuffer  = " << model.vertexBuffer << std::endl;
+  //std::cout << "textureBuffer = " << texture.textureBuffer << std::endl;
+  //std::cout << "uvBuffer      = " << model.uvBuffer << std::endl;
+
+  glUniform3f(lightPositionID, 30.0f, 30.0f, 30.0f);
+  glUniform3f(ambientID, 0.2f, 0.2f, 0.2f);
+
+  // set the color to white
+  glUniform3f(colorID, 1.0f, 1.0f, 1.0f);
+
+  // reset the MVP matrix
+  MVMatrix  = CameraMatrix * toGlmMat4(transform);
+  MVPMatrix = ProjectionMatrix * MVMatrix;
+  glUniformMatrix4fv(MVID, 1, GL_FALSE, &MVMatrix[0][0]);
+  glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
+
+  // bind the texture
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture.textureBuffer);
+  glUniform1i(textureSamplerID, 0);
+
+  glEnableVertexAttribArray(0);
+
+  // bind the model
+  glBindBuffer(GL_ARRAY_BUFFER, model.vertexBuffer);
+  glVertexAttribPointer(
+    0,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    0,
+    (void*)0
+  );
+
+  glEnableVertexAttribArray(1);
+
+  // bind the uvs
+  glBindBuffer(GL_ARRAY_BUFFER, model.uvBuffer);
+  glVertexAttribPointer(
+    1,
+    2,
+    GL_FLOAT,
+    GL_FALSE,
+    0,
+    (void*)0
+  );
+
+  glEnableVertexAttribArray(2);
+
+  // bind the uvs
+  glBindBuffer(GL_ARRAY_BUFFER, model.normalBuffer);
+  glVertexAttribPointer(
+    2,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    0,
+    (void*)0
+  );
+
+  glDrawArrays(GL_TRIANGLES, 0, 3 * model.triangleCount);
+
+  glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(2);
 }
     
 void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
@@ -300,6 +345,10 @@ void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
   glm::mat4 scale = glm::scale(glm::mat4(), 
                                glm::vec3(b.x - a.x, b.y - a.y, b.z - a.z));
 
+  // light (ambient is 1, so everything's always fully lit)
+  glUniform3f(ambientID, 1.0f, 1.0f, 1.0f);
+
+  // color
   glUniform3f(colorID, color.x, color.y, color.z);
   MVPMatrix = ProjectionMatrix * CameraMatrix * translate * scale;
   glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);

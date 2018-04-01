@@ -6,6 +6,7 @@
 RotationObject::RotationObject()
 {
   model = new Model("assets/rotationModel.obj","assets/rotationTex.bmp");
+  transform.scale = Vec3(2,1,1);
 }
 
 RotationObject::~RotationObject()
@@ -20,6 +21,10 @@ void RotationObject::update()
   if(im.getKeyClicked(KeyCodes::R))
   {
     axis = Vec3(0,0,0);
+    if(im.getKeyPressed(KeyCodes::LSHIFT))
+    {
+      transform.rot = Quat();
+    }
   }
 
   int dir = ( im.getKeyPressed(KeyCodes::LSHIFT) ? -1 : 1);
@@ -52,8 +57,6 @@ void RotationObject::update()
 
 void RotationObject::draw() const
 {
-  std::cout << axis << std::endl;
-
   GraphicsManager& gm = GraphicsManager::getReference();
   gm.drawLine(Vec3(0,0,0), 10 * axis.normal(), Vec3(1,1,1));
 

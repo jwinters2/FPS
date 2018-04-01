@@ -14,6 +14,7 @@ struct ModelMapEntry
 {
   GLuint vertexBuffer;
   GLuint uvBuffer;
+  GLuint normalBuffer;
   unsigned int triangleCount;
 };
 
@@ -35,7 +36,7 @@ class GraphicsManager
     bool loadModel(std::string);
     void unloadModel(std::string);
 
-    // render a textureless model (use error texture)
+    // render a textureless model (use white texture)
     void renderModel(std::string);
     void renderModel(std::string, const Vec3&, const Vec3&, const Quat&);
     void renderModel(std::string, const Mat4&);
@@ -72,13 +73,17 @@ class GraphicsManager
     GLuint vertexArrayID;
     GLuint textureSamplerID;
     GLuint matrixID;
+    GLuint MVID;
     GLuint colorID;
+    GLuint lightPositionID;
+    GLuint ambientID;
 
     GLuint lineVertexBuffer;
 
     glm::mat4 CameraMatrix;
     glm::mat4 ProjectionMatrix;
     glm::mat4 MVPMatrix;
+    glm::mat4 MVMatrix;
 
     std::map<std::string, ModelMapEntry>   modelMap;
     std::map<std::string, TextureMapEntry> textureMap;
@@ -86,6 +91,7 @@ class GraphicsManager
     GLuint loadShaders(std::string, std::string) const;
 
     bool loadWhiteTexture();
+    bool loadErrorModel();
     bool loadErrorTexture();
 
     static glm::mat4 toGlmMat4(const Mat4&);

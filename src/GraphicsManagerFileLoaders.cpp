@@ -270,16 +270,57 @@ bool GraphicsManager::loadModel(std::string path)
   glBufferData(GL_ARRAY_BUFFER, final_uvs.size() * sizeof(glm::vec2), 
                &final_uvs[0], GL_STATIC_DRAW);
 
+  GLuint normalBuffer;
+  glGenBuffers(1, &normalBuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+  glBufferData(GL_ARRAY_BUFFER, final_normals.size() * sizeof(glm::vec3), 
+               &final_normals[0], GL_STATIC_DRAW);
+
   // make a new model to load the data into
   ModelMapEntry newModel;
-  newModel.vertexBuffer = vertexBuffer;
-  newModel.uvBuffer = uvBuffer;
+  newModel.vertexBuffer  = vertexBuffer;
+  newModel.uvBuffer      = uvBuffer;
+  newModel.normalBuffer  = normalBuffer;
   newModel.triangleCount = final_vertices.size()/3;
 
   modelMap[path] = newModel;
   //std::cout << "vertexBuffer  = " << newModel.vertexBuffer  << std::endl;
   //std::cout << "    uvBuffer  = " << newModel.uvBuffer      << std::endl;
   //std::cout << "triangleCount = " << newModel.triangleCount << std::endl;
+
+  return true;
+}
+
+bool GraphicsManager::loadErrorModel()
+{
+  std::string modelPath = "assets/errorModel.obj";
+  
+  // first load the error model file
+  if(!loadModel(modelPath))
+  {
+    return false;
+  }
+
+  // get the ModelMapEntry
+  ModelMapEntry oldEntry = modelMap.at(modelPath);
+  GLuint       vb  = oldEntry.vertexBuffer;
+  GLuint       uvb = oldEntry.uvBuffer;
+  GLuint       nb  = oldEntry.normalBuffer;
+  unsigned int tc  = oldEntry.triangleCount;
+
+  // remove the model
+  modelMap.erase(modelPath);
+
+  // add it back under a different name
+  ModelMapEntry newEntry;
+  newEntry.vertexBuffer  = vb;
+  newEntry.uvBuffer      = uvb;
+  newEntry.normalBuffer  = nb;
+  newEntry.triangleCount = tc;
+
+  modelMap["MODEL_ERROR"] = newEntry;
+
+  return true;
 }
 
 // ---------------
@@ -382,14 +423,16 @@ bool GraphicsManager::loadTexture(std::string path)
   textureMap[path] = newTexture;
 
   delete [] data;
+
+  return true;
 }
 
 bool GraphicsManager::loadWhiteTexture()
 {
   unsigned int imageSize = 2 * 2 * 3;
-  char data[imageSize];
+  char data[imageSize+2];
 
-  for(int i=0; i<imageSize; i++)
+  for(int i=0; i<imageSize+2; i++)  // I have no idea why we need 2 extra bytes
   {
     data[i] = 0xFF; // for white
   }
@@ -398,11 +441,9 @@ bool GraphicsManager::loadWhiteTexture()
   glGenTextures(1, &textureBuffer);
   glBindTexture(GL_TEXTURE_2D, textureBuffer);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, 
-               GL_BGR, GL_UNSIGNED_BYTE, data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
-                  GL_LINEAR_MIPMAP_LINEAR);
-  glGenerateMipmap(GL_TEXTURE_2D);
+               GL_RGB, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
   TextureMapEntry newTexture;
   newTexture.textureBuffer = textureBuffer;
@@ -410,11 +451,13 @@ bool GraphicsManager::loadWhiteTexture()
   //std::cout << "new textureBuffer = " << textureBuffer << std::endl;
 
   textureMap["TEX_WHITE"] = newTexture;
+
+  return true;
 }
 
 bool GraphicsManager::loadErrorTexture()
 {
-  // the "error texture" is a pink and black texture we use to draw if
+  // the "error texture" is a red and blue texture we use to draw if
   // the correct texture couldn't be loaded
 
   unsigned int imageSize = 32 * 32 * 3 * 8 * 8;
@@ -424,15 +467,15 @@ bool GraphicsManager::loadErrorTexture()
   {
     if( ( (i/(3 * 8))  + (i/(32 * 3 * 8 * 8)) ) % 2  == 0 )
     {
-      data[i  ] = 0xFF; // even-numbered pixels are pink
-      data[i+1] = 0x33;
-      data[i+2] = 0xFF;
+      data[i  ] = 0xFF; // even-numbered pixels are red
+      data[i+1] = 0x00;
+      data[i+2] = 0x00;
     }
     else
     {
-      data[i  ] = 0x00; // odd-numbered pixels are black
+      data[i  ] = 0x00; // odd-numbered pixels are blue
       data[i+1] = 0x00;
-      data[i+2] = 0x00;
+      data[i+2] = 0xFF;
     }
   }
 
@@ -452,4 +495,6 @@ bool GraphicsManager::loadErrorTexture()
   //std::cout << "new textureBuffer = " << textureBuffer << std::endl;
 
   textureMap["TEX_ERROR"] = newTexture;
+
+  return true;
 }
