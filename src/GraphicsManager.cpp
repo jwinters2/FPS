@@ -260,6 +260,7 @@ void GraphicsManager::renderModel(std::string path, const Mat4& transform)
     );
 
     glDrawArrays(GL_TRIANGLES, 0, 3 * model.triangleCount);
+
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
   }
