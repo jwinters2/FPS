@@ -417,16 +417,16 @@ bool GraphicsManager::loadErrorTexture()
   // the "error texture" is a pink and black texture we use to draw if
   // the correct texture couldn't be loaded
 
-  unsigned int imageSize = 32 * 32 * 3;
-  char data[imageSize];
+  unsigned int imageSize = 32 * 32 * 3 * 8 * 8;
+  unsigned char data[imageSize];
 
   for(int i=0; i<imageSize; i+=3)
   {
-    if(i%2 == 0)
+    if( ( (i/(3 * 8))  + (i/(32 * 3 * 8 * 8)) ) % 2  == 0 )
     {
       data[i  ] = 0xFF; // even-numbered pixels are pink
-      data[i+1] = 0x80;
-      data[i+2] = 0x80;
+      data[i+1] = 0x33;
+      data[i+2] = 0xFF;
     }
     else
     {
@@ -439,8 +439,8 @@ bool GraphicsManager::loadErrorTexture()
   GLuint textureBuffer;
   glGenTextures(1, &textureBuffer);
   glBindTexture(GL_TEXTURE_2D, textureBuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 32, 32, 0, 
-               GL_BGR, GL_UNSIGNED_BYTE, data);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 32 * 8, 32 * 8, 0, 
+               GL_RGB, GL_UNSIGNED_BYTE, data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
                   GL_LINEAR_MIPMAP_LINEAR);

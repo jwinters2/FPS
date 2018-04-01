@@ -9,9 +9,11 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/jamie/Programming/FPS/src/InputManager.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/InputManager.cpp.o"
   "/home/jamie/Programming/FPS/src/Math3d.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/Math3d.cpp.o"
   "/home/jamie/Programming/FPS/src/World.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/World.cpp.o"
+  "/home/jamie/Programming/FPS/src/component/renderable/BoundingBox.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o"
   "/home/jamie/Programming/FPS/src/component/renderable/Model.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o"
   "/home/jamie/Programming/FPS/src/component/renderable/Renderable.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o"
   "/home/jamie/Programming/FPS/src/entity/Entity.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
+  "/home/jamie/Programming/FPS/src/entity/RotationObject.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o"
   "/home/jamie/Programming/FPS/src/entity/Statue.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
   "/home/jamie/Programming/FPS/src/main.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/main.cpp.o"
   )

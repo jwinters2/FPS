@@ -29,8 +29,16 @@ CMakeFiles/FPS.dir/src/World.cpp.o
  /home/jamie/Programming/FPS/src/World.cpp
  /home/jamie/Programming/FPS/src/World.h
  /home/jamie/Programming/FPS/src/entity/Entity.h
- /home/jamie/Programming/FPS/src/entity/Statue.h
+ /home/jamie/Programming/FPS/src/entity/RotationObject.h
  src/component/renderable/Renderable.h
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o
+ /home/jamie/Programming/FPS/src/component/renderable/BoundingBox.cpp
+ /home/jamie/Programming/FPS/src/component/renderable/BoundingBox.h
+ /home/jamie/Programming/FPS/src/component/renderable/Renderable.h
+ src/GraphicsManager.h
+ src/Math3d.h
+ src/component/renderable/Renderable.h
+ src/entity/Entity.h
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o
  /home/jamie/Programming/FPS/src/component/renderable/Model.cpp
  /home/jamie/Programming/FPS/src/component/renderable/Model.h
@@ -49,6 +57,16 @@ CMakeFiles/FPS.dir/src/entity/Entity.cpp.o
  src/Math3d.h
  src/component/renderable/Model.h
  src/component/renderable/Renderable.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o
+ /home/jamie/Programming/FPS/src/entity/Entity.h
+ /home/jamie/Programming/FPS/src/entity/RotationObject.cpp
+ /home/jamie/Programming/FPS/src/entity/RotationObject.h
+ src/GraphicsManager.h
+ src/InputManager.h
+ src/Math3d.h
+ src/component/renderable/Model.h
+ src/component/renderable/Renderable.h
+ src/entity/Entity.h
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o
  /home/jamie/Programming/FPS/src/entity/Entity.h
  /home/jamie/Programming/FPS/src/entity/Statue.cpp

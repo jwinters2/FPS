@@ -8,6 +8,7 @@ class Statue: public Entity
     Statue();
     ~Statue();
 
+    void update();
     void draw() const;
 
   private:

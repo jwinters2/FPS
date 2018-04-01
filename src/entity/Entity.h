@@ -15,6 +15,6 @@ class Entity
     void setPosition(const Vec3&);
 
   protected:
-    Vec3 pos;
+    Transform transform;
     Renderable* model;
 };

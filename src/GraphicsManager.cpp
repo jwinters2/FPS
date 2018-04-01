@@ -206,24 +206,30 @@ void GraphicsManager::endRender() const
   glfwSwapBuffers(window);
 }
 
-void GraphicsManager::renderModel(std::string path)
+void GraphicsManager::renderModel(std::string modelPath, std::string texPath)
 {
-  renderModel(path, Mat4::Identity());
+  renderModel(modelPath, texPath, Mat4::Identity());
 }
 
-void GraphicsManager::renderModel(std::string path, const Vec3& position, 
-                                  const Vec3& scale, const Quat& rotation)
+void GraphicsManager::renderModel(std::string modelPath, std::string texPath,
+                                  const Vec3& position, const Vec3& scale, 
+                                  const Quat& rotation)
 {
-  renderModel(path, Mat4::Translate(position) * Mat4::Scale(scale));
+  Transform t;
+  t.pos = position;
+  t.scale = scale;
+  t.rot = rotation;
+  renderModel(modelPath, texPath, t.toMatrix());
 }
 
-void GraphicsManager::renderModel(std::string path, const Mat4& transform)
+void GraphicsManager::renderModel(std::string modelPath, std::string texPath,
+                                  const Mat4& transform)
 {
-  if(modelMap.find(path) != modelMap.end()
-  && textureMap.find("assets/texture.bmp") != textureMap.end())
+  if(modelMap.find(modelPath) != modelMap.end()
+  && textureMap.find(texPath) != textureMap.end())
   {
-    ModelMapEntry   model   = modelMap.at(path);
-    TextureMapEntry texture = textureMap.at("assets/texture.bmp");
+    ModelMapEntry   model   = modelMap.at(modelPath);
+    TextureMapEntry texture = textureMap.at(texPath);
 
     //std::cout << "vertexBuffer  = " << model.vertexBuffer << std::endl;
     //std::cout << "textureBuffer = " << texture.textureBuffer << std::endl;
@@ -274,8 +280,17 @@ void GraphicsManager::renderModel(std::string path, const Mat4& transform)
   }
   else
   {
-    std::cerr << "cannot render model " << path 
-              << ": does not exist" << std::endl;
+    if(modelMap.find(modelPath) == modelMap.end())
+    {
+      std::cerr << "cannot render model: model " << modelPath 
+                << ": does not exist" << std::endl;
+    }
+    if(textureMap.find(texPath) == textureMap.end())
+    {
+      std::cerr << "cannot render model: texture " << texPath 
+                << ": does not exist" << std::endl;
+    }
+
   }
 }
     

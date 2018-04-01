@@ -1,6 +1,9 @@
 #include <iostream>
 #pragma once
 
+// quaternion needs to know what this is
+struct Mat4;
+
 /*
  * Vec3
  *
@@ -17,6 +20,10 @@ struct Vec3
   Vec3(double);
   Vec3(double,double,double);
   Vec3(const Vec3&);
+
+  double length() const;
+  Vec3 normal() const;
+  Vec3 normalize();
 };
 
 std::ostream& operator<<(std::ostream&, const Vec3&);
@@ -30,6 +37,8 @@ Vec3 operator/(const Vec3&, double);
 Vec3 operator/=(Vec3&, double);
 Vec3 operator*(double, Vec3&);
 double operator*(Vec3&, Vec3&);
+bool operator==(const Vec3&, const Vec3&);
+bool operator!=(const Vec3&, const Vec3&);
 
 /*
 
@@ -44,10 +53,18 @@ struct Quat
  double x;
  double y;
  double z;
- double w;
+ double s;
 
  Quat();
+ Quat(const Vec3&, double);
+
+ Mat4 toMatrix() const;
+
+ void applyRotation(const Quat&);
 };
+
+std::ostream& operator<<(std::ostream&, const Quat&);
+Quat operator*(const Quat&, const Quat&);
 
 /*
  * Mat4
@@ -70,10 +87,23 @@ struct Mat4
   static Mat4 Identity();
   static Mat4 Translate(const Vec3&);
   static Mat4 Scale(const Vec3&);
-  //static Mat4 Rotate(const Quat&);
+  static Mat4 Rotate(const Quat&);
 };
 
 std::ostream& operator<<(std::ostream&, const Mat4&);
 Mat4 operator*(const Mat4&, const Mat4&);
 Mat4 operator*=(Mat4&, const Mat4&);
 Vec3 operator*(const Mat4&, const Vec3&);
+
+struct Transform
+{
+  Vec3 pos;
+  Vec3 scale;
+  Quat rot;
+
+  Transform();
+
+  Mat4 toMatrix() const;
+};
+
+std::ostream& operator<<(std::ostream&, const Transform);

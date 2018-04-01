@@ -177,9 +177,33 @@ CMakeFiles/FPS.dir/src/World.cpp.o.provides: CMakeFiles/FPS.dir/src/World.cpp.o.
 CMakeFiles/FPS.dir/src/World.cpp.o.provides.build: CMakeFiles/FPS.dir/src/World.cpp.o
 
 
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: CMakeFiles/FPS.dir/flags.make
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/component/renderable/BoundingBox.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o -c /home/jamie/Programming/FPS/src/component/renderable/BoundingBox.cpp
+
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jamie/Programming/FPS/src/component/renderable/BoundingBox.cpp > CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.i
+
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jamie/Programming/FPS/src/component/renderable/BoundingBox.cpp -o CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.s
+
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.requires:
+
+.PHONY : CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.requires
+
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.provides: CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.requires
+	$(MAKE) -f CMakeFiles/FPS.dir/build.make CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.provides.build
+.PHONY : CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.provides
+
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.provides.build: CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o
+
+
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o: src/component/renderable/Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o -c /home/jamie/Programming/FPS/src/component/renderable/Model.cpp
 
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.i: cmake_force
@@ -203,7 +227,7 @@ CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o.provides.build: CMakeFil
 
 CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o: src/component/renderable/Renderable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o -c /home/jamie/Programming/FPS/src/component/renderable/Renderable.cpp
 
 CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.i: cmake_force
@@ -227,7 +251,7 @@ CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o.provides.build: CMa
 
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: src/entity/Entity.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/entity/Entity.cpp.o -c /home/jamie/Programming/FPS/src/entity/Entity.cpp
 
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.i: cmake_force
@@ -249,9 +273,33 @@ CMakeFiles/FPS.dir/src/entity/Entity.cpp.o.provides: CMakeFiles/FPS.dir/src/enti
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o.provides.build: CMakeFiles/FPS.dir/src/entity/Entity.cpp.o
 
 
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: CMakeFiles/FPS.dir/flags.make
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/entity/RotationObject.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o -c /home/jamie/Programming/FPS/src/entity/RotationObject.cpp
+
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jamie/Programming/FPS/src/entity/RotationObject.cpp > CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.i
+
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jamie/Programming/FPS/src/entity/RotationObject.cpp -o CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.s
+
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.requires:
+
+.PHONY : CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.requires
+
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.provides: CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.requires
+	$(MAKE) -f CMakeFiles/FPS.dir/build.make CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.provides.build
+.PHONY : CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.provides
+
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.provides.build: CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o
+
+
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o: src/entity/Statue.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/entity/Statue.cpp.o -c /home/jamie/Programming/FPS/src/entity/Statue.cpp
 
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.i: cmake_force
@@ -275,7 +323,7 @@ CMakeFiles/FPS.dir/src/entity/Statue.cpp.o.provides.build: CMakeFiles/FPS.dir/sr
 
 CMakeFiles/FPS.dir/src/main.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/main.cpp.o: src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/FPS.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/FPS.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/main.cpp.o -c /home/jamie/Programming/FPS/src/main.cpp
 
 CMakeFiles/FPS.dir/src/main.cpp.i: cmake_force
@@ -304,9 +352,11 @@ FPS_OBJECTS = \
 "CMakeFiles/FPS.dir/src/InputManager.cpp.o" \
 "CMakeFiles/FPS.dir/src/Math3d.cpp.o" \
 "CMakeFiles/FPS.dir/src/World.cpp.o" \
+"CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o" \
 "CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o" \
 "CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o" \
 "CMakeFiles/FPS.dir/src/entity/Entity.cpp.o" \
+"CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o" \
 "CMakeFiles/FPS.dir/src/entity/Statue.cpp.o" \
 "CMakeFiles/FPS.dir/src/main.cpp.o"
 
@@ -318,9 +368,11 @@ FPS: CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o
 FPS: CMakeFiles/FPS.dir/src/InputManager.cpp.o
 FPS: CMakeFiles/FPS.dir/src/Math3d.cpp.o
 FPS: CMakeFiles/FPS.dir/src/World.cpp.o
+FPS: CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o
 FPS: CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o
 FPS: CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o
 FPS: CMakeFiles/FPS.dir/src/entity/Entity.cpp.o
+FPS: CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o
 FPS: CMakeFiles/FPS.dir/src/entity/Statue.cpp.o
 FPS: CMakeFiles/FPS.dir/src/main.cpp.o
 FPS: CMakeFiles/FPS.dir/build.make
@@ -328,7 +380,7 @@ FPS: /usr/lib/libGL.so
 FPS: /usr/lib/libGLU.so
 FPS: /usr/lib/libglfw.so.3.2
 FPS: CMakeFiles/FPS.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable FPS"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable FPS"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FPS.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -341,9 +393,11 @@ CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.c
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/InputManager.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/Math3d.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/World.cpp.o.requires
+CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/entity/Entity.cpp.o.requires
+CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/entity/Statue.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/main.cpp.o.requires
 

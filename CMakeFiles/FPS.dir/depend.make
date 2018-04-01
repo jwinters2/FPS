@@ -28,8 +28,16 @@ CMakeFiles/FPS.dir/src/World.cpp.o: src/Math3d.h
 CMakeFiles/FPS.dir/src/World.cpp.o: src/World.cpp
 CMakeFiles/FPS.dir/src/World.cpp.o: src/World.h
 CMakeFiles/FPS.dir/src/World.cpp.o: src/entity/Entity.h
-CMakeFiles/FPS.dir/src/World.cpp.o: src/entity/Statue.h
+CMakeFiles/FPS.dir/src/World.cpp.o: src/entity/RotationObject.h
 CMakeFiles/FPS.dir/src/World.cpp.o: src/component/renderable/Renderable.h
+
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/component/renderable/BoundingBox.cpp
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/component/renderable/BoundingBox.h
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/component/renderable/Renderable.h
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/GraphicsManager.h
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/Math3d.h
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/component/renderable/Renderable.h
+CMakeFiles/FPS.dir/src/component/renderable/BoundingBox.cpp.o: src/entity/Entity.h
 
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o: src/component/renderable/Model.cpp
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o: src/component/renderable/Model.h
@@ -48,6 +56,16 @@ CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: src/entity/Entity.h
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: src/Math3d.h
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: src/component/renderable/Model.h
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: src/component/renderable/Renderable.h
+
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/entity/Entity.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/entity/RotationObject.cpp
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/entity/RotationObject.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/GraphicsManager.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/InputManager.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/Math3d.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/component/renderable/Model.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/component/renderable/Renderable.h
+CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o: src/entity/Entity.h
 
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o: src/entity/Entity.h
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o: src/entity/Statue.cpp

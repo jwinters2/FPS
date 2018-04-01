@@ -5,13 +5,17 @@
 
 Statue::Statue()
 {
-  model = new Model("assets/statue2.obj");
-  model->setTransform(Mat4::Translate(pos));
+  model = new Model("assets/statue2.obj","TEX_ERROR");
 }
 
 Statue::~Statue()
 {
   delete model;
+}
+
+void Statue::update()
+{
+  model->setTransform(transform.toMatrix());
 }
 
 void Statue::draw() const

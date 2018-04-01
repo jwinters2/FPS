@@ -69,6 +69,8 @@ iostream
 /home/jamie/Programming/FPS/src/Math3d.cpp
 iostream
 -
+cmath
+-
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h
 
@@ -87,12 +89,24 @@ World.h
 /home/jamie/Programming/FPS/src/World.h
 entity/Entity.h
 /home/jamie/Programming/FPS/src/entity/Entity.h
-entity/Statue.h
-/home/jamie/Programming/FPS/src/entity/Statue.h
+entity/RotationObject.h
+/home/jamie/Programming/FPS/src/entity/RotationObject.h
 
 /home/jamie/Programming/FPS/src/World.h
 Math3d.h
 /home/jamie/Programming/FPS/src/Math3d.h
+vector
+-
+
+/home/jamie/Programming/FPS/src/component/renderable/BoundingBox.cpp
+BoundingBox.h
+/home/jamie/Programming/FPS/src/component/renderable/BoundingBox.h
+GraphicsManager.h
+/home/jamie/Programming/FPS/src/component/renderable/GraphicsManager.h
+
+/home/jamie/Programming/FPS/src/component/renderable/BoundingBox.h
+Renderable.h
+/home/jamie/Programming/FPS/src/component/renderable/Renderable.h
 
 /home/jamie/Programming/FPS/src/component/renderable/Model.cpp
 Model.h
@@ -129,6 +143,22 @@ Math3d.h
 /home/jamie/Programming/FPS/src/entity/Math3d.h
 component/renderable/Renderable.h
 /home/jamie/Programming/FPS/src/entity/component/renderable/Renderable.h
+
+/home/jamie/Programming/FPS/src/entity/RotationObject.cpp
+RotationObject.h
+/home/jamie/Programming/FPS/src/entity/RotationObject.h
+GraphicsManager.h
+/home/jamie/Programming/FPS/src/entity/GraphicsManager.h
+InputManager.h
+/home/jamie/Programming/FPS/src/entity/InputManager.h
+component/renderable/Model.h
+/home/jamie/Programming/FPS/src/entity/component/renderable/Model.h
+
+/home/jamie/Programming/FPS/src/entity/RotationObject.h
+Entity.h
+/home/jamie/Programming/FPS/src/entity/Entity.h
+Math3d.h
+/home/jamie/Programming/FPS/src/entity/Math3d.h
 
 /home/jamie/Programming/FPS/src/entity/Statue.cpp
 GraphicsManager.h
@@ -171,6 +201,8 @@ glm/glm.hpp
 -
 map
 -
+
+src/InputManager.h
 
 src/Math3d.h
 iostream

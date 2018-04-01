@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math3d.h"
+#include <vector>
 
 class Entity;
 
@@ -16,7 +17,7 @@ class World
     void draw() const;
 
   private:
-    Entity** entityList; 
+    std::vector<Entity*> entityList; 
     Vec3 dimensions;
 
     void init();

@@ -4,9 +4,9 @@
 #include "GraphicsManager.h"
 #include "World.h"
 #include "entity/Entity.h"
-#include "entity/Statue.h"
+#include "entity/RotationObject.h"
 
-const int ENTITY_COUNT = 3;
+const int ENTITY_COUNT = 1;
 
 World::World()
 {
@@ -34,11 +34,9 @@ World::World(const Vec3& dim)
 
 void World::init()
 {
-  entityList = new Entity*[ENTITY_COUNT];
-
   for(int i=0; i<ENTITY_COUNT; i++)
   {
-    entityList[i] = new Statue();
+    entityList.push_back(new RotationObject());
   }
 };
 
@@ -51,7 +49,6 @@ World::~World()
       delete entityList[i];
     }
   }
-  delete [] entityList;
 };
 
 void World::update()
@@ -106,7 +103,10 @@ void World::draw() const
   gm.drawLine(v[2], v[6], color);
   gm.drawLine(v[3], v[7], color);
 
-  //gm.renderModel("assets/statue.obj");
+  // axis
+  gm.drawLine(Vec3(0,0,0), Vec3(x,0,0), Vec3(1,0,0));
+  gm.drawLine(Vec3(0,0,0), Vec3(0,y,0), Vec3(0,1,0));
+  gm.drawLine(Vec3(0,0,0), Vec3(0,0,z), Vec3(0,0,1));
 
   // draw each entity
   for(int i=0; i<ENTITY_COUNT; i++)

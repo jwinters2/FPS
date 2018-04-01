@@ -34,9 +34,18 @@ class GraphicsManager
 
     bool loadModel(std::string);
     void unloadModel(std::string);
+
+    // render a textureless model (use error texture)
     void renderModel(std::string);
     void renderModel(std::string, const Vec3&, const Vec3&, const Quat&);
     void renderModel(std::string, const Mat4&);
+
+    // render a textured model
+    void renderModel(std::string, std::string);
+    void renderModel(std::string, std::string, 
+                     const Vec3&, const Vec3&, const Quat&);
+    void renderModel(std::string, std::string, const Mat4&);
+
     bool isModelLoaded(std::string) const;
 
     bool loadTexture(std::string);

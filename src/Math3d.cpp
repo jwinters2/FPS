@@ -1,6 +1,9 @@
 #include <iostream>
+#include <cmath>
 
 #include "Math3d.h"
+
+const double PI = 3.14159265358959323;
 
 // ----------------
 // VEC3 DEFINITIONS
@@ -10,6 +13,25 @@ Vec3::Vec3(): x(0), y(0), z(0) {}
 Vec3::Vec3(double d): x(d), y(d), z(d) {}
 Vec3::Vec3(double _x, double _y, double _z): x(_x), y(_y), z(_z) {}
 Vec3::Vec3(const Vec3& o): x(o.x), y(o.y), z(o.z) {}
+
+double Vec3::length() const
+{
+  return sqrt(x*x + y*y + z*z);
+}
+
+Vec3 Vec3::normal() const
+{
+  return (*this)/length();
+}
+
+Vec3 Vec3::normalize()
+{
+  if(length() > 0.0)
+  {
+    (*this) /= length();
+  }
+  return Vec3(*this);
+}
 
 std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
@@ -74,16 +96,102 @@ Vec3 operator/=(Vec3& a, double c)
   return Vec3(a);
 }
 
-double operator*(Vec3& a, Vec3& b)
+double operator*(const Vec3& a, const Vec3& b)
 {
   return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+}
+
+bool operator==(const Vec3& a, const Vec3& b)
+{
+  return (a.x == b.x) && (a.y == b.y) && (a.z == b.z);
+}
+
+bool operator!=(const Vec3& a, const Vec3& b)
+{
+  return !(a == b);
 }
 
 // ----------------
 // QUAT DEFINITIONS
 // ----------------
 
-Quat::Quat():x(0),y(0),z(0),w(0) {}
+Quat::Quat():x(0.0),y(0.0),z(0.0),s(1.0) {}
+
+Quat::Quat(const Vec3& axis, double theta)
+{
+  x = axis.x * sin(theta * PI / 360); // theta will be in degrees, convert it to
+  y = axis.y * sin(theta * PI / 360); // radians (and divide it by 2, because
+  z = axis.z * sin(theta * PI / 360); // quaternions)
+  s =          cos(theta * PI / 360); 
+}
+
+void Quat::applyRotation(const Quat& q)
+{
+  Quat temp;
+
+  temp.x = x;
+  temp.y = y;
+  temp.z = z;
+  temp.s = s;
+
+  temp = temp * q;
+
+  x = temp.x;
+  y = temp.y;
+  z = temp.z;
+  s = temp.s;
+}
+
+Mat4 Quat::toMatrix() const
+{
+  /*
+   * [ 1 - 2y^2 - 2z^2,      2xy  + 2zs ,      2xz  - 2ys ,  0 ]
+   * [     2xy  - 2zs ,  1 - 2x^2 - 2z^2,      2yz  + 2xs ,  0 ]
+   * [     2xz  + 2ys ,      2yz  - 2xs ,  1 - 2x^2 - 2y^2,  0 ]
+   * [              0 ,               0 ,               0 ,  1 ]
+   */
+  Mat4 retval;
+
+  retval.x[0] = 1 - (2 * y * y) - (2 * z * z);
+  retval.x[1] =     (2 * x * y) + (2 * z * s);
+  retval.x[2] =     (2 * x * z) - (2 * y * s);
+  retval.x[3] = 0;
+
+  retval.y[0] =     (2 * x * y) - (2 * z * s);
+  retval.y[1] = 1 - (2 * x * x) - (2 * z * z);
+  retval.y[2] =     (2 * y * z) + (2 * x * s);
+  retval.y[3] = 0;
+
+  retval.z[0] =     (2 * x * z) + (2 * y * s);
+  retval.z[1] =     (2 * y * z) - (2 * x * s);
+  retval.z[2] = 1 - (2 * x * x) - (2 * y * y);
+  retval.z[3] = 0;
+
+  retval.w[0] = 0;
+  retval.w[1] = 0;
+  retval.w[2] = 0;
+  retval.w[3] = 1;
+
+  return retval;
+}
+
+Quat operator*(const Quat& A, const Quat& B)
+{
+  Quat retval;
+
+  retval.s = (A.s * B.s) - (A.x * B.x) - (A.y * B.y) - (A.z * B.z);
+  retval.x = (A.s * B.x) + (A.x * B.s) + (A.y * B.z) - (A.z * B.y);
+  retval.y = (A.s * B.y) + (A.y * B.s) + (A.z * B.x) - (A.x * B.z);
+  retval.z = (A.s * B.z) + (A.z * B.s) + (A.x * B.y) - (A.y * B.x);
+
+  return retval;
+}
+
+std::ostream& operator<<(std::ostream& out, const Quat& q)
+{
+  out << "[ " << q.x << ", " << q.y << ", " << q.z << ", s=" << q.s << " ]";
+  return out;
+}
 
 // ----------------
 // MAT4 DEFINITIONS
@@ -155,7 +263,11 @@ Mat4 Mat4::Scale(const Vec3& v)
    retval.z[2] = v.z;
    return retval;
 }
-//static Mat4 Mat4::Rotate(const Quat&);
+
+Mat4 Mat4::Rotate(const Quat& q)
+{
+  return q.toMatrix();
+}
 
 std::ostream& operator<<(std::ostream& out, const Mat4& m)
 {
@@ -227,4 +339,28 @@ Vec3 operator*(const Mat4& A, const Vec3& v)
   retval.y = ( A.y[0] * v.x) + (A.y[1] * v.y) + (A.y[2] * v.z) + A.y[3];
   retval.z = ( A.z[0] * v.x) + (A.z[1] * v.y) + (A.z[2] * v.z) + A.z[3];
   return retval;
+}
+
+// ---------------------
+// TRANSFORM DEFINITIONS
+// ---------------------
+
+Transform::Transform()
+{
+  pos = Vec3(0.0, 0.0, 0.0);
+  scale = Vec3(1.0, 1.0, 1.0);
+  rot = Quat();
+}
+
+
+Mat4 Transform::toMatrix() const
+{
+  return Mat4::Translate(pos) * Mat4::Rotate(rot) * Mat4::Scale(scale);  
+}
+
+std::ostream& operator<<(std::ostream& out, const Transform& t)
+{
+  std::cout << "  pos : " << t.pos << std::endl
+            << "scale : " << t.scale << std::endl
+            << "  rot : " << t.rot << std::endl;
 }
