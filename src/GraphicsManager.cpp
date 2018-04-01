@@ -121,6 +121,11 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
   // get a reference to the matrix and texure sampler in the shaders
   textureSamplerID = glGetUniformLocation(programID, "texSampler");
   matrixID         = glGetUniformLocation(programID, "MVP");
+  colorID          = glGetUniformLocation(programID, "shading");
+
+  // "load" white and error textures
+  loadWhiteTexture();
+  loadErrorTexture();
 }
 
 GraphicsManager::~GraphicsManager()
@@ -224,6 +229,9 @@ void GraphicsManager::renderModel(std::string path, const Mat4& transform)
     //std::cout << "textureBuffer = " << texture.textureBuffer << std::endl;
     //std::cout << "uvBuffer      = " << model.uvBuffer << std::endl;
 
+    // set the color to white
+    glUniform3f(colorID, 1.0f, 1.0f, 1.0f);
+
     // reset the MVP matrix
     MVPMatrix = ProjectionMatrix * CameraMatrix * toGlmMat4(transform);
     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
@@ -277,8 +285,14 @@ void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
   glm::mat4 scale = glm::scale(glm::mat4(), 
                                glm::vec3(b.x - a.x, b.y - a.y, b.z - a.z));
 
+  glUniform3f(colorID, color.x, color.y, color.z);
   MVPMatrix = ProjectionMatrix * CameraMatrix * translate * scale;
   glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVPMatrix[0][0]);
+
+  // bind the texture
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, textureMap.at("TEX_WHITE").textureBuffer);
+  glUniform1i(textureSamplerID, 0);
 
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
@@ -290,8 +304,21 @@ void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
     0,
     (void*)0
   );
+  
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, textureMap.at("TEX_WHITE").textureBuffer);
+  glVertexAttribPointer(
+    1,
+    2,
+    GL_FLOAT,
+    GL_FALSE,
+    0,
+    (void*)0
+  );
+
   glDrawArrays(GL_LINES, 0, 2);
   glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
 }
 
 glm::mat4 GraphicsManager::toGlmMat4(const Mat4& m)

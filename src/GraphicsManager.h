@@ -62,17 +62,22 @@ class GraphicsManager
     GLuint programID;
     GLuint vertexArrayID;
     GLuint textureSamplerID;
+    GLuint matrixID;
+    GLuint colorID;
+
     GLuint lineVertexBuffer;
 
     glm::mat4 CameraMatrix;
     glm::mat4 ProjectionMatrix;
     glm::mat4 MVPMatrix;
-    GLuint matrixID;
 
     std::map<std::string, ModelMapEntry>   modelMap;
     std::map<std::string, TextureMapEntry> textureMap;
 
     GLuint loadShaders(std::string, std::string) const;
+
+    bool loadWhiteTexture();
+    bool loadErrorTexture();
 
     static glm::mat4 toGlmMat4(const Mat4&);
     static bool isPowerOfTwo(unsigned int);

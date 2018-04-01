@@ -383,3 +383,73 @@ bool GraphicsManager::loadTexture(std::string path)
 
   delete [] data;
 }
+
+bool GraphicsManager::loadWhiteTexture()
+{
+  unsigned int imageSize = 2 * 2 * 3;
+  char data[imageSize];
+
+  for(int i=0; i<imageSize; i++)
+  {
+    data[i] = 0xFF; // for white
+  }
+
+  GLuint textureBuffer;
+  glGenTextures(1, &textureBuffer);
+  glBindTexture(GL_TEXTURE_2D, textureBuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, 
+               GL_BGR, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
+                  GL_LINEAR_MIPMAP_LINEAR);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  TextureMapEntry newTexture;
+  newTexture.textureBuffer = textureBuffer;
+
+  //std::cout << "new textureBuffer = " << textureBuffer << std::endl;
+
+  textureMap["TEX_WHITE"] = newTexture;
+}
+
+bool GraphicsManager::loadErrorTexture()
+{
+  // the "error texture" is a pink and black texture we use to draw if
+  // the correct texture couldn't be loaded
+
+  unsigned int imageSize = 32 * 32 * 3;
+  char data[imageSize];
+
+  for(int i=0; i<imageSize; i+=3)
+  {
+    if(i%2 == 0)
+    {
+      data[i  ] = 0xFF; // even-numbered pixels are pink
+      data[i+1] = 0x80;
+      data[i+2] = 0x80;
+    }
+    else
+    {
+      data[i  ] = 0x00; // odd-numbered pixels are black
+      data[i+1] = 0x00;
+      data[i+2] = 0x00;
+    }
+  }
+
+  GLuint textureBuffer;
+  glGenTextures(1, &textureBuffer);
+  glBindTexture(GL_TEXTURE_2D, textureBuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 32, 32, 0, 
+               GL_BGR, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
+                  GL_LINEAR_MIPMAP_LINEAR);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  TextureMapEntry newTexture;
+  newTexture.textureBuffer = textureBuffer;
+
+  //std::cout << "new textureBuffer = " << textureBuffer << std::endl;
+
+  textureMap["TEX_ERROR"] = newTexture;
+}

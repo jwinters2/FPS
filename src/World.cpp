@@ -86,7 +86,7 @@ void World::draw() const
   v[6] = Vec3( 1.0 * x,  1.0 * y,  1.0 * z);
   v[7] = Vec3(-1.0 * x,  1.0 * y,  1.0 * z);
 
-  Vec3 color(1.0, 1.0, 1.0);
+  Vec3 color(1.0, 0.0, 0.0);
 
   // bottom square of box
   gm.drawLine(v[0], v[1], color);
