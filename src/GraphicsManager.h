@@ -13,7 +13,13 @@ class GLFWwindow;
 struct ModelMapEntry
 {
   GLuint vertexBuffer;
+  GLuint uvBuffer;
   unsigned int triangleCount;
+};
+
+struct TextureMapEntry
+{
+  GLuint textureBuffer;
 };
 
 class GraphicsManager
@@ -33,6 +39,10 @@ class GraphicsManager
     void renderModel(std::string, const Mat4&);
     bool isModelLoaded(std::string) const;
 
+    bool loadTexture(std::string);
+    void unloadTexture(std::string);
+    bool isTextureLoaded(std::string) const;
+
     void beginRender() const;
     void endRender() const;
 
@@ -51,6 +61,7 @@ class GraphicsManager
 
     GLuint programID;
     GLuint vertexArrayID;
+    GLuint textureSamplerID;
     GLuint lineVertexBuffer;
 
     glm::mat4 CameraMatrix;
@@ -58,9 +69,11 @@ class GraphicsManager
     glm::mat4 MVPMatrix;
     GLuint matrixID;
 
-    std::map<std::string, ModelMapEntry> modelMap;
+    std::map<std::string, ModelMapEntry>   modelMap;
+    std::map<std::string, TextureMapEntry> textureMap;
 
     GLuint loadShaders(std::string, std::string) const;
 
-    glm::mat4 toGlmMat4(const Mat4&) const;
+    static glm::mat4 toGlmMat4(const Mat4&);
+    static bool isPowerOfTwo(unsigned int);
 };

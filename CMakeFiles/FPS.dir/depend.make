@@ -7,6 +7,12 @@ CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/Math3d.h
 CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/entity/Entity.h
 CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o: src/component/renderable/Renderable.h
 
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: src/GraphicsManager.h
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: src/GraphicsManagerFileLoaders.cpp
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: src/Math3d.h
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: src/entity/Entity.h
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: src/component/renderable/Renderable.h
+
 CMakeFiles/FPS.dir/src/InputManager.cpp.o: src/GraphicsManager.h
 CMakeFiles/FPS.dir/src/InputManager.cpp.o: src/InputManager.cpp
 CMakeFiles/FPS.dir/src/InputManager.cpp.o: src/InputManager.h

@@ -36,6 +36,24 @@ glm/glm.hpp
 map
 -
 
+/home/jamie/Programming/FPS/src/GraphicsManagerFileLoaders.cpp
+cstdlib
+-
+vector
+-
+fstream
+-
+GL/glew.h
+-
+GLFW/glfw3.h
+-
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+GraphicsManager.h
+/home/jamie/Programming/FPS/src/GraphicsManager.h
+
 /home/jamie/Programming/FPS/src/InputManager.cpp
 InputManager.h
 /home/jamie/Programming/FPS/src/InputManager.h

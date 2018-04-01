@@ -17,6 +17,8 @@ int main(int argc, char** argv)
   std::chrono::time_point<std::chrono::high_resolution_clock> newTime;
   std::chrono::duration<double> elapsedTime;
 
+  gm.loadTexture("assets/texture.bmp");
+
   World world(10.0);
   while( !im.getCloseButtonPressed() )
   {
@@ -41,8 +43,7 @@ int main(int argc, char** argv)
     // the current time is now the new time
     currentTime = newTime;
 
-    //std::cout << "elapsed time: " << elapsedTime.count() << " " << std::endl;
-    //std::cout << "FPS:          " << 1/elapsedTime.count() << " " << std::endl;
+  //std::cout << "elapsed time: " << elapsedTime.count() << " " << std::endl;
+  //std::cout << "FPS:          " << 1/elapsedTime.count() << " " << std::endl;
   }
-
 };

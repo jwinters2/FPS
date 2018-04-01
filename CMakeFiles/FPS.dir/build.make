@@ -81,9 +81,33 @@ CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o.provides: CMakeFiles/FPS.dir/src/Gr
 CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o.provides.build: CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o
 
 
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: CMakeFiles/FPS.dir/flags.make
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o: src/GraphicsManagerFileLoaders.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o -c /home/jamie/Programming/FPS/src/GraphicsManagerFileLoaders.cpp
+
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jamie/Programming/FPS/src/GraphicsManagerFileLoaders.cpp > CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.i
+
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jamie/Programming/FPS/src/GraphicsManagerFileLoaders.cpp -o CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.s
+
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.requires:
+
+.PHONY : CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.requires
+
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.provides: CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.requires
+	$(MAKE) -f CMakeFiles/FPS.dir/build.make CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.provides.build
+.PHONY : CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.provides
+
+CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.provides.build: CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o
+
+
 CMakeFiles/FPS.dir/src/InputManager.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/InputManager.cpp.o: src/InputManager.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FPS.dir/src/InputManager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FPS.dir/src/InputManager.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/InputManager.cpp.o -c /home/jamie/Programming/FPS/src/InputManager.cpp
 
 CMakeFiles/FPS.dir/src/InputManager.cpp.i: cmake_force
@@ -107,7 +131,7 @@ CMakeFiles/FPS.dir/src/InputManager.cpp.o.provides.build: CMakeFiles/FPS.dir/src
 
 CMakeFiles/FPS.dir/src/Math3d.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/Math3d.cpp.o: src/Math3d.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FPS.dir/src/Math3d.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/FPS.dir/src/Math3d.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/Math3d.cpp.o -c /home/jamie/Programming/FPS/src/Math3d.cpp
 
 CMakeFiles/FPS.dir/src/Math3d.cpp.i: cmake_force
@@ -131,7 +155,7 @@ CMakeFiles/FPS.dir/src/Math3d.cpp.o.provides.build: CMakeFiles/FPS.dir/src/Math3
 
 CMakeFiles/FPS.dir/src/World.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/World.cpp.o: src/World.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/FPS.dir/src/World.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/FPS.dir/src/World.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/World.cpp.o -c /home/jamie/Programming/FPS/src/World.cpp
 
 CMakeFiles/FPS.dir/src/World.cpp.i: cmake_force
@@ -155,7 +179,7 @@ CMakeFiles/FPS.dir/src/World.cpp.o.provides.build: CMakeFiles/FPS.dir/src/World.
 
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o: src/component/renderable/Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o -c /home/jamie/Programming/FPS/src/component/renderable/Model.cpp
 
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.i: cmake_force
@@ -179,7 +203,7 @@ CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o.provides.build: CMakeFil
 
 CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o: src/component/renderable/Renderable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o -c /home/jamie/Programming/FPS/src/component/renderable/Renderable.cpp
 
 CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.i: cmake_force
@@ -203,7 +227,7 @@ CMakeFiles/FPS.dir/src/component/renderable/Renderable.cpp.o.provides.build: CMa
 
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o: src/entity/Entity.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/entity/Entity.cpp.o -c /home/jamie/Programming/FPS/src/entity/Entity.cpp
 
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.i: cmake_force
@@ -227,7 +251,7 @@ CMakeFiles/FPS.dir/src/entity/Entity.cpp.o.provides.build: CMakeFiles/FPS.dir/sr
 
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.o: src/entity/Statue.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/entity/Statue.cpp.o -c /home/jamie/Programming/FPS/src/entity/Statue.cpp
 
 CMakeFiles/FPS.dir/src/entity/Statue.cpp.i: cmake_force
@@ -251,7 +275,7 @@ CMakeFiles/FPS.dir/src/entity/Statue.cpp.o.provides.build: CMakeFiles/FPS.dir/sr
 
 CMakeFiles/FPS.dir/src/main.cpp.o: CMakeFiles/FPS.dir/flags.make
 CMakeFiles/FPS.dir/src/main.cpp.o: src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/FPS.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/FPS.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/FPS.dir/src/main.cpp.o -c /home/jamie/Programming/FPS/src/main.cpp
 
 CMakeFiles/FPS.dir/src/main.cpp.i: cmake_force
@@ -276,6 +300,7 @@ CMakeFiles/FPS.dir/src/main.cpp.o.provides.build: CMakeFiles/FPS.dir/src/main.cp
 # Object files for target FPS
 FPS_OBJECTS = \
 "CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o" \
+"CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o" \
 "CMakeFiles/FPS.dir/src/InputManager.cpp.o" \
 "CMakeFiles/FPS.dir/src/Math3d.cpp.o" \
 "CMakeFiles/FPS.dir/src/World.cpp.o" \
@@ -289,6 +314,7 @@ FPS_OBJECTS = \
 FPS_EXTERNAL_OBJECTS =
 
 FPS: CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o
+FPS: CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o
 FPS: CMakeFiles/FPS.dir/src/InputManager.cpp.o
 FPS: CMakeFiles/FPS.dir/src/Math3d.cpp.o
 FPS: CMakeFiles/FPS.dir/src/World.cpp.o
@@ -302,7 +328,7 @@ FPS: /usr/lib/libGL.so
 FPS: /usr/lib/libGLU.so
 FPS: /usr/lib/libglfw.so.3.2
 FPS: CMakeFiles/FPS.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable FPS"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jamie/Programming/FPS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable FPS"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FPS.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -311,6 +337,7 @@ CMakeFiles/FPS.dir/build: FPS
 .PHONY : CMakeFiles/FPS.dir/build
 
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o.requires
+CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/InputManager.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/Math3d.cpp.o.requires
 CMakeFiles/FPS.dir/requires: CMakeFiles/FPS.dir/src/World.cpp.o.requires

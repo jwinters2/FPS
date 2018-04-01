@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/jamie/Programming/FPS/src/GraphicsManager.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o"
+  "/home/jamie/Programming/FPS/src/GraphicsManagerFileLoaders.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o"
   "/home/jamie/Programming/FPS/src/InputManager.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/InputManager.cpp.o"
   "/home/jamie/Programming/FPS/src/Math3d.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/Math3d.cpp.o"
   "/home/jamie/Programming/FPS/src/World.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/World.cpp.o"
