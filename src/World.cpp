@@ -35,8 +35,10 @@ World::World(const Vec3& dim)
 void World::init()
 {
   pe = new PhysicsEngine(this);
-  entityList.push_back(new RotationObject());
-  entityList.push_back(new Box(pe));
+  //entityList.push_back(new RotationObject());
+  entityList.push_back(new Box(pe, Vec3(0, 3,0), Vec3(0.25)));
+  entityList.push_back(new Box(pe, Vec3(0, 1,0), Vec3(0.5, 0.25, 0.5)));
+  entityList.push_back(new Box(pe, Vec3(0,-1,0), Vec3(1, 0.5, 1)));
 };
 
 World::~World()

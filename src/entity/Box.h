@@ -6,7 +6,7 @@
 class Box: public Entity
 {
   public:
-    Box(PhysicsEngine*);
+    Box(PhysicsEngine*, const Vec3&, const Vec3&);
     ~Box();
 
     void update();

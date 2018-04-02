@@ -8,6 +8,12 @@
 class World;
 class Entity;
 
+struct CollisionInfo
+{
+  bool areColliding;
+  Vec3 minimumSeparation;
+};
+
 class PhysicsEngine
 {
   public:

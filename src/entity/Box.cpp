@@ -2,10 +2,11 @@
 #include "component/renderable/WireframeBox.h"
 #include "PhysicsEngine.h"
 
-Box::Box(PhysicsEngine* pe)
+Box::Box(PhysicsEngine* pe, const Vec3& pos, const Vec3& dim)
 {
-  rigidBody = new RigidBody(this, Vec3(0.5), 1.0);
-  model = new WireframeBox(Vec3(0.5), Vec3(1.0));
+  transform.pos = pos;
+  rigidBody = new RigidBody(this, dim, 1.0);
+  model = new WireframeBox(dim, Vec3(1.0));
   if(pe != nullptr)
   {
     pe->addObject(this);
