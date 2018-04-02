@@ -1,60 +1,61 @@
 #include <iostream>
 #include <math.h>
 
-#include "GraphicsManager.h"
 #include "World.h"
-#include "entity/Entity.h"
-#include "entity/RotationObject.h"
+#include "GraphicsManager.h"
+#include "PhysicsEngine.h"
 
-const int ENTITY_COUNT = 1;
+#include "entity/Box.h"
 
 World::World()
 {
-  dimensions = Vec3(1.0);
+  dimension = Vec3(1.0);
   init();
 }
 
 World::World(double size)
 {
-  dimensions = Vec3(size);
+  dimension = Vec3(size);
   init();
 }
 
 World::World(double x, double y, double z)
 {
-  dimensions = Vec3(x,y,z);
+  dimension = Vec3(x,y,z);
   init();
 }
 
 World::World(const Vec3& dim)
 {
-  dimensions = Vec3(dim);
+  dimension = Vec3(dim);
   init();
 }
 
 void World::init()
 {
-  for(int i=0; i<ENTITY_COUNT; i++)
-  {
-    entityList.push_back(new RotationObject());
-  }
+  pe = new PhysicsEngine(this);
+  entityList.push_back(new Box(pe));
 };
 
 World::~World()
 {
-  for(int i=0; i<ENTITY_COUNT; i++)
+  for(int i=0; i<entityList.size(); i++)
   {
     if(entityList[i] != nullptr)
     {
       delete entityList[i];
     }
   }
+
+  delete pe;
 };
 
-void World::update()
+void World::update(double dt)
 {
+  pe->performPhysics(dt);
+
   // this should use an octree
-  for(int i=0; i<ENTITY_COUNT; i++)
+  for(int i=0; i<entityList.size(); i++)
   {
     if(entityList[i] != nullptr)
     {
@@ -69,9 +70,9 @@ void World::draw() const
   gm.beginRender();
 
   // draw the bounding box
-  double x = dimensions.x/2.0;
-  double y = dimensions.y/2.0;
-  double z = dimensions.z/2.0;
+  double x = dimension.x;
+  double y = dimension.y;
+  double z = dimension.z;
 
   Vec3 v[8];
   v[0] = Vec3(-1.0 * x, -1.0 * y, -1.0 * z);
@@ -109,7 +110,7 @@ void World::draw() const
   gm.drawLine(Vec3(0,0,0), Vec3(0,0,z), Vec3(0,0,1));
 
   // draw each entity
-  for(int i=0; i<ENTITY_COUNT; i++)
+  for(int i=0; i<entityList.size(); i++)
   {
     if(entityList[i] != nullptr)
     {
@@ -120,4 +121,9 @@ void World::draw() const
   }
   gm.endRender();
   //std::cout << std::endl;
+}
+
+Vec3 World::getDimension() const
+{
+  return dimension;
 }

@@ -373,17 +373,17 @@ bool GraphicsManager::loadTexture(std::string path)
   width     = *(unsigned int*)&(header[0x12]);
   height    = *(unsigned int*)&(header[0x16]);
 
-  std::cout << "dataPos   = " << dataPos << std::endl;
-  std::cout << "imageSize = " << imageSize << std::endl;
-  std::cout << "width     = " << width << std::endl;
-  std::cout << "height    = " << height << std::endl;
+  //std::cout << "dataPos   = " << dataPos << std::endl;
+  //std::cout << "imageSize = " << imageSize << std::endl;
+  //std::cout << "width     = " << width << std::endl;
+  //std::cout << "height    = " << height << std::endl;
 
   // if the file is not formatted correctly, fill in the missing info
   if(dataPos   == 0) dataPos = 54;
   if(imageSize == 0) imageSize = width * height * 3;
 
-  std::cout << "real dataPos   = " << dataPos << std::endl;
-  std::cout << "real imageSize = " << imageSize << std::endl;
+  //std::cout << "real dataPos   = " << dataPos << std::endl;
+  //std::cout << "real imageSize = " << imageSize << std::endl;
 
   // dimensions must be powers of 2 (and probably should be the same)
 

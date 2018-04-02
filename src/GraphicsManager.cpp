@@ -96,6 +96,13 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
   programID = loadShaders("shaders/VertexShader.glsl",
                           "shaders/FragmentShader.glsl");
 
+  // check for errors
+  if(programID == 0)
+  {
+    std::cerr << "Error: OpenGL program could not be created" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
 
   // setup a vertexbuffer for a single line
   glGenBuffers(1, &lineVertexBuffer);
@@ -137,9 +144,25 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
 GraphicsManager::~GraphicsManager()
 {
   std::cout << "shutting down graphics manager" << std::endl;
+
+  // free model buffers
+  for(auto i = modelMap.begin(); i != modelMap.end(); ++i)
+  {
+    glDeleteBuffers(1, &(i->second.vertexBuffer));
+    glDeleteBuffers(1, &(i->second.uvBuffer));
+    glDeleteBuffers(1, &(i->second.normalBuffer));
+  }
+
   glDeleteBuffers(1, &lineVertexBuffer);
-  glDeleteVertexArrays(1, &vertexArrayID);
   glDeleteProgram(programID);
+
+  // free texture buffers
+  for(auto i = textureMap.begin(); i != textureMap.end(); ++i)
+  {
+    glDeleteTextures(1, &(i->second.textureBuffer));
+  }
+
+  glDeleteVertexArrays(1, &vertexArrayID);
 
   glfwDestroyWindow(window);
   glfwTerminate();
@@ -383,6 +406,40 @@ void GraphicsManager::drawLine(const Vec3& a,const Vec3& b,const Vec3& color)
   glDrawArrays(GL_LINES, 0, 2);
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
+}
+
+void GraphicsManager::drawWireframeBox(const Vec3& center
+                                      ,const Vec3& dimension
+                                      ,const Vec3& color
+                                      ,const Mat4& transform)
+{
+  Vec3 v[8];
+  v[0] = center + Vec3(-dimension.x, -dimension.y, -dimension.z)/2;
+  v[1] = center + Vec3( dimension.x, -dimension.y, -dimension.z)/2;
+  v[2] = center + Vec3(-dimension.x,  dimension.y, -dimension.z)/2;
+  v[3] = center + Vec3( dimension.x,  dimension.y, -dimension.z)/2;
+  v[4] = center + Vec3(-dimension.x, -dimension.y,  dimension.z)/2;
+  v[5] = center + Vec3( dimension.x, -dimension.y,  dimension.z)/2;
+  v[6] = center + Vec3(-dimension.x,  dimension.y,  dimension.z)/2;
+  v[7] = center + Vec3( dimension.x,  dimension.y,  dimension.z)/2;
+
+  // bottom square
+  drawLine(transform * v[0], transform * v[1], color);
+  drawLine(transform * v[1], transform * v[3], color);
+  drawLine(transform * v[3], transform * v[2], color);
+  drawLine(transform * v[2], transform * v[0], color);
+
+  // top square
+  drawLine(transform * v[4], transform * v[5], color);
+  drawLine(transform * v[5], transform * v[7], color);
+  drawLine(transform * v[7], transform * v[6], color);
+  drawLine(transform * v[6], transform * v[4], color);
+
+  // walls
+  drawLine(transform * v[0], transform * v[4], color);
+  drawLine(transform * v[1], transform * v[5], color);
+  drawLine(transform * v[2], transform * v[6], color);
+  drawLine(transform * v[3], transform * v[7], color);
 }
 
 glm::mat4 GraphicsManager::toGlmMat4(const Mat4& m)

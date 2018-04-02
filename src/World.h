@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Math3d.h"
+#include "component/rigidbody/RigidBody.h"
+#include "PhysicsEngine.h"
+
 #include <vector>
 
 class Entity;
@@ -13,12 +16,15 @@ class World
     World(double, double, double);
     World(const Vec3&);
     ~World();
-    void update();
+    void update(double);
     void draw() const;
+
+    Vec3 getDimension() const;
 
   private:
     std::vector<Entity*> entityList; 
-    Vec3 dimensions;
+    PhysicsEngine* pe;
+    Vec3 dimension;
 
     void init();
 };

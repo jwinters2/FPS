@@ -30,6 +30,7 @@ class GraphicsManager
     ~GraphicsManager();
 
     void drawLine(const Vec3&,const Vec3&,const Vec3&);
+    void drawWireframeBox(const Vec3&, const Vec3&, const Vec3&, const Mat4&);
 
     void render(const Entity&) const;
 

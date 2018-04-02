@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "component/renderable/Model.h"
 
-Entity::Entity()
+Entity::Entity():rigidBody(nullptr),model(nullptr)
 {
 };
 

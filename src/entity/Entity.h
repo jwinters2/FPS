@@ -2,6 +2,7 @@
 
 #include "Math3d.h"
 #include "component/renderable/Renderable.h"
+#include "component/rigidbody/RigidBody.h"
 
 class Entity
 {
@@ -17,4 +18,8 @@ class Entity
   protected:
     Transform transform;
     Renderable* model;
+    RigidBody* rigidBody;
+
+  friend class PhysicsEngine;
+  friend class RigidBody;
 };
