@@ -107,6 +107,8 @@ GraphicsManager.h
 /home/jamie/Programming/FPS/src/GraphicsManager.h
 PhysicsEngine.h
 /home/jamie/Programming/FPS/src/PhysicsEngine.h
+entity/RotationObject.h
+/home/jamie/Programming/FPS/src/entity/RotationObject.h
 entity/Box.h
 /home/jamie/Programming/FPS/src/entity/Box.h
 

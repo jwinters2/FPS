@@ -43,6 +43,7 @@ CMakeFiles/FPS.dir/src/World.cpp.o
  /home/jamie/Programming/FPS/src/component/rigidbody/RigidBody.h
  /home/jamie/Programming/FPS/src/entity/Box.h
  /home/jamie/Programming/FPS/src/entity/Entity.h
+ /home/jamie/Programming/FPS/src/entity/RotationObject.h
  src/component/renderable/Renderable.h
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o
  /home/jamie/Programming/FPS/src/component/renderable/Model.cpp

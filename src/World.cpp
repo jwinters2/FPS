@@ -5,6 +5,7 @@
 #include "GraphicsManager.h"
 #include "PhysicsEngine.h"
 
+#include "entity/RotationObject.h"
 #include "entity/Box.h"
 
 World::World()
@@ -34,6 +35,7 @@ World::World(const Vec3& dim)
 void World::init()
 {
   pe = new PhysicsEngine(this);
+  entityList.push_back(new RotationObject());
   entityList.push_back(new Box(pe));
 };
 

@@ -5,8 +5,7 @@
 
 RotationObject::RotationObject()
 {
-  model = new Model("assets/rotationModel.0obj","assets/rotationTex.bmp");
-  transform.scale = Vec3(2,1,1);
+  model = new Model("assets/rotationModel.obj","assets/rotationTex.bmp");
 }
 
 RotationObject::~RotationObject()
