@@ -7,11 +7,16 @@ class Entity;
 class RigidBody
 {
   public:
-    RigidBody(Entity*, const Vec3&, double);
+    RigidBody(Entity*, const Vec3&, double, double);
     ~RigidBody();
 
     void update(double);
     void updateOwner();
+
+    void setPosition(const Vec3&);
+    void addPosition(const Vec3&);
+    void setVelocity(const Vec3&);
+    void addVelocity(const Vec3&);
 
   private:
     Entity* owner;
@@ -27,8 +32,9 @@ class RigidBody
     Quat rotation;
     Quat angular_vel;
 
-    // mass and moment of inertia
-    double mass;
+    // inverted mass, restitution and moment of inertia
+    double invMass;
+    double restitution;
 
   friend class PhysicsEngine;
 };

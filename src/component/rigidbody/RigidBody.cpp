@@ -2,8 +2,9 @@
 #include "entity/Entity.h"
 #include "GraphicsManager.h"
 
-RigidBody::RigidBody(Entity* own, const Vec3& dim, double m):
-                     owner(own), dimension(dim), mass(m)
+RigidBody::RigidBody(Entity* own, const Vec3& dim, double m, double r):
+                     owner(own), dimension(dim), invMass((m==0?0:1/m)),
+                     restitution(r)
 {
   if(owner != nullptr)
   {
@@ -15,6 +16,26 @@ RigidBody::RigidBody(Entity* own, const Vec3& dim, double m):
 }
 
 RigidBody::~RigidBody() {}
+
+void RigidBody::setPosition(const Vec3& p)
+{
+  position = p;
+}
+
+void RigidBody::addPosition(const Vec3& p)
+{
+  position += p;
+}
+
+void RigidBody::setVelocity(const Vec3& v)
+{
+  velocity = v;
+}
+
+void RigidBody::addVelocity(const Vec3& v)
+{
+  velocity += v;
+}
 
 void RigidBody::update(double dt)
 {

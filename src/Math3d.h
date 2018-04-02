@@ -31,12 +31,13 @@ Vec3 operator+(const Vec3&, const Vec3&);
 Vec3 operator+=(Vec3&, const Vec3&);
 Vec3 operator-(const Vec3&, const Vec3&);
 Vec3 operator-=(Vec3&, const Vec3&);
+Vec3 operator*(double, const Vec3&);
 Vec3 operator*(const Vec3&, double);
 Vec3 operator*=(Vec3&, double);
 Vec3 operator/(const Vec3&, double);
 Vec3 operator/=(Vec3&, double);
 Vec3 operator*(double, Vec3&);
-double operator*(Vec3&, Vec3&);
+double operator*(const Vec3&, const Vec3&);
 bool operator==(const Vec3&, const Vec3&);
 bool operator!=(const Vec3&, const Vec3&);
 

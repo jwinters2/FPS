@@ -14,6 +14,10 @@ class Entity
     virtual void draw() const;
 
     void setPosition(const Vec3&);
+    void addPosition(const Vec3&);
+
+    void setVelocity(const Vec3&);
+    void addVelocity(const Vec3&);
 
   protected:
     Transform transform;

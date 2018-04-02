@@ -12,6 +12,7 @@ struct CollisionInfo
 {
   bool areColliding;
   Vec3 minimumSeparation;
+  Vec3 impulse;
 };
 
 class PhysicsEngine
@@ -31,5 +32,5 @@ class PhysicsEngine
 
     Vec3 gravity;
 
-    bool insideWorldBounds(const RigidBody&) const;
+    bool insideWorldBounds(const RigidBody&, CollisionInfo&) const;
 };

@@ -36,9 +36,13 @@ void World::init()
 {
   pe = new PhysicsEngine(this);
   //entityList.push_back(new RotationObject());
-  entityList.push_back(new Box(pe, Vec3(0, 3,0), Vec3(0.25)));
-  entityList.push_back(new Box(pe, Vec3(0, 1,0), Vec3(0.5, 0.25, 0.5)));
-  entityList.push_back(new Box(pe, Vec3(0,-1,0), Vec3(1, 0.5, 1)));
+  //entityList.push_back(new Box(pe, Vec3(0, 3,0), Vec3(0.25)));
+  //entityList.push_back(new Box(pe, Vec3(0, 1,0), Vec3(0.5, 0.25, 0.5)));
+  //entityList.push_back(new Box(pe, Vec3(0,-1,0), Vec3(1, 0.5, 1)));
+
+  Entity* e = new Box(pe, Vec3(0,3,0), Vec3(0.25));
+  e->setVelocity(Vec3( rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5));
+  entityList.push_back(e);
 };
 
 World::~World()

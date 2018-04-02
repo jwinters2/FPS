@@ -70,7 +70,7 @@ Vec3 operator*(const Vec3& a, double c)
   return Vec3(c * a.x, c * a.y, c * a.z);
 }
 
-Vec3 operator*(double c, Vec3& a)
+Vec3 operator*(double c, const Vec3& a)
 {
   return Vec3(c * a.x, c * a.y, c * a.z);
 }
