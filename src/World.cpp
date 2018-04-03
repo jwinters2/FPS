@@ -46,7 +46,7 @@ void World::init()
 
   e = new Box(pe, Vec3(4,0,0), Vec3(0.5));
   e->setVelocity(Vec3(-1,0,0));
-  e->setMass(0);
+  e->setMass(3);
   entityList.push_back(e);
 };
 
