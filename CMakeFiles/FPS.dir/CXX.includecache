@@ -87,6 +87,8 @@ entity/Entity.h
 /home/jamie/Programming/FPS/src/entity/Entity.h
 vector
 -
+cmath
+-
 
 /home/jamie/Programming/FPS/src/PhysicsEngine.h
 Math3d.h

@@ -18,14 +18,18 @@ class RigidBody
     void setVelocity(const Vec3&);
     void addVelocity(const Vec3&);
 
+    void addImpulse(const Vec3&);
+    void applyImpulses();
+
     void setMass(double);
 
   private:
     Entity* owner;
 
-    // position, and velocity
+    // position, velocity and impulse
     Vec3 position;
     Vec3 velocity;
+    Vec3 impulse;
 
     // bounding box
     Vec3 dimension;

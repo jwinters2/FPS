@@ -13,6 +13,7 @@ RigidBody::RigidBody(Entity* own, const Vec3& dim, double m, double r):
   }
 
   velocity = Vec3(0);
+  impulse  = Vec3(0);
 }
 
 RigidBody::~RigidBody() {}
@@ -35,6 +36,17 @@ void RigidBody::setVelocity(const Vec3& v)
 void RigidBody::addVelocity(const Vec3& v)
 {
   velocity += v;
+}
+
+void RigidBody::addImpulse(const Vec3& i)
+{
+  impulse += i;
+}
+
+void RigidBody::applyImpulses()
+{
+  velocity += impulse * invMass;
+  impulse = Vec3(0);
 }
 
 void RigidBody::setMass(double m)

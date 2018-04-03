@@ -3,8 +3,9 @@
 #include "entity/Entity.h"
 
 #include <vector>
+#include <cmath>
 
-PhysicsEngine::PhysicsEngine(World* w):world(w),gravity(Vec3(0.0,0.0,0.0))
+PhysicsEngine::PhysicsEngine(World* w):world(w),gravity(Vec3(0.0,-1.0,0.0))
 { }
 
 PhysicsEngine::~PhysicsEngine() { }
@@ -19,16 +20,27 @@ void PhysicsEngine::performPhysics(double dt)
   for(int i=0; i<entityList.size(); i++)
   {
     rb = entityList[i]->rigidBody;
+    rb->position += rb->velocity * deltaTime;
     
     // acceleration due to gravity
-    rb->velocity += gravity * deltaTime;
-
-    rb->position += rb->velocity * deltaTime;
+    if(rb->invMass != 0)
+    {
+      // objects with mass handle gravity just like any other force
+      rb->addImpulse(gravity * deltaTime / rb->invMass);
+    }
 
     if(!insideWorldBounds(*rb, ci))
     {
-      rb->position -= rb->velocity * deltaTime;
-      rb->velocity += ci.impulse * rb->invMass;
+      rb->position -= ci.minimumSeparation;
+      //rb->velocity += ci.impulse * rb->invMass;
+      if(rb->invMass != 0)
+      {
+        rb->addImpulse(ci.impulse);
+      }
+      else
+      {
+        rb->velocity += ci.impulse;
+      }
     }
   }
 
@@ -37,6 +49,16 @@ void PhysicsEngine::performPhysics(double dt)
   for(int i=0; i<entityList.size(); i++)
   {
     rb = entityList[i]->rigidBody;
+
+    rb->applyImpulses();
+
+    // acceleration due to gravity
+    if(rb->invMass == 0)
+    {
+      // massless objects just add gravity to its velocity
+      rb->velocity += gravity * deltaTime;
+    }
+
     rb->updateOwner();
   }
 }
@@ -92,7 +114,7 @@ const
   }
 
   ci.areColliding = !retval;
-  if(rb.invMass != 0 && ci.minimumSeparation != Vec3(0) )
+  if(!retval && rb.invMass != 0)// && ci.minimumSeparation != Vec3(0) )
   {
     ci.impulse = -1 * ci.minimumSeparation.normal()
                * (ci.minimumSeparation.normal() * rb.velocity) 
@@ -101,7 +123,9 @@ const
   }
   else
   {
-    ci.impulse = Vec3(0);
+    ci.impulse = -1 * ci.minimumSeparation.normal()
+               * (ci.minimumSeparation.normal() * rb.velocity) 
+               * (1 + rb.restitution);
   }
 
   return retval;
@@ -127,12 +151,12 @@ void PhysicsEngine::checkCollisions() const
         if(ar->invMass != 0)
         {
           ar->position += ci.minimumSeparation * (ar->invMass)/totalInvMass;
-          ar->velocity += ci.impulse * ar->invMass;
+          ar->addImpulse(ci.impulse);
         }
         if(br->invMass != 0)
         {
           br->position -= ci.minimumSeparation * (br->invMass)/totalInvMass;
-          br->velocity -= ci.impulse * br->invMass;
+          br->addImpulse(ci.impulse * -1.0);
           // ci is calculated from the perspective of a hitting b
           // so invert it when b hitting a, because Newton's 3rd law
         }
@@ -152,11 +176,11 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
 
   bool retval = true;
 
-  if(aMax.x > bMin.x && aMin.x < bMax.x)
+  if(retval && aMax.x > bMin.x && aMin.x < bMax.x)
   {
     // a and b are intersecting on the x axis 
-    overlap.x = (a.position.x > b.position.x ? bMax.x - aMin.x
-                                             : aMax.x - bMin.x);
+    overlap.x = (aMax.x - bMin.x < bMax.x - aMin.x ? bMin.x - aMax.x
+                                                   : bMax.x - aMin.x);
   }
   else
   {
@@ -166,8 +190,9 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
   if(retval && aMax.y > bMin.y && aMin.y < bMax.y)
   {
     // a and b are intersecting on the y axis 
-    overlap.y = (a.position.y > b.position.y ? bMax.y - aMin.y
-                                             : aMax.y - bMin.y);
+    //overlap.y = fmin(aMax.y - bMin.y, bMax.y - aMin.y);
+    overlap.y = (aMax.y - bMin.y < bMax.y - aMin.y ? bMin.y - aMax.y
+                                                   : bMax.y - aMin.y);
   }
   else
   {
@@ -177,8 +202,8 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
   if(retval && aMax.z > bMin.z && aMin.z < bMax.z)
   {
     // a and b are intersecting on the z axis 
-    overlap.z = (a.position.z > b.position.z ? bMax.z - aMin.z
-                                             : aMax.z - bMin.z);
+    overlap.z = (aMax.z - bMin.z < bMax.z - aMin.z ? bMin.z - aMax.z
+                                                   : bMax.z - aMin.z);
   }
   else
   {
@@ -191,18 +216,18 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
     if(std::abs(overlap.x) < std::abs(overlap.y)
     && std::abs(overlap.x) < std::abs(overlap.z))
     {
-      ci.minimumSeparation = Vec3(-overlap.x,0,0);
+      ci.minimumSeparation = Vec3(overlap.x,0,0);
     }
     else
     {
       // smallest axis is either y or z
       if(std::abs(overlap.y) < std::abs(overlap.z))
       {
-        ci.minimumSeparation = Vec3(0,-overlap.y,0);
+        ci.minimumSeparation = Vec3(0,overlap.y,0);
       }
       else
       {
-        ci.minimumSeparation = Vec3(0,0,-overlap.z);
+        ci.minimumSeparation = Vec3(0,0,overlap.z);
       }
     }
 
@@ -210,8 +235,7 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
     double rest = (a.restitution > b.restitution ? a.restitution
                                                  : b.restitution);
 
-    // impulse
-    Vec3 displacement = a.position - b.position;
+    Vec3 displacement = ci.minimumSeparation; //a.position - b.position;
 
     /* if one of them has infinite mass, the equation changes a bit
      *
@@ -237,6 +261,9 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
       double Bm = 1.0 / b.invMass;
       massComponent = (Am + Bm) * a.invMass * b.invMass;
     }
+
+    std::cout << -1 * displacement.normal() << std::endl;
+    std::cout << a.velocity - b.velocity << std::endl;
 
     ci.impulse = -1 * displacement.normal()
                * (displacement.normal() * (a.velocity - b.velocity))
