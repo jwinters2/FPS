@@ -1,6 +1,12 @@
 #include <iostream>
 #pragma once
 
+int randInt(int);
+int randInt(int, int);
+double randDouble();
+double randDouble(double);
+double randDouble(double, double);
+
 // quaternion needs to know what this is
 struct Mat4;
 

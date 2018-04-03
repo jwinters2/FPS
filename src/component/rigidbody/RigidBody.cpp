@@ -37,8 +37,16 @@ void RigidBody::addVelocity(const Vec3& v)
   velocity += v;
 }
 
-void RigidBody::update(double dt)
+void RigidBody::setMass(double m)
 {
+  if(m <= 0)
+  {
+    invMass = 0;
+  }
+  else
+  {
+    invMass = 1/m;
+  }
 }
 
 void RigidBody::updateOwner()

@@ -19,6 +19,8 @@ class Entity
     void setVelocity(const Vec3&);
     void addVelocity(const Vec3&);
 
+    void setMass(double);
+
   protected:
     Transform transform;
     Renderable* model;

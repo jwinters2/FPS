@@ -5,6 +5,33 @@
 
 const double PI = 3.14159265358959323;
 
+int randInt(int min, int max)
+{
+  if(min == max) return min;
+  return (rand() % (max - min)) + min;
+}
+
+int randInt(int max)
+{
+  return randInt(0,max);
+}
+
+double randDouble()
+{
+  return (double)rand() / (double)RAND_MAX;
+}
+
+double randDouble(double min, double max)
+{
+  if(max == min) return min;
+  return (randDouble() * (max-min)) + min;
+}
+
+double randDouble(double max)
+{
+  return randDouble(0,max);
+}
+
 // ----------------
 // VEC3 DEFINITIONS
 // ----------------

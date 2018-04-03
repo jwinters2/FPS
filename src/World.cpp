@@ -40,8 +40,13 @@ void World::init()
   //entityList.push_back(new Box(pe, Vec3(0, 1,0), Vec3(0.5, 0.25, 0.5)));
   //entityList.push_back(new Box(pe, Vec3(0,-1,0), Vec3(1, 0.5, 1)));
 
-  Entity* e = new Box(pe, Vec3(0,3,0), Vec3(0.25));
-  e->setVelocity(Vec3( rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5));
+  Entity* e = new Box(pe, Vec3(-4,0,0), Vec3(0.5));
+  e->setVelocity(Vec3(1,0,0));
+  entityList.push_back(e);
+
+  e = new Box(pe, Vec3(4,0,0), Vec3(0.5));
+  e->setVelocity(Vec3(-1,0,0));
+  e->setMass(0);
   entityList.push_back(e);
 };
 

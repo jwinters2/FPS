@@ -54,6 +54,14 @@ void Entity::addVelocity(const Vec3& v)
   }
 }
 
+void Entity::setMass(double m)
+{
+  if(rigidBody != nullptr)
+  {
+    rigidBody->setMass(m);
+  }
+}
+
 void Entity::update()
 {
 };

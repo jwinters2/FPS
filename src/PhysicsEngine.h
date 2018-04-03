@@ -30,7 +30,12 @@ class PhysicsEngine
 
     std::vector<Entity*> entityList;
 
+    double deltaTime;
     Vec3 gravity;
 
     bool insideWorldBounds(const RigidBody&, CollisionInfo&) const;
+    bool boundingBoxCollision(const RigidBody&, const RigidBody&
+                             ,CollisionInfo&) const;
+
+    void checkCollisions() const;
 };

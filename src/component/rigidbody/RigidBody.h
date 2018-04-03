@@ -10,13 +10,15 @@ class RigidBody
     RigidBody(Entity*, const Vec3&, double, double);
     ~RigidBody();
 
-    void update(double);
     void updateOwner();
 
     void setPosition(const Vec3&);
     void addPosition(const Vec3&);
+
     void setVelocity(const Vec3&);
     void addVelocity(const Vec3&);
+
+    void setMass(double);
 
   private:
     Entity* owner;
