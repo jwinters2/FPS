@@ -234,6 +234,11 @@ bool GraphicsManager::loadModel(std::string path)
         if(ni != 0)  n_indices .push_back(ni);
       }
     }
+    else
+    {
+      // ignore the line if it starts with any other header
+      file.ignore(1,'\n');
+    }
   }
 
   // end of the file, un-compress the data

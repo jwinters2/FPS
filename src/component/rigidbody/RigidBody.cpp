@@ -2,6 +2,8 @@
 #include "entity/Entity.h"
 #include "GraphicsManager.h"
 
+#include <fstream>
+
 RigidBody::RigidBody(Entity* own, const Vec3& dim, double m, double r):
                      owner(own), dimension(dim), invMass((m==0?0:1/m)),
                      restitution(r)
@@ -17,6 +19,34 @@ RigidBody::RigidBody(Entity* own, const Vec3& dim, double m, double r):
 }
 
 RigidBody::~RigidBody() {}
+
+void RigidBody::loadHitbox(std::string filename)
+{
+  std::ifstream file("./" + filename);
+  if(!file.is_open())
+  {
+    std::cerr << "Error: hitbox file " << filename << "could not be loaded"
+              << std::endl;
+    return;
+  }
+
+  std::string header;
+  while(file >> header)
+  {
+    if(header.compare("v") == 0)
+    {
+      // this line is a vertex
+      Vec3 v;
+      file >> v.x >> v.y >> v.z;
+      hitbox.push_back(v);
+    }
+    else
+    {
+      // ignore all other lines
+      file.ignore(1,'\n');
+    }
+  }
+}
 
 void RigidBody::setPosition(const Vec3& p)
 {

@@ -2,6 +2,8 @@
 
 #include "Math3d.h"
 
+#include <vector>
+
 class Entity;
 
 class RigidBody
@@ -9,6 +11,8 @@ class RigidBody
   public:
     RigidBody(Entity*, const Vec3&, double, double);
     ~RigidBody();
+
+    void loadHitbox(std::string);
 
     void updateOwner();
 
@@ -25,6 +29,9 @@ class RigidBody
 
   private:
     Entity* owner;
+
+    // hitbox shape (it's convex, so just a list of vertices is sufficient)
+    std::vector<Vec3> hitbox;
 
     // position, velocity and impulse
     Vec3 position;

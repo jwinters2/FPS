@@ -37,5 +37,10 @@ class PhysicsEngine
     bool boundingBoxCollision(const RigidBody&, const RigidBody&
                              ,CollisionInfo&) const;
 
+    //GJK algorithm (with helper functions and minimumSeparation stuff)
+    bool GJKAlgorithm(const RigidBody&, const RigidBody& ,CollisionInfo&) const;
+    Vec3 GJKSupport(const RigidBody&, const Vec3&) const;
+    bool GJKNearestSimplex(std::vector<Vec3>&, Vec3&) const;
+
     void checkCollisions() const;
 };

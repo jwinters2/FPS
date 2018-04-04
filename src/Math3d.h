@@ -30,6 +30,8 @@ struct Vec3
   double length() const;
   Vec3 normal() const;
   Vec3 normalize();
+
+  Vec3 operator-() const;
 };
 
 std::ostream& operator<<(std::ostream&, const Vec3&);

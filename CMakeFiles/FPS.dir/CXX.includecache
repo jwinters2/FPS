@@ -161,10 +161,14 @@ entity/Entity.h
 /home/jamie/Programming/FPS/src/component/rigidbody/entity/Entity.h
 GraphicsManager.h
 /home/jamie/Programming/FPS/src/component/rigidbody/GraphicsManager.h
+fstream
+-
 
 /home/jamie/Programming/FPS/src/component/rigidbody/RigidBody.h
 Math3d.h
 /home/jamie/Programming/FPS/src/component/rigidbody/Math3d.h
+vector
+-
 
 /home/jamie/Programming/FPS/src/entity/Box.cpp
 Box.h
@@ -287,6 +291,8 @@ src/component/renderable/Renderable.h
 src/component/rigidbody/RigidBody.h
 Math3d.h
 src/component/rigidbody/Math3d.h
+vector
+-
 
 src/entity/Entity.h
 Math3d.h
