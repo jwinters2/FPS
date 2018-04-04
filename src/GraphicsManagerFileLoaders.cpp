@@ -196,7 +196,7 @@ bool GraphicsManager::loadModel(std::string path)
         file >> current_vertex;
 
         // start at the beginning of the word ("##/##/##")
-        int cursor=0;
+        unsigned int cursor=0;
 
         while(cursor < current_vertex.size()
            && current_vertex[cursor] != '/')
@@ -432,7 +432,8 @@ bool GraphicsManager::loadWhiteTexture()
   unsigned int imageSize = 2 * 2 * 3;
   char data[imageSize+2];
 
-  for(int i=0; i<imageSize+2; i++)  // I have no idea why we need 2 extra bytes
+  // I have no idea why we need 2 extra bytes
+  for(unsigned int i=0; i<imageSize+2; i++)
   {
     data[i] = 0xFF; // for white
   }
@@ -463,7 +464,7 @@ bool GraphicsManager::loadErrorTexture()
   unsigned int imageSize = 32 * 32 * 3 * 8 * 8;
   unsigned char data[imageSize];
 
-  for(int i=0; i<imageSize; i+=3)
+  for(unsigned int i=0; i<imageSize; i+=3)
   {
     if( ( (i/(3 * 8))  + (i/(32 * 3 * 8 * 8)) ) % 2  == 0 )
     {

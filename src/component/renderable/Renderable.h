@@ -6,7 +6,7 @@ class Renderable
 {
   public:
     Renderable();
-    ~Renderable();
+    virtual ~Renderable();
 
     virtual void draw() const = 0;
 

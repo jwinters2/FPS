@@ -41,22 +41,22 @@ void World::init()
   //entityList.push_back(new Box(pe, Vec3(0,-1,0), Vec3(1, 0.5, 1)));
 
   Entity* e;
-  for(int i=0; i<1; i++)
+  for(int i=0; i<5; i++)
   {
     e= new Box(pe, Vec3(i-2,i-1.5,0), Vec3(0.4));
-    e->setVelocity(Vec3(1,0,0));
+    e->setVelocity(Vec3(randDouble(-1,1),randDouble(-1,1),randDouble(-1,1)));
     entityList.push_back(e);
   }
 
   e = new Box(pe, Vec3(0,-4.5,0), Vec3(3,0.5,3));
-  e->setVelocity(Vec3(0,2,0));
-  e->setMass(0);
+  e->setVelocity(Vec3(0,3,0));
+  e->setMass(10);
   entityList.push_back(e);
 };
 
 World::~World()
 {
-  for(int i=0; i<entityList.size(); i++)
+  for(unsigned int i=0; i<entityList.size(); i++)
   {
     if(entityList[i] != nullptr)
     {
@@ -72,7 +72,7 @@ void World::update(double dt)
   pe->performPhysics(dt);
 
   // this should use an octree
-  for(int i=0; i<entityList.size(); i++)
+  for(unsigned int i=0; i<entityList.size(); i++)
   {
     if(entityList[i] != nullptr)
     {
@@ -127,7 +127,7 @@ void World::draw() const
   gm.drawLine(Vec3(0,0,0), Vec3(0,0,z), Vec3(0,0,1));
 
   // draw each entity
-  for(int i=0; i<entityList.size(); i++)
+  for(unsigned int i=0; i<entityList.size(); i++)
   {
     if(entityList[i] != nullptr)
     {

@@ -309,6 +309,7 @@ std::ostream& operator<<(std::ostream& out, const Mat4& m)
 
       << "[ " << m.w[0] << ", " << m.w[1] << ", "
       <<         m.w[2] << ", " << m.w[3] << " ]" << std::endl;
+  return out;
 }
 
 
@@ -357,6 +358,8 @@ Mat4 operator*(const Mat4& A, const Mat4& B)
 
 Mat4 operator*=(Mat4& A, const Mat4& B)
 { 
+  A = B * A;
+  return Mat4(A);
 }
 
 Vec3 operator*(const Mat4& A, const Vec3& v)
@@ -387,7 +390,8 @@ Mat4 Transform::toMatrix() const
 
 std::ostream& operator<<(std::ostream& out, const Transform& t)
 {
-  std::cout << "  pos : " << t.pos << std::endl
-            << "scale : " << t.scale << std::endl
-            << "  rot : " << t.rot << std::endl;
+  out << "  pos : " << t.pos << std::endl
+      << "scale : " << t.scale << std::endl
+      << "  rot : " << t.rot << std::endl;
+  return out;
 }

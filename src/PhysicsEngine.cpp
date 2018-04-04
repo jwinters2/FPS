@@ -17,7 +17,7 @@ void PhysicsEngine::performPhysics(double dt)
   RigidBody* rb;
   CollisionInfo ci;
 
-  for(int i=0; i<entityList.size(); i++)
+  for(unsigned int i=0; i<entityList.size(); i++)
   {
     rb = entityList[i]->rigidBody;
     rb->position += rb->velocity * deltaTime;
@@ -46,7 +46,7 @@ void PhysicsEngine::performPhysics(double dt)
 
   checkCollisions();
 
-  for(int i=0; i<entityList.size(); i++)
+  for(unsigned int i=0; i<entityList.size(); i++)
   {
     rb = entityList[i]->rigidBody;
 
@@ -134,9 +134,9 @@ const
 void PhysicsEngine::checkCollisions() const
 {
   CollisionInfo ci;
-  for(int i = 0; i<entityList.size(); i++)
+  for(unsigned int i = 0; i<entityList.size(); i++)
   {
-    for(int j = i + 1; j<entityList.size(); j++)
+    for(unsigned int j = i + 1; j<entityList.size(); j++)
     {
       RigidBody* ar = entityList[i]->rigidBody;
       RigidBody* br = entityList[j]->rigidBody;
@@ -261,9 +261,6 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
       double Bm = 1.0 / b.invMass;
       massComponent = (Am + Bm) * a.invMass * b.invMass;
     }
-
-    std::cout << -1 * displacement.normal() << std::endl;
-    std::cout << a.velocity - b.velocity << std::endl;
 
     ci.impulse = -1 * displacement.normal()
                * (displacement.normal() * (a.velocity - b.velocity))
