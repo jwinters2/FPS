@@ -7,10 +7,7 @@ set(FPS.VERSION_MINOR 1)
 
 #C++ standard (equivalent to --std=c++11)
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-
-#compiler flags
-set(GCC_COVERAGE_COMPILE_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 include_directories(${FPS_SOURCE_DIR}/src)
 

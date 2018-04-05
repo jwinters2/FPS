@@ -44,6 +44,9 @@ class PhysicsEngine
     bool GJKNearestSimplexCase2(std::vector<Vec3>&, Vec3&) const;
     bool GJKNearestSimplexCase3(std::vector<Vec3>&, Vec3&) const;
     bool GJKNearestSimplexCase4(std::vector<Vec3>&, Vec3&) const;
+    
+    bool EPAAlgorithm(const RigidBody&, const RigidBody&,
+                      std::vector<Vec3>&, CollisionInfo&) const;
 
     void checkCollisions() const;
 };

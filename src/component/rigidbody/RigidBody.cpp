@@ -81,6 +81,15 @@ void RigidBody::addVelocity(const Vec3& v)
 {
   velocity += v;
 }
+void RigidBody::setRotation(const Quat& q)
+{
+  rotation = q;
+}
+
+void RigidBody::addRotation(const Quat& q)
+{
+  rotation.applyRotation(q);
+}
 
 void RigidBody::addImpulse(const Vec3& i)
 {

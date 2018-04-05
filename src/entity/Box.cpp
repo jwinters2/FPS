@@ -7,8 +7,11 @@ Box::Box(PhysicsEngine* pe, const Vec3& pos, const Vec3& dim):
          keyboardMovement(false)
 {
   transform.pos = pos;
-  rigidBody = new RigidBody(this, dim, 1.0, 1.0);
+  rigidBody = new RigidBody(this, dim, 1.0, 0.0);
+
   rigidBody->makeBoxHitbox(dim);
+  rigidBody->setRotation(Quat(Vec3(1,0,0),30));
+
   model = new WireframeBox(dim, Vec3(1.0));
   if(pe != nullptr)
   {

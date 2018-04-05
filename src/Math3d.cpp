@@ -258,10 +258,10 @@ Mat4::Mat4(double d):x{  d,0.0,0.0,0.0}
                     ,w{0.0,0.0,0.0,  d}
                     {}
 
-Mat4::Mat4(const Mat4& o):x{o.x[0], o.x[1], o.x[2], o.x[3],}
-                         ,y{o.y[0], o.y[1], o.y[2], o.y[3],}
-                         ,z{o.z[0], o.z[1], o.z[2], o.z[3],}
-                         ,w{o.w[0], o.w[1], o.w[2], o.w[3],}
+Mat4::Mat4(const Mat4& o):x{o.x[0], o.x[1], o.x[2], o.x[3]}
+                         ,y{o.y[0], o.y[1], o.y[2], o.y[3]}
+                         ,z{o.z[0], o.z[1], o.z[2], o.z[3]}
+                         ,w{o.w[0], o.w[1], o.w[2], o.w[3]}
                          {}
 
 Mat4 Mat4::Identity()

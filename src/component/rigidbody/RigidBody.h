@@ -25,6 +25,9 @@ class RigidBody
     void setVelocity(const Vec3&);
     void addVelocity(const Vec3&);
 
+    void setRotation(const Quat&);
+    void addRotation(const Quat&);
+
     void addImpulse(const Vec3&);
     void applyImpulses();
 
