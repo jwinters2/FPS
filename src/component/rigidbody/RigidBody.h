@@ -12,7 +12,10 @@ class RigidBody
     RigidBody(Entity*, const Vec3&, double, double);
     ~RigidBody();
 
+    Transform getTransform() const;
+
     void loadHitbox(std::string);
+    void makeBoxHitbox(const Vec3&);
 
     void updateOwner();
 

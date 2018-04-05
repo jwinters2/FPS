@@ -32,6 +32,8 @@ struct Vec3
   Vec3 normalize();
 
   Vec3 operator-() const;
+
+  Vec3 cross(const Vec3&) const;
 };
 
 std::ostream& operator<<(std::ostream&, const Vec3&);

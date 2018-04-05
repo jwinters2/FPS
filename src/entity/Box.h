@@ -9,6 +9,11 @@ class Box: public Entity
     Box(PhysicsEngine*, const Vec3&, const Vec3&);
     ~Box();
 
+    void enableKeyboardMovement();
+
     void update();
     void draw() const;
+
+  private:
+    bool keyboardMovement;
 };

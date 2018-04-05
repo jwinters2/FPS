@@ -1,12 +1,14 @@
 #include "Box.h"
 #include "component/renderable/WireframeBox.h"
 #include "PhysicsEngine.h"
-//#include "GraphicsManager.h"
+#include "InputManager.h"
 
-Box::Box(PhysicsEngine* pe, const Vec3& pos, const Vec3& dim)
+Box::Box(PhysicsEngine* pe, const Vec3& pos, const Vec3& dim):
+         keyboardMovement(false)
 {
   transform.pos = pos;
   rigidBody = new RigidBody(this, dim, 1.0, 1.0);
+  rigidBody->makeBoxHitbox(dim);
   model = new WireframeBox(dim, Vec3(1.0));
   if(pe != nullptr)
   {
@@ -20,8 +22,32 @@ Box::~Box()
   delete model;
 }
 
+void Box::enableKeyboardMovement()
+{
+  keyboardMovement = true;
+}
+
 void Box::update()
 {
+  if(keyboardMovement && rigidBody != nullptr)
+  {
+    InputManager& im = InputManager::getReference();
+    if(im.getKeyPressed(KeyCodes::W))
+      rigidBody->addPosition(Vec3(-0.1,   0,   0));
+    if(im.getKeyPressed(KeyCodes::S))
+      rigidBody->addPosition(Vec3( 0.1,   0,   0));
+
+    if(im.getKeyPressed(KeyCodes::A))
+      rigidBody->addPosition(Vec3(   0,   0, 0.1));
+    if(im.getKeyPressed(KeyCodes::D))
+      rigidBody->addPosition(Vec3(   0,   0,-0.1));
+
+    if(im.getKeyPressed(KeyCodes::Z))
+      rigidBody->addPosition(Vec3(   0, 0.1,   0));
+    if(im.getKeyPressed(KeyCodes::X))
+      rigidBody->addPosition(Vec3(   0,-0.1,   0));
+  }
+
   model->setTransform(transform.toMatrix());
 }
 

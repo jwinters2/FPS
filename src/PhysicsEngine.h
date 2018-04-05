@@ -41,6 +41,9 @@ class PhysicsEngine
     bool GJKAlgorithm(const RigidBody&, const RigidBody& ,CollisionInfo&) const;
     Vec3 GJKSupport(const RigidBody&, const Vec3&) const;
     bool GJKNearestSimplex(std::vector<Vec3>&, Vec3&) const;
+    bool GJKNearestSimplexCase2(std::vector<Vec3>&, Vec3&) const;
+    bool GJKNearestSimplexCase3(std::vector<Vec3>&, Vec3&) const;
+    bool GJKNearestSimplexCase4(std::vector<Vec3>&, Vec3&) const;
 
     void checkCollisions() const;
 };

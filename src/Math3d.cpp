@@ -60,6 +60,15 @@ Vec3 Vec3::normalize()
   return Vec3(*this);
 }
 
+Vec3 Vec3::cross(const Vec3& b) const
+{
+  Vec3 retval;
+  retval.x =   (y * b.z) - (z * b.y);
+  retval.y = - (x * b.z) + (z * b.x);
+  retval.z =   (x * b.y) - (y * b.x);
+  return retval;
+}
+
 std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
   out << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";

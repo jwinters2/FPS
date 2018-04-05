@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/FPS.dir/src/GJKAlgorithm.cpp.o"
   "CMakeFiles/FPS.dir/src/GraphicsManager.cpp.o"
   "CMakeFiles/FPS.dir/src/GraphicsManagerFileLoaders.cpp.o"
   "CMakeFiles/FPS.dir/src/InputManager.cpp.o"

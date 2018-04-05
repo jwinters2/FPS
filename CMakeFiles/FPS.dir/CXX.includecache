@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/home/jamie/Programming/FPS/src/GJKAlgorithm.cpp
+PhysicsEngine.h
+/home/jamie/Programming/FPS/src/PhysicsEngine.h
+vector
+-
+
 /home/jamie/Programming/FPS/src/GraphicsManager.cpp
 cstdlib
 -
@@ -177,6 +183,8 @@ component/renderable/WireframeBox.h
 /home/jamie/Programming/FPS/src/entity/component/renderable/WireframeBox.h
 PhysicsEngine.h
 /home/jamie/Programming/FPS/src/entity/PhysicsEngine.h
+InputManager.h
+/home/jamie/Programming/FPS/src/entity/InputManager.h
 
 /home/jamie/Programming/FPS/src/entity/Box.h
 Entity.h

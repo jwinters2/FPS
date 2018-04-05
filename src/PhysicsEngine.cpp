@@ -52,11 +52,11 @@ void PhysicsEngine::performPhysics(double dt)
 
     rb->applyImpulses();
 
-    // acceleration due to gravity
+    // acceleration due to gravity (disabled for massless objects)
     if(rb->invMass == 0)
     {
       // massless objects just add gravity to its velocity
-      rb->velocity += gravity * deltaTime;
+      //rb->velocity += gravity * deltaTime;
     }
 
     rb->updateOwner();
@@ -140,7 +140,9 @@ void PhysicsEngine::checkCollisions() const
     {
       RigidBody* ar = entityList[i]->rigidBody;
       RigidBody* br = entityList[j]->rigidBody;
-      if(boundingBoxCollision(*ar,*br,ci))
+
+      //if(boundingBoxCollision(*ar,*br,ci))
+      if(GJKAlgorithm(*ar,*br,ci))
       {
         // calcualte the total inverted mass for separation (with a buffer)
         double totalInvMass = ar->invMass + br->invMass;
@@ -160,6 +162,12 @@ void PhysicsEngine::checkCollisions() const
           // ci is calculated from the perspective of a hitting b
           // so invert it when b hitting a, because Newton's 3rd law
         }
+
+        std::cout << "colliding" << std::endl;
+      }
+      else
+      {
+        std::cout << std::endl;
       }
     }
   }

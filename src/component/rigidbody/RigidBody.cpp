@@ -48,6 +48,20 @@ void RigidBody::loadHitbox(std::string filename)
   }
 }
 
+void RigidBody::makeBoxHitbox(const Vec3& dim)
+{
+  for(int i=-1; i<=1; i+=2)
+  {
+    for(int j=-1; j<=1; j+=2)
+    {
+      for(int k=-1; k<=1; k+=2)
+      {
+        hitbox.push_back(Vec3(dim.x * i, dim.y * j, dim.x * k));
+      }
+    }
+  }
+}
+
 void RigidBody::setPosition(const Vec3& p)
 {
   position = p;
@@ -89,6 +103,15 @@ void RigidBody::setMass(double m)
   {
     invMass = 1/m;
   }
+}
+
+Transform RigidBody::getTransform() const
+{
+  Transform retval;
+  retval.pos   = position;
+  retval.scale = Vec3(1);
+  retval.rot   = rotation;
+  return retval;
 }
 
 void RigidBody::updateOwner()

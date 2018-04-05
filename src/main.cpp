@@ -17,9 +17,6 @@ int main(int argc, char** argv)
   std::chrono::time_point<std::chrono::high_resolution_clock> newTime;
   std::chrono::duration<double> elapsedTime(0);
 
-  RigidBody a(nullptr, Vec3(1), 1, 1);
-  a.loadHitbox("assets/hitboxTest.obj");
-
   //gm.loadTexture("assets/texture.bmp");
 
   World world(5.0);
