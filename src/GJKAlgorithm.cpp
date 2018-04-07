@@ -29,10 +29,15 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
   #endif
 
   Vec3 direction(1,0,0);
-  Vec3 nextPoint = GJKSupport(a,direction) - GJKSupport(b,-direction);
-  std::vector<Vec3> simplex;
+
+  SupportPoint nextPoint;
+  nextPoint.a = GJKSupport(a,direction);
+  nextPoint.v = nextPoint.a - GJKSupport(b,-direction);
+
+  std::vector<SupportPoint> simplex;
   simplex.push_back(nextPoint);
-  direction = -nextPoint;
+
+  direction = -nextPoint.v;
   bool retval;
 
   while(true)
@@ -49,12 +54,13 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
     // */
 
     // calculate the next point
-    nextPoint = GJKSupport(a,direction) - GJKSupport(b,-direction);
+    nextPoint.a = GJKSupport(a,direction);
+    nextPoint.v = nextPoint.a - GJKSupport(b,-direction);
     
     // if the next point is not in the same direction (roughly) as the direction
     // then we've gone as far as we can in that direction and it wasn't enough
     // to enclose the origin, return false
-    if(nextPoint * direction < 0)
+    if(nextPoint.v * direction < 0)
     {
       retval = false;
       break;
@@ -114,7 +120,7 @@ Vec3 PhysicsEngine::GJKSupport(const RigidBody& r, const Vec3& v) const
   return retval;
 }
 
-bool PhysicsEngine::GJKNearestSimplex(std::vector<Vec3>& simplex, 
+bool PhysicsEngine::GJKNearestSimplex(std::vector<SupportPoint>& simplex, 
                                       Vec3& direction) const
 {
   switch(simplex.size())
@@ -154,11 +160,11 @@ bool PhysicsEngine::GJKNearestSimplex(std::vector<Vec3>& simplex,
  * else
  *   [2]: s = [a], d = ao
  */
-bool PhysicsEngine::GJKNearestSimplexCase2(std::vector<Vec3>& simplex, 
+bool PhysicsEngine::GJKNearestSimplexCase2(std::vector<SupportPoint>& simplex, 
                                       Vec3& direction) const
 {
-  Vec3 ao = -simplex[1];
-  Vec3 ab = simplex[0] - simplex[1];
+  Vec3 ao = -simplex[1].v;
+  Vec3 ab =  simplex[0].v - simplex[1].v;
 
   if(ab * ao > 0)
   {
@@ -219,12 +225,12 @@ bool PhysicsEngine::GJKNearestSimplexCase2(std::vector<Vec3>& simplex,
  *       [5]: s = [b,c,a], d = -abc
  *    
  */
-bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<Vec3>& simplex, 
+bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<SupportPoint>& simplex, 
                                            Vec3& direction) const
 {
-  Vec3 ao = -simplex[2];
-  Vec3 ab = simplex[1] - simplex[2];
-  Vec3 ac = simplex[0] - simplex[2];
+  Vec3 ao = -simplex[2].v;
+  Vec3 ab =  simplex[1].v - simplex[2].v;
+  Vec3 ac =  simplex[0].v - simplex[2].v;
 
   Vec3 abc = ab.cross(ac);
 
@@ -269,7 +275,7 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<Vec3>& simplex,
       {
         // region 5 (swap b and c to keep the triangle anti-clockwise)
         //std::cout << "Case 3 region 5 (swap)" << std::endl;
-        Vec3 temp = simplex[0];
+        SupportPoint temp = simplex[0];
         simplex[0] = simplex[1];
         simplex[1] = temp;
         direction = -abc;
@@ -280,13 +286,13 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<Vec3>& simplex,
   return false;
 }
 
-bool PhysicsEngine::GJKNearestSimplexCase4(std::vector<Vec3>& simplex, 
+bool PhysicsEngine::GJKNearestSimplexCase4(std::vector<SupportPoint>& simplex, 
                                            Vec3& direction) const
 {
-  Vec3 ao = -simplex[3]; 
-  Vec3 ab = simplex[2] - simplex[3]; 
-  Vec3 ac = simplex[1] - simplex[3]; 
-  Vec3 ad = simplex[0] - simplex[3]; 
+  Vec3 ao = -simplex[3].v; 
+  Vec3 ab =  simplex[2].v - simplex[3].v; 
+  Vec3 ac =  simplex[1].v - simplex[3].v; 
+  Vec3 ad =  simplex[0].v - simplex[3].v; 
 
   Vec3 abc = ab.cross(ac);
   Vec3 acd = ac.cross(ad);
@@ -348,7 +354,7 @@ bool PhysicsEngine::GJKNearestSimplexCase4(std::vector<Vec3>& simplex,
         // the nearest simplex is the adb triangle, pretend we just added a
         // [d,c,b,a] -> [b,d,a]
         simplex.erase(simplex.begin() + 1);
-        Vec3 temp = simplex[0];
+        SupportPoint temp = simplex[0];
         simplex[0] = simplex[1];
         simplex[1] = temp;
         GJKNearestSimplexCase3(simplex,direction);
@@ -365,32 +371,32 @@ bool PhysicsEngine::GJKNearestSimplexCase4(std::vector<Vec3>& simplex,
 }
 
 bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b, 
-                                 std::vector<Vec3>& simplex, CollisionInfo& ci)
-const
+                                 std::vector<SupportPoint>& simplex, 
+                                 CollisionInfo& ci) const
 {
-  std::vector<std::vector<Vec3>> facesList;
-  std::vector<std::vector<Vec3>> edgesList;
+  std::vector<Triangle> facesList;
+  std::vector<Edge> edgesList;
 
   // add abc face
-  facesList.push_back(std::vector<Vec3>());
-  facesList.back().push_back(simplex[3]);
-  facesList.back().push_back(simplex[2]);
-  facesList.back().push_back(simplex[1]);
+  facesList.push_back(Triangle());
+  facesList.back().v[0] = simplex[3];
+  facesList.back().v[1] = simplex[2];
+  facesList.back().v[2] = simplex[1];
   // add acd face
-  facesList.push_back(std::vector<Vec3>());
-  facesList.back().push_back(simplex[3]);
-  facesList.back().push_back(simplex[1]);
-  facesList.back().push_back(simplex[0]);
+  facesList.push_back(Triangle());
+  facesList.back().v[0] = simplex[3];
+  facesList.back().v[1] = simplex[1];
+  facesList.back().v[2] = simplex[0];
   // add adb face
-  facesList.push_back(std::vector<Vec3>());
-  facesList.back().push_back(simplex[3]);
-  facesList.back().push_back(simplex[0]);
-  facesList.back().push_back(simplex[2]);
+  facesList.push_back(Triangle());
+  facesList.back().v[0] = simplex[3];
+  facesList.back().v[1] = simplex[0];
+  facesList.back().v[2] = simplex[2];
   // add cbd face
-  facesList.push_back(std::vector<Vec3>());
-  facesList.back().push_back(simplex[1]);
-  facesList.back().push_back(simplex[2]);
-  facesList.back().push_back(simplex[0]);
+  facesList.push_back(Triangle());
+  facesList.back().v[0] = simplex[1];
+  facesList.back().v[1] = simplex[2];
+  facesList.back().v[2] = simplex[0];
 
   while(true)
   {
@@ -399,50 +405,52 @@ const
     {
       std::cout << (i==0 ? "facesList = ":
                            "            ")
-                << facesList[i][0] << " "
-                << facesList[i][1] << " "
-                << facesList[i][2] << std::endl;
+                << facesList[i].v[0].v << " "
+                << facesList[i].v[1].v << " "
+                << facesList[i].v[2].v << std::endl;
     }
     #endif
 
     // find the face closest to the origin (the projection of the origin onto
     // the face has the shortest length)
-    Vec3 abc = (facesList[0][1] - facesList[0][0]).cross     // ab x ac
-               (facesList[0][2] - facesList[0][0]).normal(); // (b-a) x (c-a)
-    double currentMinDist  = -facesList[0][0] * abc;
+    Vec3 abc = (facesList[0].v[1].v - facesList[0].v[0].v).cross     // ab x ac
+               (facesList[0].v[2].v - facesList[0].v[0].v).normal();
+    double currentMinDist  = -facesList[0].v[0].v * abc;
     Vec3   searchDirection = abc;// * currentMinDist;
 
     for(unsigned int i=1; i<facesList.size(); i++)
     {
-      abc = (facesList[i][1] - facesList[i][0]).cross     // ab x ac
-            (facesList[i][2] - facesList[i][0]).normal(); // (b-a) x (c-a)
-      if(std::abs(currentMinDist) > std::abs(-facesList[i][0] * abc))
+      abc = (facesList[i].v[1].v - facesList[i].v[0].v).cross     // ab x ac
+            (facesList[i].v[2].v - facesList[i].v[0].v).normal();
+      if(std::abs(currentMinDist) > std::abs(-facesList[i].v[0].v * abc))
       {
-        currentMinDist  = -facesList[i][0] * abc;
+        currentMinDist  = -facesList[i].v[0].v * abc;
         searchDirection = abc;// * currentMinDist;
       }
     }
 
     // get the furthest point in that distance
-    Vec3 expansionPoint = GJKSupport(a, searchDirection)
-                        - GJKSupport(b,-searchDirection);
+    SupportPoint expansionPoint;
+    expansionPoint.a = GJKSupport(a, searchDirection);
+    expansionPoint.v = expansionPoint.a - GJKSupport(b,-searchDirection);
 
-    // if we didn't get any new distance we're done
-    // (the new point is co-planar with the closest face)
     #ifdef GJK_DEBUG
-    std::cout << "expansionPoint       = " << expansionPoint << std::endl;
+    std::cout << "expansionPoint       = " << expansionPoint.v << std::endl;
     std::cout << "                 searchDirection = "
               << searchDirection << std::endl;
     std::cout << "expansionPoint * searchDirection = " 
-              << expansionPoint * searchDirection << std::endl;
+              << expansionPoint.v * searchDirection << std::endl;
     std::cout << "currentMinDist       = " << currentMinDist << std::endl;
     #endif
-    if(std::abs((searchDirection * expansionPoint)
+
+    // if we didn't get any new distance we're done
+    // (the new point is co-planar with the closest face)
+    if(std::abs((searchDirection * expansionPoint.v)
                - std::abs(currentMinDist)) < 0.02)
     {
       ci.areColliding = true;
 
-      if(searchDirection != Vec3(0))
+      if(searchDirection * currentMinDist != Vec3(0))
       {
         ci.minimumSeparation = searchDirection * currentMinDist;
         double massComponent;
@@ -479,24 +487,33 @@ const
     // add edges of faces that face in the same general way
     for(unsigned int i=0; i<facesList.size(); i++)
     {
-      abc = (facesList[i][1] - facesList[i][0]).cross     // ab x ac
-            (facesList[i][2] - facesList[i][0]).normal(); // (b-a) x (c-a)
-      if(abc * expansionPoint > 0)
+      abc = (facesList[i].v[1].v - facesList[i].v[0].v).cross     // ab x ac
+            (facesList[i].v[2].v - facesList[i].v[0].v).normal();
+      if(abc * expansionPoint.v > 0)
       {
         // add this face's edges to the edge list (remove if their reverse is
         // in the list)
 
         for(int j=0; j<3; j++)
         {
-          Vec3 pointA;
-          Vec3 pointB;
+          SupportPoint pointA;
+          SupportPoint pointB;
 
           // get the points of the edge
           switch(j)
           {
-            case 0: pointA = facesList[i][1]; pointB = facesList[i][2]; break;
-            case 1: pointA = facesList[i][2]; pointB = facesList[i][0]; break;
-            case 2: pointA = facesList[i][0]; pointB = facesList[i][1]; break;
+            case 0:
+              pointA = facesList[i].v[1];
+              pointB = facesList[i].v[2];
+              break;
+            case 1: 
+              pointA = facesList[i].v[2];
+              pointB = facesList[i].v[0];
+              break;
+            case 2:
+              pointA = facesList[i].v[0];
+              pointB = facesList[i].v[1];
+              break;
           }
 
           // determine if the edge is already in the edge list (reversed,
@@ -504,7 +521,8 @@ const
           bool isInEdgeList = false;
           for(unsigned int k = 0; k < edgesList.size(); k++)
           {
-            if(edgesList[k][0] == pointB && edgesList[k][1] == pointA)
+            if(edgesList[k].v[0].v == pointB.v 
+            && edgesList[k].v[1].v == pointA.v)
             {
               isInEdgeList = true;
               // remove it if it's there
@@ -516,9 +534,9 @@ const
           // add it to the edges list otherwise
           if(!isInEdgeList)
           {
-            edgesList.push_back(std::vector<Vec3>());
-            edgesList.back().push_back(pointA);
-            edgesList.back().push_back(pointB);
+            edgesList.push_back(Edge());
+            edgesList.back().v[0] = pointA;
+            edgesList.back().v[1] = pointB;
           }
         }
 
@@ -531,13 +549,52 @@ const
     for(unsigned int i=0; i < edgesList.size(); i++)
     {
       // make a new triangle from each edge and the new point and add it
-      facesList.push_back(std::vector<Vec3>());
-      facesList.back().push_back(edgesList[i][0]);
-      facesList.back().push_back(edgesList[i][1]);
-      facesList.back().push_back(expansionPoint);
+      facesList.push_back(Triangle());
+      facesList.back().v[0] = edgesList[i].v[0];
+      facesList.back().v[1] = edgesList[i].v[1];
+      facesList.back().v[2] = expansionPoint;
     }
 
     // clear the edge list (we don't need to keep edges between iterations)
     edgesList.clear();
   }
+}
+
+// constructors for helper structs
+PhysicsEngine::Triangle::Triangle()
+{
+  v[0] = SupportPoint();
+  v[1] = SupportPoint();
+  v[2] = SupportPoint();
+}
+
+PhysicsEngine::Triangle::Triangle(const Triangle& t)
+{
+  v[0] = t.v[0];
+  v[1] = t.v[1];
+  v[2] = t.v[2];
+}
+
+PhysicsEngine::Edge::Edge()
+{
+  v[0] = SupportPoint();
+  v[1] = SupportPoint();
+}
+
+PhysicsEngine::Edge::Edge(const Edge& e)
+{
+  v[0] = e.v[0];
+  v[1] = e.v[1];
+}
+
+PhysicsEngine::SupportPoint::SupportPoint()
+{
+  v = Vec3();
+  a = Vec3();
+}
+
+PhysicsEngine::SupportPoint::SupportPoint(const SupportPoint& s)
+{
+  v = s.v;
+  a = s.a;
 }
