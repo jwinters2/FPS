@@ -14,8 +14,10 @@ RigidBody::RigidBody(Entity* own, const Vec3& dim, double m, double r):
     rotation = own->transform.rot;
   }
 
-  velocity = Vec3(0);
-  impulse  = Vec3(0);
+  velocity        = Vec3(0);
+  angularVelocity = Vec3(0);
+  impulse         = Vec3(0);
+  angularImpulse  = Vec3(0);
 }
 
 RigidBody::~RigidBody() {}
@@ -60,6 +62,14 @@ void RigidBody::makeBoxHitbox(const Vec3& dim)
       }
     }
   }
+
+  invMOI = Mat3(0);                                   // normally 12
+  invMOI.x[0] = ((dim.y * dim.y) + (dim.z * dim.z)) / (3 * invMass);
+  invMOI.y[1] = ((dim.x * dim.x) + (dim.z * dim.z)) / (3 * invMass);
+  invMOI.z[2] = ((dim.x * dim.x) + (dim.y * dim.y)) / (3 * invMass);
+                                       // but dim are half the lengths, so 3
+
+  invMOI = invMOI.invert();
 }
 
 void RigidBody::setPosition(const Vec3& p)
@@ -81,6 +91,7 @@ void RigidBody::addVelocity(const Vec3& v)
 {
   velocity += v;
 }
+
 void RigidBody::setRotation(const Quat& q)
 {
   rotation = q;
@@ -91,15 +102,32 @@ void RigidBody::addRotation(const Quat& q)
   rotation.applyRotation(q);
 }
 
+void RigidBody::setAngularVelocity(const Vec3& omega)
+{
+  angularVelocity = omega;
+}
+
+void RigidBody::addAngularVelocity(const Vec3& omega)
+{
+  angularVelocity += omega;
+}
+
 void RigidBody::addImpulse(const Vec3& i)
 {
   impulse += i;
 }
 
+void RigidBody::addAngularImpulse(const Vec3& i)
+{
+  angularImpulse += i;
+}
+
 void RigidBody::applyImpulses()
 {
   velocity += impulse * invMass;
+  angularVelocity += (invMOI * angularImpulse);
   impulse = Vec3(0);
+  angularImpulse = Vec3(0);
 }
 
 void RigidBody::setMass(double m)

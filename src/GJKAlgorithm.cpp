@@ -1,6 +1,6 @@
 #include "PhysicsEngine.h"
 
-//#define GJK_DEBUG
+#define GJK_DEBUG
 
 #include <vector>
 
@@ -31,6 +31,7 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
   Vec3 direction(1,0,0);
 
   SupportPoint nextPoint;
+  std::vector<Vec3> pointHistory;
   nextPoint.a = GJKSupport(a,direction);
   nextPoint.v = nextPoint.a - GJKSupport(b,-direction);
 
@@ -52,6 +53,8 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
     }
     std::cout << "direction = " << direction << std::endl;
     // */
+    
+    pointHistory.push_back(nextPoint.v);
 
     // calculate the next point
     nextPoint.a = GJKSupport(a,direction);
@@ -66,11 +69,23 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
       break;
     }
 
-    /*
-    std::cout << "nextPoint = " << nextPoint << std::endl;
+    for(unsigned int i=0; i<pointHistory.size(); i++)
+    {
+      if(pointHistory[i] == nextPoint.v)
+      {
+        retval = false;
+        break;
+      }
+    }
+
+    
+    #ifdef GJK_DEBUG
+    std::cout << "nextPoint = " << nextPoint.v << std::endl;
+    std::cout << "direction = " << direction << std::endl;
     std::cout << "nextPoint * direction = "
-              << nextPoint * direction << std::endl;
-    // */
+              << nextPoint.v * direction << std::endl;
+    #endif
+     
 
     // add the next point to the simplex
     simplex.push_back(nextPoint);
@@ -416,7 +431,8 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     Vec3 abc = (facesList[0].v[1].v - facesList[0].v[0].v).cross     // ab x ac
                (facesList[0].v[2].v - facesList[0].v[0].v).normal();
     double currentMinDist  = -facesList[0].v[0].v * abc;
-    Vec3   searchDirection = abc;// * currentMinDist;
+    Vec3   searchDirection = abc;
+    Triangle currentFace = facesList[0];
 
     for(unsigned int i=1; i<facesList.size(); i++)
     {
@@ -425,7 +441,8 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
       if(std::abs(currentMinDist) > std::abs(-facesList[i].v[0].v * abc))
       {
         currentMinDist  = -facesList[i].v[0].v * abc;
-        searchDirection = abc;// * currentMinDist;
+        searchDirection = abc;
+        currentFace = facesList[i];
       }
     }
 
@@ -450,9 +467,40 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     {
       ci.areColliding = true;
 
+      // calculate barycentric weights for our triangle
+
+      // projection of the origin onto the closest face
+      Vec3 tp = currentFace.v[0].v *
+               (currentFace.v[0].v * searchDirection.normal());
+
+      Vec3 ta = currentFace.v[0].v;  // the vertices of the triangle
+      Vec3 tb = currentFace.v[1].v;
+      Vec3 tc = currentFace.v[2].v;
+
+      // the area of the main triangle
+      // (we're getting ratios, so we ignore the /2)
+      double abcArea = ((tb-ta).cross(tc-ta)).length();
+
+      // the areas of each sub-triangle (p with 2 other vertices)
+      //double abpArea = ((a-p).cross(b-p)).length(); // we don't need this one
+      double bcpArea = ((tb-tp).cross(tc-tp)).length();
+      double acpArea = ((ta-tp).cross(tc-tp)).length();
+
+      double u = bcpArea / abcArea;
+      double v = acpArea / abcArea;
+      double w = 1.0 - u - v; // they always sum to 1
+
+      // get the same point using the original a's vertices
+      ci.pointOfContact = currentFace.v[0].a * u
+                        + currentFace.v[1].a * v
+                        + currentFace.v[2].a * w;
+
+      // calculate the minimum separation
+      ci.minimumSeparation = searchDirection * currentMinDist;
+
+      // calculate the impulse
       if(searchDirection * currentMinDist != Vec3(0))
       {
-        ci.minimumSeparation = searchDirection * currentMinDist;
         double massComponent;
         double rest = (a.restitution > b.restitution ? a.restitution
                                                      : b.restitution);
@@ -472,15 +520,21 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
           massComponent = (Am + Bm) * a.invMass * b.invMass;
         }
 
+        // velocities of the points of contact
+        // (center of mass velocity plus tangental velocity (omega x r)
+        Vec3 avel = a.velocity + a.angularVelocity.cross
+                                 (ci.pointOfContact - a.position);
+        Vec3 bvel = b.velocity + b.angularVelocity.cross
+                                 (ci.pointOfContact - b.position);
+
         ci.impulse = -1 * ci.minimumSeparation.normal()
-                   * (ci.minimumSeparation.normal() * (a.velocity - b.velocity))
+                   * (ci.minimumSeparation.normal() * (avel - bvel))
                    * (1 + rest) / massComponent;
       }
       else
       {
         ci.impulse = Vec3(0);
       }
-
       return true;
     }
 

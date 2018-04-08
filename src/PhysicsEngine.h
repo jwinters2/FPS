@@ -26,6 +26,7 @@ class PhysicsEngine
       bool areColliding;
       Vec3 minimumSeparation;
       Vec3 impulse;
+      Vec3 pointOfContact;
     };
 
     struct SupportPoint

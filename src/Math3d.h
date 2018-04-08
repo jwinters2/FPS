@@ -72,10 +72,40 @@ struct Quat
  Mat4 toMatrix() const;
 
  void applyRotation(const Quat&);
+
+ static Quat slerp(const Quat&,const Quat&,double);
+ double dot(const Quat&) const;
+ Quat normal() const;
 };
 
 std::ostream& operator<<(std::ostream&, const Quat&);
 Quat operator*(const Quat&, const Quat&);
+Quat operator*(const Quat&, double);
+Quat operator+(const Quat&, const Quat&);
+Quat operator-(const Quat&, const Quat&);
+
+/*
+ * Mat3
+ *
+ * a 3x3 matrix
+ * used for moments of inertia
+ */
+
+struct Mat3
+{
+  double x[3];
+  double y[3];
+  double z[3];
+
+  Mat3();
+  Mat3(double);
+  Mat3(const Mat3&);
+
+  Mat3 invert() const;
+};
+
+std::ostream& operator<<(std::ostream&, const Mat3&);
+Vec3 operator*(const Mat3&, const Vec3&);
 
 /*
  * Mat4

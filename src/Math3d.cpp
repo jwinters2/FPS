@@ -216,6 +216,77 @@ Mat4 Quat::toMatrix() const
   return retval;
 }
 
+Quat Quat::slerp(const Quat& a, const Quat& b, double t)
+{
+  double product = a.dot(b);
+
+  if(product > 0.999)
+  {
+    // they're close enough to just linearly interpolate
+    Quat retval = a + ((b-a) * t);
+    return retval.normal();
+  }
+
+  // we're taking acos of the product, so it needs to be within the domain
+  if(product < -1) product = -1;
+  if(product >  1) product =  1;
+
+  // I got this formula from wikipedia
+  double theta0 = acos(product); // angle between a and b
+  double theta1 = theta0 * t; // angle between a and retval
+
+  double weightA = sin(theta0 - theta1) / sin(theta0);
+  double weightB = sin(theta1) / sin(theta0);
+
+  return (a * weightA) + (b * weightB);
+}
+
+Quat Quat::normal() const
+{
+  double length = sqrt(s*s + x*x + y*y + z*z);
+  Quat retval;
+  retval.s = s / length;
+  retval.x = x / length;
+  retval.y = y / length;
+  retval.z = z / length;
+  return retval;
+}
+
+double Quat::dot(const Quat& o) const
+{
+  return (s * o.s) + (x * o.x) + (y * o.y) + (z * o.z);
+}
+
+Quat operator*(const Quat& a, double d)
+{
+  Quat retval;
+  retval.s = a.s * d;
+  retval.x = a.x * d;
+  retval.y = a.y * d;
+  retval.z = a.z * d;
+  return retval;
+}
+
+Quat operator+(const Quat& a, const Quat& b)
+{
+  Quat retval;
+  retval.s = a.s + b.s;
+  retval.x = a.x + b.x;
+  retval.y = a.y + b.y;
+  retval.z = a.z + b.z;
+  return retval;
+}
+
+Quat operator-(const Quat& a, const Quat& b)
+{
+  Quat retval;
+  retval.s = a.s - b.s;
+  retval.x = a.x - b.x;
+  retval.y = a.y - b.y;
+  retval.z = a.z - b.z;
+  return retval;
+}
+
 Quat operator*(const Quat& A, const Quat& B)
 {
   Quat retval;
@@ -228,10 +299,85 @@ Quat operator*(const Quat& A, const Quat& B)
   return retval;
 }
 
+
 std::ostream& operator<<(std::ostream& out, const Quat& q)
 {
   out << "[ " << q.x << ", " << q.y << ", " << q.z << ", s=" << q.s << " ]";
   return out;
+}
+
+// ----------------
+// MAT3 DEFINITIONS
+// ----------------
+
+/*
+ *   [0][1][2]
+ * x  .  .  .
+ * y  .  .  .
+ * z  .  .  .
+ */
+
+Mat3::Mat3():x{1.0,0.0,0.0} // apparently C++ initalizer lists don't need 
+            ,y{0.0,1.0,0.0} // parens with array-bracket-lists
+            ,z{0.0,0.0,1.0}
+            {}
+
+Mat3::Mat3(double d):x{  d,0.0,0.0}
+                    ,y{0.0,  d,0.0}
+                    ,z{0.0,0.0,  d}
+                    {}
+
+Mat3::Mat3(const Mat3& o):x{o.x[0],o.x[1],o.x[2]}
+                         ,y{o.y[0],o.y[1],o.y[2]}
+                         ,z{o.z[0],o.z[1],o.z[2]}
+                         {}
+
+Mat3 Mat3::invert() const
+{
+  double determinant = x[0] * (y[1] * z[2]  -  y[2] * z[1])
+                     - x[1] * (y[0] * z[2]  -  y[2] * z[0])
+                     + x[1] * (y[0] * z[1]  -  y[1] * z[0]);
+
+  Mat3 retval;
+
+  if(determinant != 0)
+  {
+    retval.x[0] = (y[1] * z[2]  -  y[2] * z[1]) / determinant;
+    retval.x[1] = (y[0] * z[2]  -  y[2] * z[0]) / determinant;
+    retval.x[2] = (y[0] * z[1]  -  y[1] * z[0]) / determinant;
+
+    retval.y[0] = (x[1] * z[2]  -  x[2] * z[1]) / determinant;
+    retval.y[1] = (x[0] * z[2]  -  x[2] * z[0]) / determinant;
+    retval.y[2] = (x[0] * z[1]  -  x[1] * z[0]) / determinant;
+
+    retval.z[0] = (x[1] * y[2]  -  x[2] * y[1]) / determinant;
+    retval.z[1] = (x[0] * y[2]  -  x[2] * y[0]) / determinant;
+    retval.z[2] = (x[0] * y[1]  -  x[1] * y[0]) / determinant;
+  }
+
+  return retval;
+}
+
+std::ostream& operator<<(std::ostream& out, const Mat3& m)
+{
+  out << "[ " << m.x[0] << ", " << m.x[1] << ", "
+      <<         m.x[2]  << " ]" << std::endl
+
+      << "[ " << m.y[0] << ", " << m.y[1] << ", "
+      <<         m.y[2] << " ]" << std::endl
+
+      << "[ " << m.z[0] << ", " << m.z[1] << ", "
+      <<         m.z[2] << " ]" << std::endl;
+  return out;
+}
+
+Vec3 operator*(const Mat3& A, const Vec3& v)
+{
+  Vec3 retval;
+  retval.x = (A.x[0] * v.x) + (A.x[1] * v.y) + (A.x[2] * v.z);
+  retval.y = (A.y[0] * v.x) + (A.y[1] * v.y) + (A.y[2] * v.z);
+  retval.z = (A.z[0] * v.x) + (A.z[1] * v.y) + (A.z[2] * v.z);
+  return retval;
 }
 
 // ----------------

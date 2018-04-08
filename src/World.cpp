@@ -61,6 +61,11 @@ World::~World()
   delete pe;
 };
 
+void World::addObject(Entity* e)
+{
+  entityList.push_back(e);
+}
+
 void World::update(double dt)
 {
   pe->performPhysics(dt);

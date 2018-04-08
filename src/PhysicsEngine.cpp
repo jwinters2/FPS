@@ -22,6 +22,13 @@ void PhysicsEngine::performPhysics(double dt)
     rb = entityList[i]->rigidBody;
     rb->position += rb->velocity * deltaTime;
     
+    if(rb->angularVelocity != Vec3(0))
+    {
+      rb->rotation.applyRotation(Quat(rb->angularVelocity.normal(),
+                                      rb->angularVelocity.length() * deltaTime
+                                      * 180 / 3.14159));
+    }
+    
     // acceleration due to gravity
     if(rb->invMass != 0)
     {
@@ -32,7 +39,6 @@ void PhysicsEngine::performPhysics(double dt)
     if(!insideWorldBounds(*rb, ci))
     {
       rb->position -= ci.minimumSeparation;
-      //rb->velocity += ci.impulse * rb->invMass;
       if(rb->invMass != 0)
       {
         rb->addImpulse(ci.impulse);
@@ -128,6 +134,8 @@ const
                * (1 + rb.restitution);
   }
 
+  ci.pointOfContact = rb.position;
+
   return retval;
 }
 
@@ -154,11 +162,15 @@ void PhysicsEngine::checkCollisions() const
         {
           ar->position += ci.minimumSeparation * (ar->invMass)/totalInvMass;
           ar->addImpulse(ci.impulse);
+          ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
+                                (ci.impulse * -1.0));
         }
         if(br->invMass != 0)
         {
           br->position -= ci.minimumSeparation * (br->invMass)/totalInvMass;
           br->addImpulse(ci.impulse * -1.0);
+          br->addAngularImpulse((ci.pointOfContact - br->position).cross
+                                (ci.impulse));
           // ci is calculated from the perspective of a hitting b
           // so invert it when b hitting a, because Newton's 3rd law
         }

@@ -28,7 +28,11 @@ class RigidBody
     void setRotation(const Quat&);
     void addRotation(const Quat&);
 
+    void setAngularVelocity(const Vec3&);
+    void addAngularVelocity(const Vec3&);
+
     void addImpulse(const Vec3&);
+    void addAngularImpulse(const Vec3&);
     void applyImpulses();
 
     void setMass(double);
@@ -49,10 +53,13 @@ class RigidBody
 
     // rotation
     Quat rotation;
-    Quat angular_vel;
+    Vec3 angularVelocity;
+    Vec3 angularImpulse;
 
-    // inverted mass, restitution and moment of inertia
+    // inverted mass, restitution and interted moment of inertia
     double invMass;
+    Mat3 invMOI;
+
     double restitution;
 
   friend class PhysicsEngine;

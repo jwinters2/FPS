@@ -21,6 +21,8 @@ class World
 
     Vec3 getDimension() const;
 
+    void addObject(Entity*);
+
   private:
     std::vector<Entity*> entityList; 
     PhysicsEngine* pe;
