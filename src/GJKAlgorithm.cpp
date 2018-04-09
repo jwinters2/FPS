@@ -1,6 +1,6 @@
 #include "PhysicsEngine.h"
 
-#define GJK_DEBUG
+//#define GJK_DEBUG
 
 #include <vector>
 
@@ -31,7 +31,6 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
   Vec3 direction(1,0,0);
 
   SupportPoint nextPoint;
-  std::vector<Vec3> pointHistory;
   nextPoint.a = GJKSupport(a,direction);
   nextPoint.v = nextPoint.a - GJKSupport(b,-direction);
 
@@ -54,8 +53,6 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
     std::cout << "direction = " << direction << std::endl;
     // */
     
-    pointHistory.push_back(nextPoint.v);
-
     // calculate the next point
     nextPoint.a = GJKSupport(a,direction);
     nextPoint.v = nextPoint.a - GJKSupport(b,-direction);
@@ -69,16 +66,6 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
       break;
     }
 
-    for(unsigned int i=0; i<pointHistory.size(); i++)
-    {
-      if(pointHistory[i] == nextPoint.v)
-      {
-        retval = false;
-        break;
-      }
-    }
-
-    
     #ifdef GJK_DEBUG
     std::cout << "nextPoint = " << nextPoint.v << std::endl;
     std::cout << "direction = " << direction << std::endl;
@@ -195,6 +182,17 @@ bool PhysicsEngine::GJKNearestSimplexCase2(std::vector<SupportPoint>& simplex,
     //std::cout << "Case 2 region [2] (removal" << std::endl;
   }
 
+  #ifdef GJK_DEBUG
+  for(unsigned int i=0; i<simplex.size(); i++)
+  {
+    std::cout << (i==0?"CASE 2: ":"        ") << simplex[i].v << std::endl;
+  }
+  std::cout << "       ab = " << ab << std::endl;
+  std::cout << "       ao = " << ao << std::endl;
+  std::cout << "      dir = " << direction << std::endl;
+  #endif
+
+
   return false;
 }
 
@@ -298,6 +296,18 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<SupportPoint>& simplex,
     }
   }
 
+  #ifdef GJK_DEBUG
+  for(unsigned int i=0; i<simplex.size(); i++)
+  {
+    std::cout << (i==0?"CASE 3: ":"        ") << simplex[i].v << std::endl;
+  }
+  std::cout << "       ab = " << ab << std::endl;
+  std::cout << "       ac = " << ac << std::endl;
+  std::cout << "       ao = " << ao << std::endl;
+  std::cout << "      abc = " << abc << std::endl;
+  std::cout << "      dir = " << direction << std::endl;
+  #endif
+
   return false;
 }
 
@@ -376,11 +386,40 @@ bool PhysicsEngine::GJKNearestSimplexCase4(std::vector<SupportPoint>& simplex,
       }
       else
       {
-        // we enclse the origin
+        // we enclose the origin
+        #ifdef GJK_DEBUG
+        for(unsigned int i=0; i<simplex.size(); i++)
+        {
+          std::cout << (i==0?"CASE 4: ":"        ") << simplex[i].v << std::endl;
+        }
+        std::cout << "       ab = " << ab << std::endl;
+        std::cout << "       ac = " << ac << std::endl;
+        std::cout << "       ad = " << ad << std::endl;
+        std::cout << "       ao = " << ao << std::endl;
+        std::cout << "      abc = " << abc << std::endl;
+        std::cout << "      acd = " << acd << std::endl;
+        std::cout << "      adb = " << adb << std::endl;
+        std::cout << "      dir = " << direction << std::endl;
+        #endif
         return true;
       }
     }
   }
+
+  #ifdef GJK_DEBUG
+  for(unsigned int i=0; i<simplex.size(); i++)
+  {
+    std::cout << (i==0?"CASE 4: ":"        ") << simplex[i].v << std::endl;
+  }
+  std::cout << "       ab = " << ab << std::endl;
+  std::cout << "       ac = " << ac << std::endl;
+  std::cout << "       ad = " << ad << std::endl;
+  std::cout << "       ao = " << ao << std::endl;
+  std::cout << "      abc = " << abc << std::endl;
+  std::cout << "      acd = " << acd << std::endl;
+  std::cout << "      adb = " << adb << std::endl;
+  std::cout << "      dir = " << direction << std::endl;
+  #endif
 
   return false;
 }
@@ -423,6 +462,13 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
                 << facesList[i].v[0].v << " "
                 << facesList[i].v[1].v << " "
                 << facesList[i].v[2].v << std::endl;
+      Vec3 abc = (facesList[i].v[1].v - facesList[i].v[0].v).cross     // ab x ac
+                 (facesList[i].v[2].v - facesList[i].v[0].v).normal();
+      std::cout << "        n = " << abc << " (l=" << abc.length() << ")" << std::endl;
+      if(facesList[i].v[0].v * abc < 0)
+      {
+        std::cout << "NORMAL POINTS TOWARDS THE ORIGIN" << std::endl;
+      }
     }
     #endif
 
@@ -430,7 +476,7 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     // the face has the shortest length)
     Vec3 abc = (facesList[0].v[1].v - facesList[0].v[0].v).cross     // ab x ac
                (facesList[0].v[2].v - facesList[0].v[0].v).normal();
-    double currentMinDist  = -facesList[0].v[0].v * abc;
+    double currentMinDist  = std::abs(facesList[0].v[0].v * abc);
     Vec3   searchDirection = abc;
     Triangle currentFace = facesList[0];
 
@@ -438,9 +484,9 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     {
       abc = (facesList[i].v[1].v - facesList[i].v[0].v).cross     // ab x ac
             (facesList[i].v[2].v - facesList[i].v[0].v).normal();
-      if(std::abs(currentMinDist) > std::abs(-facesList[i].v[0].v * abc))
+      if(currentMinDist > std::abs(facesList[i].v[0].v * abc))
       {
-        currentMinDist  = -facesList[i].v[0].v * abc;
+        currentMinDist  = std::abs(facesList[i].v[0].v * abc);
         searchDirection = abc;
         currentFace = facesList[i];
       }
@@ -452,6 +498,9 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     expansionPoint.v = expansionPoint.a - GJKSupport(b,-searchDirection);
 
     #ifdef GJK_DEBUG
+    std::cout << currentFace.v[0].v << " ";
+    std::cout << currentFace.v[1].v << " ";
+    std::cout << currentFace.v[2].v << std::endl;
     std::cout << "expansionPoint       = " << expansionPoint.v << std::endl;
     std::cout << "                 searchDirection = "
               << searchDirection << std::endl;
@@ -462,8 +511,9 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
 
     // if we didn't get any new distance we're done
     // (the new point is co-planar with the closest face)
-    if(std::abs((searchDirection * expansionPoint.v)
-               - std::abs(currentMinDist)) < 0.02)
+    //if(std::abs((searchDirection * expansionPoint.v)
+    //           - std::abs(currentMinDist)) < 0.02)
+    if((searchDirection * expansionPoint.v) - currentMinDist < 0.02)
     {
       ci.areColliding = true;
 
@@ -538,12 +588,15 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
       return true;
     }
 
+    // clear the edge list (we don't need to keep edges between iterations)
+    edgesList.clear();
+
     // add edges of faces that face in the same general way
     for(unsigned int i=0; i<facesList.size(); i++)
     {
       abc = (facesList[i].v[1].v - facesList[i].v[0].v).cross     // ab x ac
             (facesList[i].v[2].v - facesList[i].v[0].v).normal();
-      if(abc * expansionPoint.v > 0)
+      if(abc * (expansionPoint.v - facesList[i].v[0].v) > 0)
       {
         // add this face's edges to the edge list (remove if their reverse is
         // in the list)
@@ -600,17 +653,14 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
       }
     }
 
-    for(unsigned int i=0; i < edgesList.size(); i++)
+    for(unsigned int j=0; j < edgesList.size(); j++)
     {
       // make a new triangle from each edge and the new point and add it
       facesList.push_back(Triangle());
-      facesList.back().v[0] = edgesList[i].v[0];
-      facesList.back().v[1] = edgesList[i].v[1];
+      facesList.back().v[0] = edgesList[j].v[0];
+      facesList.back().v[1] = edgesList[j].v[1];
       facesList.back().v[2] = expansionPoint;
     }
-
-    // clear the edge list (we don't need to keep edges between iterations)
-    edgesList.clear();
   }
 }
 
