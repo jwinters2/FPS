@@ -60,7 +60,7 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
     // if the next point is not in the same direction (roughly) as the direction
     // then we've gone as far as we can in that direction and it wasn't enough
     // to enclose the origin, return false
-    if(nextPoint.v * direction < 0)
+    if(nextPoint.v * direction <= 0)
     {
       retval = false;
       break;
@@ -116,9 +116,6 @@ Vec3 PhysicsEngine::GJKSupport(const RigidBody& r, const Vec3& v) const
     }
   }
 
-  /*
-  std::cout << "support: "<< retval << std::endl;
-  // */
   return retval;
 }
 
@@ -172,26 +169,15 @@ bool PhysicsEngine::GJKNearestSimplexCase2(std::vector<SupportPoint>& simplex,
   {
     // don't need to change the simplex
     direction = ab.cross(ao.cross(ab));
-    //std::cout << "Case 2 region [1] (no removal)" << std::endl;
+    //std::cout << "2AB" << std::endl;
   }
   else
   {
     // [b,a] -> [a]
     simplex.erase(simplex.begin());
     direction = ao;
-    //std::cout << "Case 2 region [2] (removal" << std::endl;
+    //std::cout << "2A" << std::endl;
   }
-
-  #ifdef GJK_DEBUG
-  for(unsigned int i=0; i<simplex.size(); i++)
-  {
-    std::cout << (i==0?"CASE 2: ":"        ") << simplex[i].v << std::endl;
-  }
-  std::cout << "       ab = " << ab << std::endl;
-  std::cout << "       ao = " << ao << std::endl;
-  std::cout << "      dir = " << direction << std::endl;
-  #endif
-
 
   return false;
 }
@@ -255,14 +241,14 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<SupportPoint>& simplex,
       // [c,b,a] -> [c,a]
       simplex.erase(simplex.begin() + 1);
       direction = ac.cross(ao.cross(ac));
-      //std::cout << "Case 3 region 1 (removal)" << std::endl;
+      //std::cout << "3CA" << std::endl;
     }
     else
     {
       // this is identical to a simplex [b] that just added a
       // [c,b,a] -> [b,a]
       simplex.erase(simplex.begin());
-      //std::cout << "Case 3 region 2,3 (removal)" << std::endl;
+      //std::cout << "3BA -> ";
       GJKNearestSimplexCase2(simplex,direction);
     }
   }
@@ -273,7 +259,7 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<SupportPoint>& simplex,
       // this is identical to a simplex [b] that just added a
       // [c,b,a] -> [b,a]
       simplex.erase(simplex.begin());
-      //std::cout << "Case 3 region 2,3 (removal) (second)" << std::endl;
+      //std::cout << "3BA -> ";
       GJKNearestSimplexCase2(simplex,direction);
     }
     else
@@ -283,6 +269,7 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<SupportPoint>& simplex,
         // region 4 (we don't need to change the simplex)
         //std::cout << "Case 3 region 4" << std::endl;
         direction = abc;
+       // std::cout << "3ABC" << std::endl;
       }
       else
       {
@@ -292,21 +279,10 @@ bool PhysicsEngine::GJKNearestSimplexCase3(std::vector<SupportPoint>& simplex,
         simplex[0] = simplex[1];
         simplex[1] = temp;
         direction = -abc;
+        //std::cout << "3ACB" << std::endl;
       }
     }
   }
-
-  #ifdef GJK_DEBUG
-  for(unsigned int i=0; i<simplex.size(); i++)
-  {
-    std::cout << (i==0?"CASE 3: ":"        ") << simplex[i].v << std::endl;
-  }
-  std::cout << "       ab = " << ab << std::endl;
-  std::cout << "       ac = " << ac << std::endl;
-  std::cout << "       ao = " << ao << std::endl;
-  std::cout << "      abc = " << abc << std::endl;
-  std::cout << "      dir = " << direction << std::endl;
-  #endif
 
   return false;
 }
@@ -325,103 +301,29 @@ bool PhysicsEngine::GJKNearestSimplexCase4(std::vector<SupportPoint>& simplex,
 
   if(abc * ao > 0)
   {
-    if(acd * ao > 0)
-    {
-      // the nearest simplex is the ac edge, pretend we just added a
-      // [d,c,b,a] -> [c,a]
-      simplex.erase(simplex.begin());
-      simplex.erase(simplex.begin() + 2);
-      GJKNearestSimplexCase2(simplex,direction);
-    }
-    else
-    {
-      if(adb * ao > 0)
-      {
-        // the nearest simplex is the ab edge, pretend we just added a
-        // [d,c,b,a] -> [b,a]
-        simplex.erase(simplex.begin());
-        simplex.erase(simplex.begin() + 1);
-        GJKNearestSimplexCase2(simplex,direction);
-      }
-      else
-      {
-        // the nearest simplex is the abc triangle, pretend we just added a
-        // [d,c,b,a] -> [c,b,a]
-        simplex.erase(simplex.begin());
-        GJKNearestSimplexCase3(simplex,direction);
-      }
-    }
+    // abc face
+    simplex.erase(simplex.begin());
+    return GJKNearestSimplexCase3(simplex,direction);
+  }
+  else if(acd * ao > 0)
+  {
+    // acd face
+    simplex.erase(simplex.begin() + 2);
+    return GJKNearestSimplexCase3(simplex,direction);
+  }
+  else if(adb * ao > 0)
+  {
+    // acd face
+    simplex.erase(simplex.begin() + 1); // [d,c,b,a] -> [d,b,a]
+    SupportPoint temp = simplex[0]; // [d,b,a] -> [b,d,a]
+    simplex[0] = simplex[1];
+    simplex[1] = temp;
+    return GJKNearestSimplexCase3(simplex,direction);
   }
   else
   {
-    if(acd * ao > 0)
-    {
-      if(adb * ao > 0)
-      {
-        // the nearest simplex is the ad edge, pretend we just added a
-        // [d,c,b,a] -> [d,a]
-        simplex.erase(simplex.begin() + 1);
-        simplex.erase(simplex.begin() + 2);
-        GJKNearestSimplexCase2(simplex,direction);
-      }
-      else
-      {
-        // the nearest simplex is the acd triangle, pretend we just added a
-        // [d,c,b,a] -> [d,c,a]
-        simplex.erase(simplex.begin() + 2);
-        GJKNearestSimplexCase3(simplex,direction);
-      }
-    }
-    else
-    {
-      if(adb * ao > 0)
-      {
-        // the nearest simplex is the adb triangle, pretend we just added a
-        // [d,c,b,a] -> [b,d,a]
-        simplex.erase(simplex.begin() + 1);
-        SupportPoint temp = simplex[0];
-        simplex[0] = simplex[1];
-        simplex[1] = temp;
-        GJKNearestSimplexCase3(simplex,direction);
-      }
-      else
-      {
-        // we enclose the origin
-        #ifdef GJK_DEBUG
-        for(unsigned int i=0; i<simplex.size(); i++)
-        {
-          std::cout << (i==0?"CASE 4: ":"        ") << simplex[i].v << std::endl;
-        }
-        std::cout << "       ab = " << ab << std::endl;
-        std::cout << "       ac = " << ac << std::endl;
-        std::cout << "       ad = " << ad << std::endl;
-        std::cout << "       ao = " << ao << std::endl;
-        std::cout << "      abc = " << abc << std::endl;
-        std::cout << "      acd = " << acd << std::endl;
-        std::cout << "      adb = " << adb << std::endl;
-        std::cout << "      dir = " << direction << std::endl;
-        #endif
-        return true;
-      }
-    }
+    return true;
   }
-
-  #ifdef GJK_DEBUG
-  for(unsigned int i=0; i<simplex.size(); i++)
-  {
-    std::cout << (i==0?"CASE 4: ":"        ") << simplex[i].v << std::endl;
-  }
-  std::cout << "       ab = " << ab << std::endl;
-  std::cout << "       ac = " << ac << std::endl;
-  std::cout << "       ad = " << ad << std::endl;
-  std::cout << "       ao = " << ao << std::endl;
-  std::cout << "      abc = " << abc << std::endl;
-  std::cout << "      acd = " << acd << std::endl;
-  std::cout << "      adb = " << adb << std::endl;
-  std::cout << "      dir = " << direction << std::endl;
-  #endif
-
-  return false;
 }
 
 bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b, 
@@ -462,13 +364,6 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
                 << facesList[i].v[0].v << " "
                 << facesList[i].v[1].v << " "
                 << facesList[i].v[2].v << std::endl;
-      Vec3 abc = (facesList[i].v[1].v - facesList[i].v[0].v).cross     // ab x ac
-                 (facesList[i].v[2].v - facesList[i].v[0].v).normal();
-      std::cout << "        n = " << abc << " (l=" << abc.length() << ")" << std::endl;
-      if(facesList[i].v[0].v * abc < 0)
-      {
-        std::cout << "NORMAL POINTS TOWARDS THE ORIGIN" << std::endl;
-      }
     }
     #endif
 
@@ -517,36 +412,14 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     {
       ci.areColliding = true;
 
-      // calculate barycentric weights for our triangle
-
-      // projection of the origin onto the closest face
-      Vec3 tp = currentFace.v[0].v *
-               (currentFace.v[0].v * searchDirection.normal());
-
-      Vec3 ta = currentFace.v[0].v;  // the vertices of the triangle
-      Vec3 tb = currentFace.v[1].v;
-      Vec3 tc = currentFace.v[2].v;
-
-      // the area of the main triangle
-      // (we're getting ratios, so we ignore the /2)
-      double abcArea = ((tb-ta).cross(tc-ta)).length();
-
-      // the areas of each sub-triangle (p with 2 other vertices)
-      //double abpArea = ((a-p).cross(b-p)).length(); // we don't need this one
-      double bcpArea = ((tb-tp).cross(tc-tp)).length();
-      double acpArea = ((ta-tp).cross(tc-tp)).length();
-
-      double u = bcpArea / abcArea;
-      double v = acpArea / abcArea;
-      double w = 1.0 - u - v; // they always sum to 1
-
-      // get the same point using the original a's vertices
-      ci.pointOfContact = currentFace.v[0].a * u
-                        + currentFace.v[1].a * v
-                        + currentFace.v[2].a * w;
-
       // calculate the minimum separation
-      ci.minimumSeparation = searchDirection * currentMinDist;
+      ci.minimumSeparation = searchDirection * currentMinDist * -1.0;
+
+      // get a set of every
+      std::vector<Vec3> aFace;
+      std::vector<Vec3> bFace;
+
+      ci.pointOfContact;
 
       // calculate the impulse
       if(searchDirection * currentMinDist != Vec3(0))

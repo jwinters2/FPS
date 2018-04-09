@@ -174,6 +174,8 @@ void PhysicsEngine::checkCollisions() const
           // ci is calculated from the perspective of a hitting b
           // so invert it when b hitting a, because Newton's 3rd law
         }
+
+        std::cout << ci.pointOfContact << std::endl;
       }
     }
   }
