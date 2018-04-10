@@ -101,7 +101,7 @@ bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b,
 
 Vec3 PhysicsEngine::GJKSupport(const RigidBody& r, const Vec3& v) const
 {
-  // get the point in r's hitbox with the highest dot produc with v
+  // get the point in r's hitbox with the highest dot product with v
   Mat4 t = r.getTransform().toMatrix();
   double currentMax = (t * r.hitbox[0]) * v;
   Vec3 retval = (t * r.hitbox[0]);
@@ -113,6 +113,26 @@ Vec3 PhysicsEngine::GJKSupport(const RigidBody& r, const Vec3& v) const
     {
       currentMax = current;
       retval = (t * r.hitbox[i]);
+    }
+  }
+
+  return retval;
+}
+
+std::vector<Vec3> PhysicsEngine::GJKSupportSet(const RigidBody& r, const Vec3 v,
+                                               double buffer) const
+{
+  Mat4 t = r.getTransform().toMatrix();
+  Vec3 furthestPoint = GJKSupport(r,v);
+  std::vector<Vec3> retval;
+
+  for(unsigned int i=0; i<r.hitbox.size(); i++)
+  {
+    Vec3 current = t * r.hitbox[i];
+    if(current * v + buffer >= furthestPoint * v)
+    {
+      //if it's equal (enough) to the max, add it to the retval
+      retval.push_back(current);
     }
   }
 
@@ -415,11 +435,17 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
       // calculate the minimum separation
       ci.minimumSeparation = searchDirection * currentMinDist * -1.0;
 
-      // get a set of every
-      std::vector<Vec3> aFace;
-      std::vector<Vec3> bFace;
+      // get the touching faces
+      std::vector<Vec3> aFace = GJKSupportSet(a, searchDirection,
+                                              currentMinDist/2);
+      std::vector<Vec3> bFace = GJKSupportSet(b,-searchDirection,
+                                              currentMinDist/2);
 
-      ci.pointOfContact;
+      ci.pointOfContact = GJKGetPointOfContact(aFace,bFace,searchDirection);
+
+      #ifdef GJK_DEBUG
+      std::cout << "PoC = " << ci.pointOfContact << std::endl;
+      #endif
 
       // calculate the impulse
       if(searchDirection * currentMinDist != Vec3(0))
@@ -533,6 +559,163 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
       facesList.back().v[0] = edgesList[j].v[0];
       facesList.back().v[1] = edgesList[j].v[1];
       facesList.back().v[2] = expansionPoint;
+    }
+  }
+}
+
+// Sutherland Hodgman Algorithm
+Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
+                                         std::vector<Vec3>& B,
+                                         const Vec3& dir) const
+{
+  // sort the points into counter clockwise shapes
+  RotateSort(A,dir);
+  RotateSort(B,dir);
+
+  // make a copy of A (A is the incident polygon)
+  std::vector<Vec3> manifold(A);
+  std::vector<Vec3> manifoldNew;
+
+  for(unsigned int i=0; i<B.size(); i++)
+  {
+    // get the point and normal for each edge on B
+    Vec3 pb = B[i];
+    Vec3 nb = -(B[ (i+1) % B.size() ] - B[i]).cross(dir);
+
+    for(unsigned int j=0; j<manifold.size(); j++)
+    {
+      // for each point on A
+      Vec3 a1 = manifold[ (j+1) % manifold.size() ];
+      Vec3 a0 = manifold[j];
+
+      if((a1 - pb) * nb >= 0)
+      {
+        if((a0 - pb) * nb >= 0)
+        {
+          // both points are past the normal edge, save a1
+          manifoldNew.push_back(Vec3(a1));
+        }
+        else
+        {
+          // only a1 is past the edge, save a1 and the intersection point
+          double weight = ((pb - a0) * nb) / ((a1 - a0) * nb);
+          if(weight < 0 || weight > 1)
+            std::cout << "WARNING, weight not in range [0,1]" << std::endl;
+          manifoldNew.push_back( ((a1 - a0) * weight) + a0);
+
+          manifoldNew.push_back(Vec3(a1));
+        }
+      }
+      else
+      {
+        if((a0 - pb) * nb >= 0)
+        {
+          // only a0 is past the edge, save the intersection point
+          double weight = ((pb - a0) * nb) / ((a1 - a0) * nb);
+          if(weight < 0 || weight > 1)
+            std::cout << "WARNING, weight not in range [0,1]" << std::endl;
+          manifoldNew.push_back( ((a1 - a0) * weight) + a0);
+        }
+        // neither point is past the normal edge, save neither
+      }
+    }
+
+    // move new manifold to the main one and clear it
+    manifold.clear();
+    for(unsigned int j=0; j<manifoldNew.size(); j++)
+    {
+      manifold.push_back(manifoldNew[j]);   
+    }
+    manifoldNew.clear();
+  }
+
+  #ifdef GJK_DEBUG
+  for(unsigned int k=0; k<manifold.size(); k++)
+  {
+    std::cout << "M: " << manifold[k] << std::endl;
+  }
+  std::cout << std::endl;
+  #endif
+
+  for(unsigned int k=0; k<manifold.size(); k++)
+  {
+    for(unsigned int j=k+1; j<manifold.size(); j++)
+    {
+      if((manifold[k] - manifold[j]).length() < 0.000001) // rounding errors
+      {
+        manifold.erase(manifold.begin() + j);
+        j--;
+      }
+    }
+  }
+
+  #ifdef GJK_DEBUG
+  for(unsigned int k=0; k<manifold.size(); k++)
+  {
+    std::cout << "M: " << manifold[k] << std::endl;
+  }
+  #endif
+
+  if(manifold.size() == 0)
+  {
+    // this shouldn't happen
+    std::cout << "ERROR: manifold of size 0" << std::endl;
+    return Vec3(0);
+  }
+  if(manifold.size() == 1)
+  {
+    // the center of mass of a single point is that point
+    return manifold[0];
+  }
+  if(manifold.size() == 2)
+  {
+    // the center of mass of a line is the midpoint
+    return (manifold[0] + manifold[1]) / 2;
+  }
+
+  Vec3 netCenter(0);
+  double netArea = 0;
+
+  for(unsigned int i=1; i<manifold.size() - 1; i++)
+  {
+    /* separate the manifold into triangles like a fan, and calculate the
+     * center of mass and area of each one
+     *
+     * the center of any shape broken up into smaller shapes is
+     *
+     * C = Sum(Ci * Ai) / Sum(Ai), where Ci is the center of shape i, and Ai
+     * is the area
+     *
+     * the center of a triangle is just the average of each vertex
+     */
+    Vec3 p0 = manifold[i  ];
+    Vec3 p1 = manifold[i+1];
+    double area = (p0 - manifold[0]).cross(p1 - manifold[0]).length() / 2;
+    Vec3 center = (manifold[0] + p0 + p1) / 3;
+    
+    netArea += area;
+    netCenter += center * area;
+  }
+
+  return netCenter / netArea;
+}
+
+void PhysicsEngine::RotateSort(std::vector<Vec3>& set, const Vec3& dir) const
+{
+  for(unsigned int i=0; i<set.size(); i++)
+  {
+    Vec3 e0 = set[ (i+1) % set.size()] - set[i];
+    Vec3 e1 = set[ (i+2) % set.size()] - set[ (i+1) % set.size()];
+
+    // if the angle from faces [0-1] and [1-2] turns right
+    // we swap 1 and 0 and restart
+    if(e0.cross(e1) * dir < 0)
+    {
+      Vec3 temp = set[i];
+      set[i] = set[ (i+1) % set.size()];
+      set[ (i+1) % set.size()] = temp;
+      i = -1; // this gets incremented at the end of the loop
+              // where it should become 0
     }
   }
 }

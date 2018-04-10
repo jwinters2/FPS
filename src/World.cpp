@@ -43,8 +43,8 @@ void World::init()
   //b->enableKeyboardMovement();
   entityList.push_back(b);
 
-  Entity* e = new Box(pe, Vec3(0,-3,0), Vec3(1));
-  //e->setMass(0);
+  Entity* e = new Box(pe, Vec3(1,-3,0), Vec3(1));
+  e->setMass(0);
   entityList.push_back(e);
 };
 

@@ -65,11 +65,18 @@ class PhysicsEngine
 
     //GJK algorithm (with helper functions and minimumSeparation stuff)
     bool GJKAlgorithm(const RigidBody&, const RigidBody& ,CollisionInfo&) const;
+
     Vec3 GJKSupport(const RigidBody&, const Vec3&) const;
+    std::vector<Vec3> GJKSupportSet(const RigidBody&, const Vec3, double) const;
+
     bool GJKNearestSimplex(std::vector<SupportPoint>&, Vec3&) const;
     bool GJKNearestSimplexCase2(std::vector<SupportPoint>&, Vec3&) const;
     bool GJKNearestSimplexCase3(std::vector<SupportPoint>&, Vec3&) const;
     bool GJKNearestSimplexCase4(std::vector<SupportPoint>&, Vec3&) const;
+
+    void RotateSort(std::vector<Vec3>&, const Vec3&) const;
+    Vec3 GJKGetPointOfContact(std::vector<Vec3>&,std::vector<Vec3>&,
+                             const Vec3&) const;
     
     bool EPAAlgorithm(const RigidBody&, const RigidBody&,
                       std::vector<SupportPoint>&, CollisionInfo&) const;
