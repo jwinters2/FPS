@@ -259,6 +259,7 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
      *
      * also 2 is replaced with (1 + restitution)
      */
+
     double massComponent;
 
     if(a.invMass == 0)
@@ -279,6 +280,7 @@ bool PhysicsEngine::boundingBoxCollision(const RigidBody& a, const RigidBody& b
     ci.impulse = -1 * displacement.normal()
                * (displacement.normal() * (a.velocity - b.velocity))
                * (1 + rest) / massComponent;
+
   }
   else
   {

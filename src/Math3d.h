@@ -100,6 +100,7 @@ struct Mat3
   Mat3();
   Mat3(double);
   Mat3(const Mat3&);
+  Mat3(const Mat4&);
 
   Mat3 invert() const;
 };

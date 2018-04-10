@@ -125,7 +125,10 @@ void RigidBody::addAngularImpulse(const Vec3& i)
 void RigidBody::applyImpulses()
 {
   velocity += impulse * invMass;
-  angularVelocity += (invMOI * angularImpulse);
+
+  Mat3 R(rotation.toMatrix());
+  angularVelocity += R * (invMOI * (R.invert() * angularImpulse));
+
   impulse = Vec3(0);
   angularImpulse = Vec3(0);
 }

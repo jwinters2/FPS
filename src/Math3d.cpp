@@ -332,6 +332,11 @@ Mat3::Mat3(const Mat3& o):x{o.x[0],o.x[1],o.x[2]}
                          ,z{o.z[0],o.z[1],o.z[2]}
                          {}
 
+Mat3::Mat3(const Mat4& o):x{o.x[0],o.x[1],o.x[2]}
+                         ,y{o.y[0],o.y[1],o.y[2]}
+                         ,z{o.z[0],o.z[1],o.z[2]}
+                         {}
+
 Mat3 Mat3::invert() const
 {
   double determinant = x[0] * (y[1] * z[2]  -  y[2] * z[1])

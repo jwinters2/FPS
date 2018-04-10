@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
   srand(time(NULL));
-  GraphicsManager gm(640,480,true);
+  GraphicsManager gm(640,480,false);
   InputManager im;
   
   std::chrono::time_point<std::chrono::high_resolution_clock> currentTime;

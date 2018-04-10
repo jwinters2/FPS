@@ -428,7 +428,7 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
     // (the new point is co-planar with the closest face)
     //if(std::abs((searchDirection * expansionPoint.v)
     //           - std::abs(currentMinDist)) < 0.02)
-    if((searchDirection * expansionPoint.v) - currentMinDist < 0.02)
+    if((searchDirection * expansionPoint.v) - currentMinDist < 0.001)
     {
       ci.areColliding = true;
 
@@ -450,10 +450,11 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
       // calculate the impulse
       if(searchDirection * currentMinDist != Vec3(0))
       {
-        double massComponent;
+        //double massComponent;
         double rest = (a.restitution > b.restitution ? a.restitution
                                                      : b.restitution);
 
+        /*
         if(a.invMass == 0)
         {
           massComponent = b.invMass;
@@ -479,6 +480,28 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
         ci.impulse = -1 * ci.minimumSeparation.normal()
                    * (ci.minimumSeparation.normal() * (avel - bvel))
                    * (1 + rest) / massComponent;
+        */
+
+        // -(1 + e) Vr . n    e = restitution, Vr = relative vel. (Va - Vb)
+        // ---------------    n = normal vector (normalized)
+        //   1/Ma + 1/Mb + n . ((Ia(ra x n) x ra) + (Ib(rb x n) x rb))
+        Vec3 n = ci.minimumSeparation.normal();
+
+        Vec3 ra = ci.pointOfContact - a.position;
+        Vec3 rb = ci.pointOfContact - b.position;
+
+        Mat3 Ra(a.rotation.toMatrix());
+        Vec3 Iaran = Ra * (a.invMOI * ( Ra.invert() * (ra.cross(n))));
+        Mat3 Rb(b.rotation.toMatrix());
+        Vec3 Ibrbn = Rb * (b.invMOI * ( Rb.invert() * (rb.cross(n))));
+
+        Vec3 Vr = a.velocity - b.velocity;
+        double numerator = -1.0 * (1 + rest) * (Vr * n);
+
+        double denominator = a.invMass + b.invMass
+                           + (n * ((Iaran.cross(ra)) + (Ibrbn.cross(rb))));
+
+        ci.impulse = n * numerator/denominator;
       }
       else
       {
@@ -568,6 +591,7 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
                                          std::vector<Vec3>& B,
                                          const Vec3& dir) const
 {
+  static const double BUFFER = 0.01;
   // sort the points into counter clockwise shapes
   RotateSort(A,dir);
   RotateSort(B,dir);
@@ -588,32 +612,40 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
       Vec3 a1 = manifold[ (j+1) % manifold.size() ];
       Vec3 a0 = manifold[j];
 
-      if((a1 - pb) * nb >= 0)
+      if((a1 - pb) * nb > 0 - BUFFER)
       {
-        if((a0 - pb) * nb >= 0)
+        if((a0 - pb) * nb > 0 - BUFFER)
         {
           // both points are past the normal edge, save a1
-          manifoldNew.push_back(Vec3(a1));
+          manifoldNew.push_back(a1);
         }
         else
         {
           // only a1 is past the edge, save a1 and the intersection point
           double weight = ((pb - a0) * nb) / ((a1 - a0) * nb);
-          if(weight < 0 || weight > 1)
+          if(weight < 0 - BUFFER || weight > 1 + BUFFER)
+          {
+            if(weight > 1) weight = 1;
+            if(weight < 0) weight = 0;
             std::cout << "WARNING, weight not in range [0,1]" << std::endl;
+          }
           manifoldNew.push_back( ((a1 - a0) * weight) + a0);
 
-          manifoldNew.push_back(Vec3(a1));
+          manifoldNew.push_back(a1);
         }
       }
       else
       {
-        if((a0 - pb) * nb >= 0)
+        if((a0 - pb) * nb > 0 - BUFFER)
         {
           // only a0 is past the edge, save the intersection point
           double weight = ((pb - a0) * nb) / ((a1 - a0) * nb);
-          if(weight < 0 || weight > 1)
+          if(weight < 0 - BUFFER || weight > 1 + BUFFER)
+          {
+            if(weight > 1) weight = 1;
+            if(weight < 0) weight = 0;
             std::cout << "WARNING, weight not in range [0,1]" << std::endl;
+          }
           manifoldNew.push_back( ((a1 - a0) * weight) + a0);
         }
         // neither point is past the normal edge, save neither
@@ -660,6 +692,15 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
   {
     // this shouldn't happen
     std::cout << "ERROR: manifold of size 0" << std::endl;
+    std::cout << "A,B = " << A.size() << "," << B.size() << std::endl;
+    for(unsigned int k=0; k<A.size(); k++)
+    {
+      std::cout << (k==0?"A = ":"    ") << A[k] << std::endl;
+    }
+    for(unsigned int k=0; k<B.size(); k++)
+    {
+      std::cout << (k==0?"B = ":"    ") << B[k] << std::endl;
+    }
     return Vec3(0);
   }
   if(manifold.size() == 1)
