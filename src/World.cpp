@@ -35,15 +35,45 @@ World::World(const Vec3& dim)
 void World::init()
 {
   pe = new PhysicsEngine(this);
+
+  // make bounds
+  bounds = new RigidBody*[6];
+
+  bounds[0] = new RigidBody(nullptr, 0, 0);
+  bounds[0]->makeBoxHitbox(Vec3(1, dimension.y, dimension.z));
+  bounds[0]->setPosition(Vec3(-dimension.x-1,0,0));
+  bounds[1] = new RigidBody(nullptr, 0, 0);
+  bounds[1]->makeBoxHitbox(Vec3(1, dimension.y, dimension.z));
+  bounds[1]->setPosition(Vec3( dimension.x+1,0,0));
+
+  bounds[2] = new RigidBody(nullptr, 0, 0);
+  bounds[2]->makeBoxHitbox(Vec3(dimension.x, 1, dimension.z));
+  bounds[2]->setPosition(Vec3(0,-dimension.y-1,0));
+  bounds[3] = new RigidBody(nullptr, 0, 0);
+  bounds[3]->makeBoxHitbox(Vec3(dimension.x, 1, dimension.z));
+  bounds[3]->setPosition(Vec3(0, dimension.y+1,0));
+
+  bounds[4] = new RigidBody(nullptr, 0, 0);
+  bounds[4]->makeBoxHitbox(Vec3(dimension.z, dimension.y, 1));
+  bounds[4]->setPosition(Vec3(0,0,-dimension.z-1));
+  bounds[5] = new RigidBody(nullptr, 0, 0);
+  bounds[5]->makeBoxHitbox(Vec3(dimension.z, dimension.y, 1));
+  bounds[5]->setPosition(Vec3(0,0, dimension.z+1));
+
   //entityList.push_back(new RotationObject());
 
-  Box* b = new Box(pe, Vec3(0,0.5,0), Vec3(1));
-  b->setVelocity(Vec3(0,0,0));
+  //Box* b = new Box(pe, Vec3(0,0.5,0), Vec3(1));
+  //b->setVelocity(Vec3(0,0,0));
   //b->setMass(0);
   //b->enableKeyboardMovement();
-  entityList.push_back(b);
+  //entityList.push_back(b);
 
-  Entity* e = new Box(pe, Vec3(0.4,-3,0), Vec3(1));
+  for(int i=0; i<5; i++)
+  {
+    Entity* e = new Box(pe, Vec3(0.4*i,-2+i,0), Vec3(1,0.3,1));
+    entityList.push_back(e);
+  }
+  Entity* e = new Box(pe, Vec3(0,-4,0), Vec3(4,0.1,4));
   e->setMass(0);
   entityList.push_back(e);
 };
@@ -57,6 +87,12 @@ World::~World()
       delete entityList[i];
     }
   }
+
+  for(int i=0; i<6; i++)
+  {
+    delete bounds[i];
+  }
+  delete [] bounds;
 
   delete pe;
 };
@@ -142,4 +178,9 @@ void World::draw() const
 Vec3 World::getDimension() const
 {
   return dimension;
+}
+
+const RigidBody& World::getBound(int i) const
+{
+  return *(bounds[i]);
 }

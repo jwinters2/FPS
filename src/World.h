@@ -23,10 +23,13 @@ class World
 
     void addObject(Entity*);
 
+    const RigidBody& getBound(int) const;
+
   private:
     std::vector<Entity*> entityList; 
     PhysicsEngine* pe;
     Vec3 dimension;
+    RigidBody** bounds;
 
     void init();
 };

@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 
   //gm.loadTexture("assets/texture.bmp");
 
-  World world(5.0);
+  World world(20.0,5.0,20.0);
   while( !im.getCloseButtonPressed() )
   {
     // this loop has all the timing and whatnot happening in it

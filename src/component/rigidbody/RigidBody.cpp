@@ -4,8 +4,8 @@
 
 #include <fstream>
 
-RigidBody::RigidBody(Entity* own, const Vec3& dim, double m, double r):
-                     owner(own), dimension(dim), invMass((m==0?0:1/m)),
+RigidBody::RigidBody(Entity* own, double m, double r):
+                     owner(own), invMass((m==0?0:1/m)),
                      restitution(r)
 {
   if(owner != nullptr)
@@ -64,9 +64,42 @@ void RigidBody::makeBoxHitbox(const Vec3& dim)
   }
 
   invMOI = Mat3(0);                                   // normally 12
-  invMOI.x[0] = ((dim.y * dim.y) + (dim.z * dim.z)) / (3 * invMass);
-  invMOI.y[1] = ((dim.x * dim.x) + (dim.z * dim.z)) / (3 * invMass);
-  invMOI.z[2] = ((dim.x * dim.x) + (dim.y * dim.y)) / (3 * invMass);
+  invMOI.x[0] = ((dim.y * dim.y) + (dim.z * dim.z)) / 3;
+  invMOI.y[1] = ((dim.x * dim.x) + (dim.z * dim.z)) / 3;
+  invMOI.z[2] = ((dim.x * dim.x) + (dim.y * dim.y)) / 3;
+                                       // but dim are half the lengths, so 3
+
+  invMOI = invMOI.invert();
+}
+
+void RigidBody::makePlaneHitbox(const Vec3& dim)
+{
+  if(dim.x == 0)
+  {
+    hitbox.push_back(Vec3(0, dim.y, dim.z));
+    hitbox.push_back(Vec3(0, dim.y,-dim.z));
+    hitbox.push_back(Vec3(0,-dim.y, dim.z));
+    hitbox.push_back(Vec3(0,-dim.y,-dim.z));
+  }
+  else if(dim.y == 0)
+  {
+    hitbox.push_back(Vec3( dim.x,0, dim.z));
+    hitbox.push_back(Vec3(-dim.x,0,-dim.z));
+    hitbox.push_back(Vec3( dim.x,0, dim.z));
+    hitbox.push_back(Vec3(-dim.x,0,-dim.z));
+  }
+  else if(dim.z == 0)
+  {
+    hitbox.push_back(Vec3( dim.x, dim.y,0));
+    hitbox.push_back(Vec3(-dim.x,-dim.y,0));
+    hitbox.push_back(Vec3( dim.x, dim.y,0));
+    hitbox.push_back(Vec3(-dim.x,-dim.y,0));
+  }
+
+  invMOI = Mat3(0);                                   // normally 12
+  invMOI.x[0] = ((dim.y * dim.y) + (dim.z * dim.z)) / 3;
+  invMOI.y[1] = ((dim.x * dim.x) + (dim.z * dim.z)) / 3;
+  invMOI.z[2] = ((dim.x * dim.x) + (dim.y * dim.y)) / 3;
                                        // but dim are half the lengths, so 3
 
   invMOI = invMOI.invert();
@@ -127,7 +160,8 @@ void RigidBody::applyImpulses()
   velocity += impulse * invMass;
 
   Mat3 R(rotation.toMatrix());
-  angularVelocity += R * (invMOI * (R.invert() * angularImpulse));
+  angularVelocity += (R * (invMOI * (R.invert() * angularImpulse))) * invMass;
+  //angularVelocity += (invMOI *  angularImpulse) * invMass;
 
   impulse = Vec3(0);
   angularImpulse = Vec3(0);

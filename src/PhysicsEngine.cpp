@@ -5,6 +5,8 @@
 #include <vector>
 #include <cmath>
 
+double PhysicsEngine::maxImpulse = 0;
+
 PhysicsEngine::PhysicsEngine(World* w):world(w),gravity(Vec3(0.0,-1.0,0.0))
 { }
 
@@ -25,8 +27,8 @@ void PhysicsEngine::performPhysics(double dt)
     if(rb->angularVelocity != Vec3(0))
     {
       rb->rotation.applyRotation(Quat(rb->angularVelocity.normal(),
-                                      rb->angularVelocity.length() * deltaTime
-                                      * 180 / 3.14159));
+                                     rb->angularVelocity.length() * deltaTime
+                                     * 180.0 / 3.14159263538));
     }
     
     // acceleration due to gravity
@@ -36,6 +38,7 @@ void PhysicsEngine::performPhysics(double dt)
       rb->addImpulse(gravity * deltaTime / rb->invMass);
     }
 
+    /*
     if(!insideWorldBounds(*rb, ci))
     {
       rb->position -= ci.minimumSeparation;
@@ -48,6 +51,7 @@ void PhysicsEngine::performPhysics(double dt)
         rb->velocity += ci.impulse;
       }
     }
+    */
   }
 
   checkCollisions();
@@ -144,9 +148,32 @@ void PhysicsEngine::checkCollisions() const
   CollisionInfo ci;
   for(unsigned int i = 0; i<entityList.size(); i++)
   {
+    RigidBody* ar = entityList[i]->rigidBody;
+
+    // check with bounds
+    for(int j=0; j<6; j++)
+    {
+      if(GJKAlgorithm(*ar,world->getBound(j),ci))
+      {
+        if(ar->invMass != 0)
+        {
+          ar->position += ci.minimumSeparation;
+          ar->addImpulse(ci.impulse);
+          //if(ci.pointOfContact != Vec3(0))
+          ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
+                                (ci.impulse * -1.0));
+
+          if(ci.impulse.length() > maxImpulse)
+          {
+            maxImpulse = ci.impulse.length();
+            std::cout << "Highest Impulse so far: " << maxImpulse << std::endl;
+          }
+        }
+      }
+    }
+
     for(unsigned int j = i + 1; j<entityList.size(); j++)
     {
-      RigidBody* ar = entityList[i]->rigidBody;
       RigidBody* br = entityList[j]->rigidBody;
 
       //if(boundingBoxCollision(*ar,*br,ci))
@@ -162,6 +189,7 @@ void PhysicsEngine::checkCollisions() const
         {
           ar->position += ci.minimumSeparation * (ar->invMass)/totalInvMass;
           ar->addImpulse(ci.impulse);
+          //if(ci.pointOfContact != Vec3(0))
           ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
                                 (ci.impulse * -1.0));
         }
@@ -169,10 +197,17 @@ void PhysicsEngine::checkCollisions() const
         {
           br->position -= ci.minimumSeparation * (br->invMass)/totalInvMass;
           br->addImpulse(ci.impulse * -1.0);
+          //if(ci.pointOfContact != Vec3(0))
           br->addAngularImpulse((ci.pointOfContact - br->position).cross
-                                (ci.impulse));
+                                (ci.impulse * 1.0));
           // ci is calculated from the perspective of a hitting b
           // so invert it when b hitting a, because Newton's 3rd law
+        }
+
+        if(ci.impulse.length() > maxImpulse)
+        {
+          maxImpulse = ci.impulse.length();
+          std::cout << "Highest Impulse so far: " << maxImpulse << std::endl;
         }
       }
     }

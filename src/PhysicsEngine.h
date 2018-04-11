@@ -20,6 +20,7 @@ class PhysicsEngine
     void addObject(Entity*);
 
   private:
+    static double maxImpulse;
 
     struct CollisionInfo
     {

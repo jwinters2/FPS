@@ -9,13 +9,14 @@ class Entity;
 class RigidBody
 {
   public:
-    RigidBody(Entity*, const Vec3&, double, double);
+    RigidBody(Entity*, double, double);
     ~RigidBody();
 
     Transform getTransform() const;
 
     void loadHitbox(std::string);
     void makeBoxHitbox(const Vec3&);
+    void makePlaneHitbox(const Vec3&);
 
     void updateOwner();
 
@@ -59,7 +60,6 @@ class RigidBody
     // inverted mass, restitution and interted moment of inertia
     double invMass;
     Mat3 invMOI;
-
     double restitution;
 
   friend class PhysicsEngine;

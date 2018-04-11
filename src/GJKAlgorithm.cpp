@@ -437,9 +437,9 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
 
       // get the touching faces
       std::vector<Vec3> aFace = GJKSupportSet(a, searchDirection,
-                                              currentMinDist/2);
+                                              currentMinDist);
       std::vector<Vec3> bFace = GJKSupportSet(b,-searchDirection,
-                                              currentMinDist/2);
+                                              currentMinDist);
 
       ci.pointOfContact = GJKGetPointOfContact(aFace,bFace,searchDirection);
 
@@ -485,16 +485,20 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
         // -(1 + e) Vr . n    e = restitution, Vr = relative vel. (Va - Vb)
         // ---------------    n = normal vector (normalized)
         //   1/Ma + 1/Mb + n . ((Ia(ra x n) x ra) + (Ib(rb x n) x rb))
-        Vec3 n = ci.minimumSeparation.normal();
+        Vec3 n = searchDirection.normal();
 
         Vec3 ra = ci.pointOfContact - a.position;
         Vec3 rb = ci.pointOfContact - b.position;
 
         Mat3 Ra(a.rotation.toMatrix());
-        Vec3 Iaran = Ra * (a.invMOI * ( Ra.invert() * (ra.cross(n))));
+        Vec3 Iaran = (Ra * (a.invMOI * ( Ra.invert() * (ra.cross(n)))))
+                   * a.invMass;
         Mat3 Rb(b.rotation.toMatrix());
-        Vec3 Ibrbn = Rb * (b.invMOI * ( Rb.invert() * (rb.cross(n))));
+        Vec3 Ibrbn = (Rb * (b.invMOI * ( Rb.invert() * (rb.cross(n)))))
+                   * b.invMass;
 
+        //Vec3 Vr = (a.velocity + a.angularVelocity.cross(ra))
+                //- (b.velocity + b.angularVelocity.cross(rb));
         Vec3 Vr = a.velocity - b.velocity;
         double numerator = -1.0 * (1 + rest) * (Vr * n);
 
@@ -627,7 +631,7 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
           {
             if(weight > 1) weight = 1;
             if(weight < 0) weight = 0;
-            std::cout << "WARNING, weight not in range [0,1]" << std::endl;
+            //std::cout << "WARNING, weight not in range [0,1]" << std::endl;
           }
           manifoldNew.push_back( ((a1 - a0) * weight) + a0);
 
@@ -644,7 +648,7 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
           {
             if(weight > 1) weight = 1;
             if(weight < 0) weight = 0;
-            std::cout << "WARNING, weight not in range [0,1]" << std::endl;
+            //std::cout << "WARNING, weight not in range [0,1]" << std::endl;
           }
           manifoldNew.push_back( ((a1 - a0) * weight) + a0);
         }
@@ -691,17 +695,24 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
   if(manifold.size() == 0)
   {
     // this shouldn't happen
-    std::cout << "ERROR: manifold of size 0" << std::endl;
-    std::cout << "A,B = " << A.size() << "," << B.size() << std::endl;
+    //std::cout << "ERROR: manifold of size 0" << std::endl;
+    //std::cout << "A,B = " << A.size() << "," << B.size() << std::endl;
+
+    //Vec3 center(0);
     for(unsigned int k=0; k<A.size(); k++)
     {
-      std::cout << (k==0?"A = ":"    ") << A[k] << std::endl;
+      //std::cout << (k==0?"A = ":"    ") << A[k] << std::endl;
+      //center += A[k];
+      manifold.push_back(A[k]);
     }
     for(unsigned int k=0; k<B.size(); k++)
     {
-      std::cout << (k==0?"B = ":"    ") << B[k] << std::endl;
+      //std::cout << (k==0?"B = ":"    ") << B[k] << std::endl;
+      //center += B[k];
+      manifold.push_back(B[k]);
     }
-    return Vec3(0);
+    //return center / (A.size() + B.size() > 0 ? A.size() + B.size() : 1);
+    //return Vec3(0);
   }
   if(manifold.size() == 1)
   {
