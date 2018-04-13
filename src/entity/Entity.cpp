@@ -10,7 +10,20 @@ Entity::Entity():model(nullptr),rigidBody(nullptr)
 
 Entity::~Entity()
 {
+  if(rigidBody != nullptr)
+  {
+    delete rigidBody;
+  }
+  if(model != nullptr)
+  {
+    delete model;
+  }
 };
+
+Transform Entity::getTransform() const
+{
+  return transform;
+}
 
 void Entity::setPosition(const Vec3& p)
 {

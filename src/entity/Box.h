@@ -6,7 +6,7 @@
 class Box: public Entity
 {
   public:
-    Box(PhysicsEngine*, const Vec3&, const Vec3&);
+    Box(World*, const Vec3&, const Vec3&);
     ~Box();
 
     void enableKeyboardMovement();

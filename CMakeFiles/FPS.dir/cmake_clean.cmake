@@ -12,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/FPS.dir/src/component/rigidbody/RigidBody.cpp.o"
   "CMakeFiles/FPS.dir/src/entity/Box.cpp.o"
   "CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
+  "CMakeFiles/FPS.dir/src/entity/Player.cpp.o"
   "CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o"
   "CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
   "CMakeFiles/FPS.dir/src/main.cpp.o"

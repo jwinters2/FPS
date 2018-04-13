@@ -40,9 +40,10 @@ void glfw_key_callback(GLFWwindow* window, int key, int scancode,
       case GLFW_KEY_LEFT_CONTROL:   keyIndex = KeyCodes::LCTRL;  break;
       case GLFW_KEY_RIGHT_CONTROL:  keyIndex = KeyCodes::RCTRL;  break;
 
-      // enter
-      case GLFW_KEY_ENTER: keyIndex = KeyCodes::ENTER; break;
-      case GLFW_KEY_SPACE: keyIndex = KeyCodes::SPACE; break;
+      // enter, space, escape
+      case GLFW_KEY_ENTER:  keyIndex = KeyCodes::ENTER;  break;
+      case GLFW_KEY_SPACE:  keyIndex = KeyCodes::SPACE;  break;
+      case GLFW_KEY_ESCAPE: keyIndex = KeyCodes::ESCAPE; break;
 
       // International 1 and 2 (they're different for some reason)
       case GLFW_KEY_WORLD_1: keyIndex = KeyCodes::ONE; break;
@@ -65,8 +66,8 @@ void glfw_mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
   InputManager& im = InputManager::getReference();
 
-  im.mouseX = (int)xpos;
-  im.mouseY = (int)ypos;
+  im.mouseX = xpos;
+  im.mouseY = ypos;
 }
 
 void glfw_resize_callback(GLFWwindow* window, int width, int height)
@@ -103,7 +104,8 @@ InputManager::InputManager()
   GLFWwindow* window = gm.getWindow();
 
   glfwSetKeyCallback(window, glfw_key_callback);
-  glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+  //glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   glfwSetCursorPosCallback(window, glfw_mouse_callback);
 
@@ -148,5 +150,16 @@ bool InputManager::getKeyReleased(KeyCodes k) const
 
 bool InputManager::getCloseButtonPressed() const
 {
-  return closeButtonPressed;
+  return closeButtonPressed || 
+  (keyPressed[LSHIFT] && keyPressed[ESCAPE]);
+}
+
+double InputManager::getMouseX() const
+{
+  return mouseX;
+}
+
+double InputManager::getMouseY() const
+{
+  return mouseY;
 }

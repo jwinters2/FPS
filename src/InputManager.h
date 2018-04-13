@@ -44,6 +44,7 @@ enum KeyCodes
   RIGHT,
   ENTER,
   SPACE,
+  ESCAPE,
   LSHIFT,
   RSHIFT,
   LCTRL,
@@ -64,8 +65,8 @@ class InputManager
     bool getKeyReleased(KeyCodes) const;
     bool getCloseButtonPressed() const;
 
-    int getMouseX() const;
-    int getMouseY() const;
+    double getMouseX() const;
+    double getMouseY() const;
 
     void pollInput();
 
@@ -78,8 +79,8 @@ class InputManager
 
     bool closeButtonPressed;
 
-    int mouseX;
-    int mouseY;
+    double mouseX;
+    double mouseY;
 
   friend void glfw_key_callback   (GLFWwindow*, int, int, int, int);
   friend void glfw_mouse_callback (GLFWwindow*, double, double);

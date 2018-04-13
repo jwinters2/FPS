@@ -17,6 +17,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/jamie/Programming/FPS/src/component/rigidbody/RigidBody.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/component/rigidbody/RigidBody.cpp.o"
   "/home/jamie/Programming/FPS/src/entity/Box.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/Box.cpp.o"
   "/home/jamie/Programming/FPS/src/entity/Entity.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/Entity.cpp.o"
+  "/home/jamie/Programming/FPS/src/entity/Player.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/Player.cpp.o"
   "/home/jamie/Programming/FPS/src/entity/RotationObject.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o"
   "/home/jamie/Programming/FPS/src/entity/Statue.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/entity/Statue.cpp.o"
   "/home/jamie/Programming/FPS/src/main.cpp" "/home/jamie/Programming/FPS/CMakeFiles/FPS.dir/src/main.cpp.o"

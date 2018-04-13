@@ -54,7 +54,7 @@ class GraphicsManager
     void unloadTexture(std::string);
     bool isTextureLoaded(std::string) const;
 
-    void beginRender() const;
+    void beginRender();
     void endRender() const;
 
     GLFWwindow* getWindow() const;
@@ -64,9 +64,13 @@ class GraphicsManager
 
     void setWindowSize(int,int);
 
+    void setCamera(const Entity*);
+
   private:
     int width;
     int height;
+
+    const Entity* camera;
 
     GLFWwindow* window;
 

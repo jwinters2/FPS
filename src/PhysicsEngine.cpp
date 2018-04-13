@@ -212,7 +212,7 @@ void PhysicsEngine::checkCollisions() const
         if(ci.impulse.length() > maxImpulse)
         {
           maxImpulse = ci.impulse.length();
-          std::cout << "Highest Impulse so far: " << maxImpulse << std::endl;
+          //std::cout << "Highest Impulse so far: " << maxImpulse << std::endl;
         }
       }
     }

@@ -7,6 +7,7 @@
 
 #include "entity/RotationObject.h"
 #include "entity/Box.h"
+#include "entity/Player.h"
 
 World::World()
 {
@@ -68,14 +69,12 @@ void World::init()
   //b->enableKeyboardMovement();
   //entityList.push_back(b);
 
-  for(int i=0; i<=5; i+=5)
-  {
-    Entity* e = new Box(pe, Vec3(0.1*i,-2+i,0), Vec3(1,0.3,1));
-    entityList.push_back(e);
-  }
-  Entity* e = new Box(pe, Vec3(0,-4,0), Vec3(4,0.1,4));
+  Entity* e = new Box(this, Vec3(0,-4,0), Vec3(4,0.1,4));
   e->setMass(0);
-  entityList.push_back(e);
+
+  Player* p = new Player(this, Vec3(0));
+  GraphicsManager& gm = GraphicsManager::getReference();
+  gm.setCamera(p);
 };
 
 World::~World()
@@ -99,7 +98,14 @@ World::~World()
 
 void World::addObject(Entity* e)
 {
-  entityList.push_back(e);
+  if(e != nullptr)
+  {
+    entityList.push_back(e);
+    if(e->rigidBody != nullptr)
+    {
+      pe->addObject(e);
+    }
+  }
 }
 
 void World::update(double dt)

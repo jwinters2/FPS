@@ -13,6 +13,8 @@ class Entity
     virtual void update();
     virtual void draw() const;
 
+    Transform getTransform() const;
+
     void setPosition(const Vec3&);
     void addPosition(const Vec3&);
 
@@ -26,6 +28,7 @@ class Entity
     Renderable* model;
     RigidBody* rigidBody;
 
+  friend class World;
   friend class PhysicsEngine;
   friend class RigidBody;
 };

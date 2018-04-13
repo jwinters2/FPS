@@ -48,6 +48,7 @@ CMakeFiles/FPS.dir/src/World.cpp.o
  /home/jamie/Programming/FPS/src/component/rigidbody/RigidBody.h
  /home/jamie/Programming/FPS/src/entity/Box.h
  /home/jamie/Programming/FPS/src/entity/Entity.h
+ /home/jamie/Programming/FPS/src/entity/Player.h
  /home/jamie/Programming/FPS/src/entity/RotationObject.h
  src/component/renderable/Renderable.h
 CMakeFiles/FPS.dir/src/component/renderable/Model.cpp.o
@@ -82,14 +83,15 @@ CMakeFiles/FPS.dir/src/component/rigidbody/RigidBody.cpp.o
  src/entity/Entity.h
 CMakeFiles/FPS.dir/src/entity/Box.cpp.o
  /home/jamie/Programming/FPS/src/entity/Box.cpp
- /home/jamie/Programming/FPS/src/entity/Box.h
- /home/jamie/Programming/FPS/src/entity/Entity.h
  src/InputManager.h
  src/Math3d.h
  src/PhysicsEngine.h
+ src/World.h
  src/component/renderable/Renderable.h
  src/component/renderable/WireframeBox.h
  src/component/rigidbody/RigidBody.h
+ src/entity/Box.h
+ src/entity/Entity.h
 CMakeFiles/FPS.dir/src/entity/Entity.cpp.o
  /home/jamie/Programming/FPS/src/entity/Entity.cpp
  /home/jamie/Programming/FPS/src/entity/Entity.h
@@ -97,6 +99,16 @@ CMakeFiles/FPS.dir/src/entity/Entity.cpp.o
  src/component/renderable/Model.h
  src/component/renderable/Renderable.h
  src/component/rigidbody/RigidBody.h
+CMakeFiles/FPS.dir/src/entity/Player.cpp.o
+ /home/jamie/Programming/FPS/src/entity/Player.cpp
+ src/InputManager.h
+ src/Math3d.h
+ src/PhysicsEngine.h
+ src/World.h
+ src/component/renderable/Renderable.h
+ src/component/rigidbody/RigidBody.h
+ src/entity/Entity.h
+ src/entity/Player.h
 CMakeFiles/FPS.dir/src/entity/RotationObject.cpp.o
  /home/jamie/Programming/FPS/src/entity/Entity.h
  /home/jamie/Programming/FPS/src/entity/RotationObject.cpp

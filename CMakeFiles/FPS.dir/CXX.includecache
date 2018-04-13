@@ -121,6 +121,8 @@ entity/RotationObject.h
 /home/jamie/Programming/FPS/src/entity/RotationObject.h
 entity/Box.h
 /home/jamie/Programming/FPS/src/entity/Box.h
+entity/Player.h
+/home/jamie/Programming/FPS/src/entity/Player.h
 
 /home/jamie/Programming/FPS/src/World.h
 Math3d.h
@@ -179,10 +181,12 @@ vector
 -
 
 /home/jamie/Programming/FPS/src/entity/Box.cpp
-Box.h
-/home/jamie/Programming/FPS/src/entity/Box.h
+entity/Box.h
+/home/jamie/Programming/FPS/src/entity/entity/Box.h
 component/renderable/WireframeBox.h
 /home/jamie/Programming/FPS/src/entity/component/renderable/WireframeBox.h
+World.h
+/home/jamie/Programming/FPS/src/entity/World.h
 PhysicsEngine.h
 /home/jamie/Programming/FPS/src/entity/PhysicsEngine.h
 InputManager.h
@@ -211,6 +215,18 @@ component/renderable/Renderable.h
 /home/jamie/Programming/FPS/src/entity/component/renderable/Renderable.h
 component/rigidbody/RigidBody.h
 /home/jamie/Programming/FPS/src/entity/component/rigidbody/RigidBody.h
+
+/home/jamie/Programming/FPS/src/entity/Player.cpp
+entity/Player.h
+/home/jamie/Programming/FPS/src/entity/entity/Player.h
+InputManager.h
+/home/jamie/Programming/FPS/src/entity/InputManager.h
+
+/home/jamie/Programming/FPS/src/entity/Player.h
+entity/Entity.h
+/home/jamie/Programming/FPS/src/entity/entity/Entity.h
+World.h
+/home/jamie/Programming/FPS/src/entity/World.h
 
 /home/jamie/Programming/FPS/src/entity/RotationObject.cpp
 RotationObject.h
@@ -284,6 +300,16 @@ src/component/rigidbody/RigidBody.h
 vector
 -
 
+src/World.h
+Math3d.h
+src/Math3d.h
+component/rigidbody/RigidBody.h
+src/component/rigidbody/RigidBody.h
+PhysicsEngine.h
+src/PhysicsEngine.h
+vector
+-
+
 src/component/renderable/Model.h
 Renderable.h
 src/component/renderable/Renderable.h
@@ -304,6 +330,12 @@ src/component/rigidbody/Math3d.h
 vector
 -
 
+src/entity/Box.h
+Entity.h
+src/entity/Entity.h
+PhysicsEngine.h
+src/entity/PhysicsEngine.h
+
 src/entity/Entity.h
 Math3d.h
 src/entity/Math3d.h
@@ -311,4 +343,10 @@ component/renderable/Renderable.h
 src/entity/component/renderable/Renderable.h
 component/rigidbody/RigidBody.h
 src/entity/component/rigidbody/RigidBody.h
+
+src/entity/Player.h
+entity/Entity.h
+src/entity/entity/Entity.h
+World.h
+src/entity/World.h
 

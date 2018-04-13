@@ -22,6 +22,7 @@ static const GLfloat lineData[] =
 // -------------------
 
 GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
+                                :camera(nullptr)
 {
   // set a reference for the singleton instance
   if(gm == nullptr)
@@ -111,8 +112,8 @@ GraphicsManager::GraphicsManager(int width, int height, bool fullscreen)
 
   // setup MVP matrix (this will be done on the fly later)
   CameraMatrix = glm::lookAt(
-    glm::vec3(20,10,18),
     glm::vec3(0,0,0),
+    glm::vec3(1,0,0),
     glm::vec3(0,1,0)
   );
 
@@ -224,10 +225,33 @@ bool GraphicsManager::isTextureLoaded(std::string path) const
 // MODEL RENDERING
 // ---------------
 
-void GraphicsManager::beginRender() const
+void GraphicsManager::beginRender()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glUseProgram(programID);
+
+  if(camera != nullptr)
+  {
+    Mat4 rot     = camera->getTransform().rot.toMatrix();
+    Vec3 pos     = camera->getTransform().pos;
+
+    Vec3 forward = rot * Vec3(1,0,0);
+    Vec3 upward  = rot * Vec3(0,1,0);
+
+    CameraMatrix = glm::lookAt(
+      glm::vec3(pos.x, pos.y, pos.z),
+      glm::vec3(pos.x + forward.x, pos.y + forward.y, pos.z + forward.z),
+      glm::vec3(upward.x, upward.y, upward.z)
+    );
+  }
+  else
+  {
+    CameraMatrix = glm::lookAt(
+      glm::vec3(0,0,0),
+      glm::vec3(1,0,0),
+      glm::vec3(0,1,0)
+    );
+  }
 }
 
 void GraphicsManager::endRender() const
@@ -440,6 +464,11 @@ void GraphicsManager::drawWireframeBox(const Vec3& center
   drawLine(transform * v[1], transform * v[5], color);
   drawLine(transform * v[2], transform * v[6], color);
   drawLine(transform * v[3], transform * v[7], color);
+}
+
+void GraphicsManager::setCamera(const Entity* e)
+{
+  camera = e;
 }
 
 glm::mat4 GraphicsManager::toGlmMat4(const Mat4& m)

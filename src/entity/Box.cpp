@@ -1,9 +1,10 @@
-#include "Box.h"
+#include "entity/Box.h"
 #include "component/renderable/WireframeBox.h"
+#include "World.h"
 #include "PhysicsEngine.h"
 #include "InputManager.h"
 
-Box::Box(PhysicsEngine* pe, const Vec3& pos, const Vec3& dim):
+Box::Box(World* w, const Vec3& pos, const Vec3& dim):
          keyboardMovement(false)
 {
   transform.pos = pos;
@@ -13,16 +14,16 @@ Box::Box(PhysicsEngine* pe, const Vec3& pos, const Vec3& dim):
   rigidBody->setRotation(Quat(Vec3(1,0,0),0));
 
   model = new WireframeBox(dim, Vec3(1.0));
-  if(pe != nullptr)
+  if(w != nullptr)
   {
-    pe->addObject(this);
+    w->addObject(this);
   }
 }
 
 Box::~Box()
 {
-  delete rigidBody;
-  delete model;
+  //delete rigidBody;
+  //delete model;
 }
 
 void Box::enableKeyboardMovement()
