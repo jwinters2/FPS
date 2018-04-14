@@ -11,6 +11,8 @@ PhysicsEngine.h
 /home/jamie/Programming/FPS/src/PhysicsEngine.h
 vector
 -
+cmath
+-
 
 /home/jamie/Programming/FPS/src/GraphicsManager.cpp
 cstdlib

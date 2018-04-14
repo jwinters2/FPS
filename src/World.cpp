@@ -68,9 +68,9 @@ void World::init()
   //b->enableKeyboardMovement();
   //entityList.push_back(b);
 
-  for(int i=0; i<5; i++)
+  for(int i=0; i<=5; i+=5)
   {
-    Entity* e = new Box(pe, Vec3(0.4*i,-2+i,0), Vec3(1,0.3,1));
+    Entity* e = new Box(pe, Vec3(0.1*i,-2+i,0), Vec3(1,0.3,1));
     entityList.push_back(e);
   }
   Entity* e = new Box(pe, Vec3(0,-4,0), Vec3(4,0.1,4));

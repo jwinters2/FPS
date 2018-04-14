@@ -3,6 +3,7 @@
 //#define GJK_DEBUG
 
 #include <vector>
+#include <cmath>
 
 bool PhysicsEngine::GJKAlgorithm(const RigidBody& a, const RigidBody& b, 
                                  CollisionInfo& ci) const
@@ -119,8 +120,8 @@ Vec3 PhysicsEngine::GJKSupport(const RigidBody& r, const Vec3& v) const
   return retval;
 }
 
-std::vector<Vec3> PhysicsEngine::GJKSupportSet(const RigidBody& r, const Vec3 v,
-                                               double buffer) const
+std::vector<Vec3> PhysicsEngine::GJKSupportSet(const RigidBody& r, const Vec3& v
+                                               , double buffer) const
 {
   Mat4 t = r.getTransform().toMatrix();
   Vec3 furthestPoint = GJKSupport(r,v);
@@ -437,9 +438,9 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
 
       // get the touching faces
       std::vector<Vec3> aFace = GJKSupportSet(a, searchDirection,
-                                              currentMinDist);
+                                              0 + 0.001);
       std::vector<Vec3> bFace = GJKSupportSet(b,-searchDirection,
-                                              currentMinDist);
+                                              0 + 0.001);
 
       ci.pointOfContact = GJKGetPointOfContact(aFace,bFace,searchDirection);
 
@@ -453,34 +454,6 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
         //double massComponent;
         double rest = (a.restitution > b.restitution ? a.restitution
                                                      : b.restitution);
-
-        /*
-        if(a.invMass == 0)
-        {
-          massComponent = b.invMass;
-        }
-        else if(b.invMass == 0)
-        {
-          massComponent = a.invMass;
-        }
-        else
-        {
-          double Am = 1.0 / a.invMass;
-          double Bm = 1.0 / b.invMass;
-          massComponent = (Am + Bm) * a.invMass * b.invMass;
-        }
-
-        // velocities of the points of contact
-        // (center of mass velocity plus tangental velocity (omega x r)
-        Vec3 avel = a.velocity + a.angularVelocity.cross
-                                 (ci.pointOfContact - a.position);
-        Vec3 bvel = b.velocity + b.angularVelocity.cross
-                                 (ci.pointOfContact - b.position);
-
-        ci.impulse = -1 * ci.minimumSeparation.normal()
-                   * (ci.minimumSeparation.normal() * (avel - bvel))
-                   * (1 + rest) / massComponent;
-        */
 
         // -(1 + e) Vr . n    e = restitution, Vr = relative vel. (Va - Vb)
         // ---------------    n = normal vector (normalized)
@@ -498,7 +471,7 @@ bool PhysicsEngine::EPAAlgorithm(const RigidBody& a, const RigidBody& b,
                    * b.invMass;
 
         //Vec3 Vr = (a.velocity + a.angularVelocity.cross(ra))
-                //- (b.velocity + b.angularVelocity.cross(rb));
+        //        - (b.velocity + b.angularVelocity.cross(rb));
         Vec3 Vr = a.velocity - b.velocity;
         double numerator = -1.0 * (1 + rest) * (Vr * n);
 
@@ -695,24 +668,11 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
   if(manifold.size() == 0)
   {
     // this shouldn't happen
-    //std::cout << "ERROR: manifold of size 0" << std::endl;
-    //std::cout << "A,B = " << A.size() << "," << B.size() << std::endl;
-
-    //Vec3 center(0);
-    for(unsigned int k=0; k<A.size(); k++)
-    {
-      //std::cout << (k==0?"A = ":"    ") << A[k] << std::endl;
-      //center += A[k];
-      manifold.push_back(A[k]);
-    }
-    for(unsigned int k=0; k<B.size(); k++)
-    {
-      //std::cout << (k==0?"B = ":"    ") << B[k] << std::endl;
-      //center += B[k];
-      manifold.push_back(B[k]);
-    }
-    //return center / (A.size() + B.size() > 0 ? A.size() + B.size() : 1);
-    //return Vec3(0);
+    #ifdef GJK_DEBUG
+    std::cerr << "ERROR: manifold of size 0" << std::endl;
+    std::cerr << "A,B = " << A.size() << "," << B.size() << std::endl;
+    #endif
+    return Vec3(0);
   }
   if(manifold.size() == 1)
   {
@@ -754,20 +714,61 @@ Vec3 PhysicsEngine::GJKGetPointOfContact(std::vector<Vec3>& A,
 
 void PhysicsEngine::RotateSort(std::vector<Vec3>& set, const Vec3& dir) const
 {
+  if(set.size() < 3)
+  {
+    return;
+  }
+
+  Vec3 center(0);
   for(unsigned int i=0; i<set.size(); i++)
   {
-    Vec3 e0 = set[ (i+1) % set.size()] - set[i];
-    Vec3 e1 = set[ (i+2) % set.size()] - set[ (i+1) % set.size()];
+    center += set[i];
+  }
+  center /= set.size();
 
-    // if the angle from faces [0-1] and [1-2] turns right
-    // we swap 1 and 0 and restart
-    if(e0.cross(e1) * dir < 0)
+  Vec3 ihat = (set[0] - center).normal();
+  Vec3 jhat = dir.normal().cross(ihat).normal();
+       ihat = jhat.cross(dir.normal()).normal(); // ihat might not be perfectly
+                                                 // perpendicular with dir
+  /*            |
+   *  0      .  |         1
+   *            |
+   *    .      j^     .
+   *            |
+   *            |
+   * -----------+------->----
+   *            |       i
+   *            |
+   *    .    .  |
+   *            |  .
+   *  3         |         2
+   *            |
+   */
+
+  std::vector<double> angles;
+  for(unsigned int i=0; i<set.size(); i++)
+  {
+    angles.push_back(atan2((set[i] - center) * jhat, (set[i] - center) * ihat));
+  }
+
+  // these tend to be short (size < 10), so bubble sort will work
+
+  for(unsigned int i=set.size()-1; i>0; i--)
+  {
+    for(unsigned int j=0; j<i; j++)
     {
-      Vec3 temp = set[i];
-      set[i] = set[ (i+1) % set.size()];
-      set[ (i+1) % set.size()] = temp;
-      i = -1; // this gets incremented at the end of the loop
-              // where it should become 0
+      // we want angles in increasing order
+      // so flip them if the next one is smaller
+      if(angles[j+1] < angles[j])
+      {
+        double ta = angles[j];
+        angles[j] = angles[j+1];
+        angles[j+1] = ta;
+
+        Vec3 tp = set[j];
+        set[j] = set[j+1];
+        set[j+1] = tp;
+      }
     }
   }
 }

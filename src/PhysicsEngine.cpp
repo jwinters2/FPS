@@ -6,6 +6,7 @@
 #include <cmath>
 
 double PhysicsEngine::maxImpulse = 0;
+double PhysicsEngine::timeScale = 1;
 
 PhysicsEngine::PhysicsEngine(World* w):world(w),gravity(Vec3(0.0,-1.0,0.0))
 { }
@@ -22,12 +23,14 @@ void PhysicsEngine::performPhysics(double dt)
   for(unsigned int i=0; i<entityList.size(); i++)
   {
     rb = entityList[i]->rigidBody;
-    rb->position += rb->velocity * deltaTime;
+    rb->applyImpulses();
+    rb->position += rb->velocity * deltaTime * timeScale;
     
     if(rb->angularVelocity != Vec3(0))
     {
       rb->rotation.applyRotation(Quat(rb->angularVelocity.normal(),
-                                     rb->angularVelocity.length() * deltaTime
+                                     rb->angularVelocity.length()
+                                     * deltaTime * timeScale
                                      * 180.0 / 3.14159263538));
     }
     
@@ -60,7 +63,7 @@ void PhysicsEngine::performPhysics(double dt)
   {
     rb = entityList[i]->rigidBody;
 
-    rb->applyImpulses();
+    //rb->applyImpulses();
 
     // acceleration due to gravity (disabled for massless objects)
     if(rb->invMass == 0)
@@ -157,7 +160,7 @@ void PhysicsEngine::checkCollisions() const
       {
         if(ar->invMass != 0)
         {
-          ar->position += ci.minimumSeparation;
+          ar->collisionResolutionJump += ci.minimumSeparation;
           ar->addImpulse(ci.impulse);
           //if(ci.pointOfContact != Vec3(0))
           ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
@@ -187,19 +190,21 @@ void PhysicsEngine::checkCollisions() const
         // otherwise move in porportion to m1/(m1+m2)
         if(ar->invMass != 0)
         {
-          ar->position += ci.minimumSeparation * (ar->invMass)/totalInvMass;
+          ar->collisionResolutionJump += ci.minimumSeparation 
+                                       * (ar->invMass)/totalInvMass;
           ar->addImpulse(ci.impulse);
           //if(ci.pointOfContact != Vec3(0))
           ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
-                                (ci.impulse * -1.0));
+                                (ci.impulse * -0.9));
         }
         if(br->invMass != 0)
         {
-          br->position -= ci.minimumSeparation * (br->invMass)/totalInvMass;
+          br->collisionResolutionJump -= ci.minimumSeparation 
+                                       * (br->invMass)/totalInvMass;
           br->addImpulse(ci.impulse * -1.0);
           //if(ci.pointOfContact != Vec3(0))
           br->addAngularImpulse((ci.pointOfContact - br->position).cross
-                                (ci.impulse * 1.0));
+                                (ci.impulse * 0.9));
           // ci is calculated from the perspective of a hitting b
           // so invert it when b hitting a, because Newton's 3rd law
         }

@@ -49,6 +49,8 @@ class RigidBody
     Vec3 velocity;
     Vec3 impulse;
 
+    Vec3 collisionResolutionJump;
+
     // bounding box
     Vec3 dimension;
 

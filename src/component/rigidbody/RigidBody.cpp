@@ -152,6 +152,7 @@ void RigidBody::addImpulse(const Vec3& i)
 
 void RigidBody::addAngularImpulse(const Vec3& i)
 {
+  if(i.length() * invMass > 0.01)
   angularImpulse += i;
 }
 
@@ -163,8 +164,11 @@ void RigidBody::applyImpulses()
   angularVelocity += (R * (invMOI * (R.invert() * angularImpulse))) * invMass;
   //angularVelocity += (invMOI *  angularImpulse) * invMass;
 
+  position += collisionResolutionJump;
+
   impulse = Vec3(0);
   angularImpulse = Vec3(0);
+  collisionResolutionJump = Vec3(0);
 }
 
 void RigidBody::setMass(double m)
