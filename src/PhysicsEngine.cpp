@@ -146,7 +146,7 @@ const
   return retval;
 }
 
-void PhysicsEngine::checkCollisions() const
+void PhysicsEngine::checkCollisions()
 {
   CollisionInfo ci;
   for(unsigned int i = 0; i<entityList.size(); i++)
@@ -161,10 +161,11 @@ void PhysicsEngine::checkCollisions() const
         if(ar->invMass != 0)
         {
           ar->collisionResolutionJump += ci.minimumSeparation;
+
           ar->addImpulse(ci.impulse);
           //if(ci.pointOfContact != Vec3(0))
           ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
-                                (ci.impulse * -1.0));
+                                (ci.impulse * -0.9));
 
           if(ci.impulse.length() > maxImpulse)
           {
@@ -172,6 +173,7 @@ void PhysicsEngine::checkCollisions() const
             std::cout << "Highest Impulse so far: " << maxImpulse << std::endl;
           }
         }
+
       }
     }
 
@@ -190,24 +192,48 @@ void PhysicsEngine::checkCollisions() const
         // otherwise move in porportion to m1/(m1+m2)
         if(ar->invMass != 0)
         {
-          ar->collisionResolutionJump += ci.minimumSeparation 
-                                       * (ar->invMass)/totalInvMass;
-          ar->addImpulse(ci.impulse);
-          //if(ci.pointOfContact != Vec3(0))
-          ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
-                                (ci.impulse * -0.9));
+          if(ar->simplifyMovement)
+          {
+            ar->position += ci.minimumSeparation;
+            //ar->addImpulse(ci.impulse);
+            ar->velocity -= (ar->velocity).proj(ci.minimumSeparation);
+          }
+          else
+          {
+            ar->collisionResolutionJump += ci.minimumSeparation 
+                                         * (ar->invMass)/totalInvMass;
+
+            ar->addImpulse(ci.impulse);
+            //if(ci.pointOfContact != Vec3(0))
+            ar->addAngularImpulse((ci.pointOfContact - ar->position).cross
+                                  (ci.impulse * -0.9));
+          }
         }
+
         if(br->invMass != 0)
         {
-          br->collisionResolutionJump -= ci.minimumSeparation 
-                                       * (br->invMass)/totalInvMass;
-          br->addImpulse(ci.impulse * -1.0);
-          //if(ci.pointOfContact != Vec3(0))
-          br->addAngularImpulse((ci.pointOfContact - br->position).cross
-                                (ci.impulse * 0.9));
-          // ci is calculated from the perspective of a hitting b
-          // so invert it when b hitting a, because Newton's 3rd law
+          if(br->simplifyMovement)
+          {
+            br->position -= ci.minimumSeparation;
+            //br->addImpulse(ci.impulse * -1.0);
+            br->velocity += (br->velocity).proj(ci.minimumSeparation);
+          }
+          else
+          {
+            br->collisionResolutionJump -= ci.minimumSeparation 
+                                         * (br->invMass)/totalInvMass;
+
+            br->addImpulse(ci.impulse * -1.0);
+            //if(ci.pointOfContact != Vec3(0))
+            br->addAngularImpulse((ci.pointOfContact - br->position).cross
+                                  (ci.impulse * 0.9));
+            // ci is calculated from the perspective of a hitting b
+            // so invert it when b hitting a, because Newton's 3rd law
+          }
         }
+
+        entityList[i]->collide(*entityList[j], ci);
+        entityList[j]->collide(*entityList[i], ci);
 
         if(ci.impulse.length() > maxImpulse)
         {

@@ -8,6 +8,13 @@
 class World;
 class Entity;
 
+struct CollisionInfo
+{
+  bool areColliding;
+  Vec3 minimumSeparation;
+  Vec3 impulse;
+  Vec3 pointOfContact;
+};
 
 class PhysicsEngine
 {
@@ -22,14 +29,6 @@ class PhysicsEngine
   private:
     static double maxImpulse;
     static double timeScale;
-
-    struct CollisionInfo
-    {
-      bool areColliding;
-      Vec3 minimumSeparation;
-      Vec3 impulse;
-      Vec3 pointOfContact;
-    };
 
     struct SupportPoint
     {
@@ -83,5 +82,5 @@ class PhysicsEngine
     bool EPAAlgorithm(const RigidBody&, const RigidBody&,
                       std::vector<SupportPoint>&, CollisionInfo&) const;
 
-    void checkCollisions() const;
+    void checkCollisions();
 };

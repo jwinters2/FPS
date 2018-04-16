@@ -37,6 +37,9 @@ class RigidBody
     void applyImpulses();
 
     void setMass(double);
+    double getMass() const;
+
+    void setSimplifiedMovement(bool);
 
   private:
     Entity* owner;
@@ -58,6 +61,8 @@ class RigidBody
     Quat rotation;
     Vec3 angularVelocity;
     Vec3 angularImpulse;
+
+    bool simplifyMovement;
 
     // inverted mass, restitution and interted moment of inertia
     double invMass;

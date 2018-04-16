@@ -20,6 +20,8 @@ Entity::~Entity()
   }
 };
 
+void Entity::collide(Entity& e, const CollisionInfo& ci) {}
+
 Transform Entity::getTransform() const
 {
   return transform;
@@ -65,6 +67,15 @@ void Entity::addVelocity(const Vec3& v)
   {
     rigidBody->addVelocity(v);
   }
+}
+
+double Entity::getMass() const
+{
+  if(rigidBody != nullptr)
+  {
+    return rigidBody->getMass();
+  }
+  return 0;
 }
 
 void Entity::setMass(double m)

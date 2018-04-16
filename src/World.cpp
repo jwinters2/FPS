@@ -110,8 +110,6 @@ void World::addObject(Entity* e)
 
 void World::update(double dt)
 {
-  pe->performPhysics(dt);
-
   // this should use an octree
   for(unsigned int i=0; i<entityList.size(); i++)
   {
@@ -120,6 +118,8 @@ void World::update(double dt)
       entityList[i]->update();
     }
   }
+
+  pe->performPhysics(dt);
 };
 
 void World::draw() const

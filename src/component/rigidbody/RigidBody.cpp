@@ -6,7 +6,7 @@
 
 RigidBody::RigidBody(Entity* own, double m, double r):
                      owner(own), invMass((m==0?0:1/m)),
-                     restitution(r)
+                     restitution(r),simplifyMovement(false)
 {
   if(owner != nullptr)
   {
@@ -181,6 +181,20 @@ void RigidBody::setMass(double m)
   {
     invMass = 1/m;
   }
+}
+
+double RigidBody::getMass() const
+{
+  if(invMass == 0)
+  {
+    return 0;
+  }
+  return 1/invMass;
+}
+
+void RigidBody::setSimplifiedMovement(bool sm)
+{
+  simplifyMovement = sm;
 }
 
 Transform RigidBody::getTransform() const

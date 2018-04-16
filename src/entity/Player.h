@@ -11,5 +11,8 @@ class Player: public Entity
     
     void update();
     void draw() const;
-  //private:
+    void collide(Entity&, const CollisionInfo&);
+
+  private:
+    Vec3 floorNormal;
 };

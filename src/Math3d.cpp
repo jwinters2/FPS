@@ -69,6 +69,11 @@ Vec3 Vec3::cross(const Vec3& b) const
   return retval;
 }
 
+Vec3 Vec3::proj(const Vec3& n) const
+{
+  return ((*this) * n.normal()) * n.normal();
+}
+
 std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
   out << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
